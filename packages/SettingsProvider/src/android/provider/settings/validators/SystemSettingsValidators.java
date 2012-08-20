@@ -213,5 +213,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.ANIM_TILE_STYLE, new InclusiveIntegerRangeValidator(0, 2));
         VALIDATORS.put(System.ANIM_TILE_DURATION, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.ANIM_TILE_INTERPOLATOR, new InclusiveIntegerRangeValidator(0, 7));
+        VALIDATORS.put(System.VOLUME_KEY_CURSOR_CONTROL, new InclusiveIntegerRangeValidator(0, 2));
     }
 }
