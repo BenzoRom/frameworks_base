@@ -8316,6 +8316,12 @@ public final class Settings {
         public static final String DEVICE_PAIRED = "device_paired";
 
         /**
+         * Whether to display the ADB notification.
+         * @hide
+         */
+        public static final String ADB_NOTIFY = "adb_notify";
+
+        /**
          * Integer state indicating whether package verifier is enabled.
          * TODO(b/34259924): Remove this setting.
          *
