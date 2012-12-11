@@ -24,13 +24,20 @@ import android.animation.ValueAnimator;
 import android.annotation.DrawableRes;
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.UserHandle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -103,6 +110,10 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
     final static int MSG_CHECK_INVALID_LAYOUT = 8686;
+
+    private boolean mShowDpadArrowKeys;
+
+    private SettingsObserver mSettingsObserver;
 
     // performs manual animation in sync with layout transitions
     private final NavTransitionListener mTransitionListener = new NavTransitionListener();
@@ -224,6 +235,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         mButtonDispatchers.put(R.id.ime_switcher, new ButtonDispatcher(R.id.ime_switcher));
         mButtonDispatchers.put(R.id.accessibility_button,
                 new ButtonDispatcher(R.id.accessibility_button));
+
+        mSettingsObserver = new SettingsObserver(new Handler());
     }
 
     public BarTransitions getBarTransitions() {
@@ -308,6 +321,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     public SparseArray<ButtonDispatcher> getButtonDispatchers() {
         return mButtonDispatchers;
     }
+
+    public ViewGroup getDpadView() { return (ViewGroup) getCurrentView().findViewById(R.id.dpad_group); }
 
     private void updateCarModeIcons(Context ctx) {
         mBackCarModeIcon = getDrawable(ctx,
@@ -428,9 +443,13 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         // The Accessibility button always overrides the appearance of the IME switcher
         final boolean showImeButton =
                 !mShowAccessibilityButton && ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN)
-                        != 0);
+                        != 0) && !mShowDpadArrowKeys;
         getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.INVISIBLE);
         getImeSwitchButton().setImageDrawable(mImeIcon);
+
+        setDisabledFlags(mDisabledFlags, true);
+
+        updateDpadKeys();
 
         // Update menu button in case the IME state has changed.
         setMenuVisibility(mShowMenu, true);
@@ -438,8 +457,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
         setAccessibilityButtonState(mShowAccessibilityButton, mLongClickableAccessibilityButton);
         getAccessibilityButton().setImageDrawable(mAccessibilityIcon);
-
-        setDisabledFlags(mDisabledFlags, true);
 
         mBarTransitions.reapplyDarkIntensity();
     }
@@ -762,6 +779,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         onPluginDisconnected(null); // Create default gesture helper
         Dependency.get(PluginManager.class).addPluginListener(this,
                 NavGesture.class, false /* Only one */);
+        mSettingsObserver.observe();
     }
 
     @Override
@@ -771,6 +789,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         if (mGestureHelper != null) {
             mGestureHelper.destroy();
         }
+        mSettingsObserver.unobserve();
     }
 
     @Override
@@ -845,4 +864,42 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         mDockedStackExists = exists;
         updateRecentsIcon();
     });
+
+    public void updateDpadKeys() {
+        if (mShowDpadArrowKeys) { // overrides IME button
+            final boolean showingIme = ((mNavigationIconHints
+                    & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0);
+
+            final int vis = showingIme ? View.VISIBLE : View.INVISIBLE;
+            getDpadView().setVisibility(vis);
+        }
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            mContext.getContentResolver().registerContentObserver(
+                  Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS),
+                  false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            mShowDpadArrowKeys = Settings.System.getIntForUser(getContext().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 0, UserHandle.USER_CURRENT) == 1;
+            setNavigationIconHints(mNavigationIconHints, true);
+        }
+    }
 }
