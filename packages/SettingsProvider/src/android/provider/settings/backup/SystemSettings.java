@@ -89,5 +89,6 @@ public class SystemSettings {
         Settings.System.ANIM_TILE_DURATION,
         Settings.System.ANIM_TILE_INTERPOLATOR,
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
+        Settings.System.ACCELEROMETER_ROTATION_ANGLES,
     };
 }
