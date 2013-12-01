@@ -202,6 +202,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -340,6 +341,9 @@ public class NotificationManagerService extends SystemService {
 
     // The last key in this list owns the hardware.
     ArrayList<String> mLights = new ArrayList<>();
+
+    private HashMap<String, Long> mAnnoyingNotifications = new HashMap<String, Long>();
+    private long mAnnoyingNotificationThreshold = -1;
 
     private AppOpsManager mAppOps;
     private UsageStatsManagerInternal mAppUsageStats;
@@ -1050,6 +1054,8 @@ public class NotificationManagerService extends SystemService {
                 = Settings.Global.getUriFor(Settings.Global.MAX_NOTIFICATION_ENQUEUE_RATE);
         private final Uri ENABLED_NOTIFICATION_LISTENERS_URI
                 = Settings.Secure.getUriFor(Settings.Secure.ENABLED_NOTIFICATION_LISTENERS);
+        private final Uri MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI
+                = Settings.System.getUriFor(Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD);
 
         LEDSettingsObserver(Handler handler) {
             super(handler);
@@ -1082,6 +1088,8 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(NOTIFICATION_LIGHT_PULSE_URI,
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(NOTIFICATION_RATE_LIMIT_URI,
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI,
                     false, this, UserHandle.USER_ALL);
             update(null);
         }
@@ -1133,6 +1141,12 @@ public class NotificationManagerService extends SystemService {
                     mScreenOnDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             updateNotificationPulse();
+
+            if (uri == null || MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI.equals(uri)) {
+                mAnnoyingNotificationThreshold = Settings.System.getLongForUser(resolver,
+                       Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 0,
+                       UserHandle.USER_CURRENT);
+            }
         }
     }
 
@@ -4052,6 +4066,26 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
+    private boolean notificationIsAnnoying(String pkg) {
+        if (pkg == null
+                || mAnnoyingNotificationThreshold <= 0
+                || "android".equals(pkg)) {
+            return false;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        if (mAnnoyingNotifications.containsKey(pkg)
+                && (currentTime - mAnnoyingNotifications.get(pkg)
+                < mAnnoyingNotificationThreshold)) {
+            // less than threshold; it's an annoying notification!!
+            return true;
+        } else {
+            // not in map or time to re-add
+            mAnnoyingNotifications.put(pkg, currentTime);
+            return false;
+        }
+    }
+
     /**
      * Ensures that grouped notification receive their special treatment.
      *
@@ -4127,6 +4161,7 @@ public class NotificationManagerService extends SystemService {
 
         final Notification notification = record.sbn.getNotification();
         final String key = record.getKey();
+        final String pkg = record.sbn.getPackageName();
 
         // Should this notification make noise, vibe, or use the LED?
         final boolean aboveThreshold =
@@ -4148,7 +4183,7 @@ public class NotificationManagerService extends SystemService {
 
         if (aboveThreshold && isNotificationForCurrentUser(record)) {
 
-            if (mSystemReady && mAudioManager != null) {
+            if (mSystemReady && mAudioManager != null && !notificationIsAnnoying(pkg)) {
                 Uri soundUri = record.getSound();
                 hasValidSound = soundUri != null && !Uri.EMPTY.equals(soundUri);
                 long[] vibration = record.getVibration();
