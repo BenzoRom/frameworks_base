@@ -219,6 +219,7 @@ public class SecureSettings {
         Settings.Secure.BLUETOOTH_LE_BROADCAST_PROGRAM_INFO,
         Settings.Secure.BLUETOOTH_LE_BROADCAST_CODE,
         Settings.Secure.BLUETOOTH_LE_BROADCAST_APP_SOURCE_NAME,
-        Settings.Secure.ADVANCED_REBOOT
+        Settings.Secure.ADVANCED_REBOOT,
+        Settings.Secure.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT
     };
 }
