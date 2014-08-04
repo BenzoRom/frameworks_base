@@ -294,5 +294,6 @@ public class SecureSettingsValidators {
         VALIDATORS.put(Secure.QUICK_SETTINGS_TILES_ANIM_DURATION, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(Secure.QUICK_SETTINGS_TILES_ANIM_INTERPOLATOR,
                 new InclusiveIntegerRangeValidator(0, 7));
+        VALIDATORS.put(Secure.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, BOOLEAN_VALIDATOR);
     }
 }
