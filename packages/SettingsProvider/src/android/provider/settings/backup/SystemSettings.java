@@ -98,5 +98,6 @@ public class SystemSettings {
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
         Settings.System.STATUS_BAR_SHOW_ACTIVITY_INDICATORS,
+        Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN,
     };
 }
