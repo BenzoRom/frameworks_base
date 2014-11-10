@@ -645,6 +645,8 @@ public class NotificationPanelViewController extends PanelViewController {
 
     private KeyguardMediaController mKeyguardMediaController;
 
+    private int mOneFingerQuickSettingsIntercept;
+
     private View.AccessibilityDelegate mAccessibilityDelegate = new View.AccessibilityDelegate() {
         @Override
         public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
@@ -1851,6 +1853,30 @@ public class NotificationPanelViewController extends PanelViewController {
         return mNotificationStackScrollLayoutController.getOpeningHeight();
     }
 
+    private boolean isQuickQs(MotionEvent event) {
+        mOneFingerQuickSettingsIntercept =
+                Settings.System.getInt(mView.getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN, 1);
+        boolean showQsOverride = false;
+        boolean isRtl = mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        final float w = mView.getMeasuredWidth();
+        final float x = event.getX();
+        float region = w * 1f / 4f;
+
+        switch (mOneFingerQuickSettingsIntercept) {
+            case 1: // Right side pulldown
+                showQsOverride = isRtl ? x < region : w - region < x;
+                break;
+            case 2: // Left side pulldown
+                showQsOverride = isRtl ? w - region < x : x < region;
+                break;
+            case 3: // pull down anywhere
+                showQsOverride = true;
+                break;
+        }
+        showQsOverride &= mBarState == StatusBarState.SHADE;
+        return showQsOverride;
+    }
 
     private boolean handleQsTouch(MotionEvent event) {
         final int action = event.getActionMasked();
@@ -1880,8 +1906,9 @@ public class NotificationPanelViewController extends PanelViewController {
         if (action == MotionEvent.ACTION_DOWN && isFullyCollapsed() && isQsExpansionEnabled()) {
             mTwoFingerQsExpandPossible = true;
         }
-        if (mTwoFingerQsExpandPossible && isOpenQsEvent(event) && event.getY(event.getActionIndex())
-                < mStatusBarMinHeight) {
+        if (isQuickQs(event) ||
+                mTwoFingerQsExpandPossible && isOpenQsEvent(event) &&
+                event.getY(event.getActionIndex()) < mStatusBarMinHeight) {
             mMetricsLogger.count(COUNTER_PANEL_OPEN_QS, 1);
             mQsExpandImmediate = true;
             mNotificationStackScrollLayoutController.setShouldShowShelfOnly(true);
