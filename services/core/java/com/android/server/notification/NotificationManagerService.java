@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
+ * Copyright (C) 2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +97,7 @@ import android.app.AutomaticZenRule;
 import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
@@ -190,6 +193,8 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.notification.LedValues;
+import com.android.internal.notification.NotificationLights;
 import com.android.internal.notification.SystemNotificationChannels;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.statusbar.NotificationVisibility;
@@ -409,6 +414,8 @@ public class NotificationManagerService extends SystemService {
 
     private MetricsLogger mMetricsLogger;
     private Predicate<String> mAllowedManagedServicePackages;
+
+    private NotificationLights mNotificationLights;
 
     private static class Archive {
         final int mBufferSize;
@@ -944,8 +951,13 @@ public class NotificationManagerService extends SystemService {
     @GuardedBy("mNotificationLock")
     private void clearLightsLocked() {
         // light
-        mLights.clear();
-        updateLightsLocked();
+        // clear only if lockscreen is not active
+        boolean onKeyguard = getContext().getSystemService(
+            KeyguardManager.class).isKeyguardLocked();
+        if (!onKeyguard) {
+            mLights.clear();
+            updateLightsLocked();
+        }
     }
 
     protected final BroadcastReceiver mLocaleChangeReceiver = new BroadcastReceiver() {
@@ -1135,7 +1147,10 @@ public class NotificationManagerService extends SystemService {
                 }
             } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
                 // turn off LED when user passes through lock screen
-                mNotificationLight.turnOff();
+                // if lights with screen on is disabled.
+                if (!mNotificationLights.showLightsScreenOn()) {
+                    mNotificationLight.turnOff();
+                }
             } else if (action.equals(Intent.ACTION_USER_SWITCHED)) {
                 final int user = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, USER_NULL);
                 // reload per-user settings
@@ -1575,6 +1590,13 @@ public class NotificationManagerService extends SystemService {
 
         IntentFilter localeChangedFilter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED);
         getContext().registerReceiver(mLocaleChangeReceiver, localeChangedFilter);
+
+        mNotificationLights = new NotificationLights(getContext(),
+                 new NotificationLights.LedUpdater() {
+            public void update() {
+                updateNotificationPulse();
+            }
+        });
 
         publishBinderService(Context.NOTIFICATION_SERVICE, mService, /* allowIsolated= */ false,
                 DUMP_FLAG_PRIORITY_CRITICAL | DUMP_FLAG_PRIORITY_NORMAL);
@@ -3563,6 +3585,15 @@ public class NotificationManagerService extends SystemService {
                 throws RemoteException {
             new ShellCmd().exec(this, in, out, err, args, callback, resultReceiver);
         }
+
+        @Override
+        public void forceShowLedLight(int color) {
+            forceShowLed(color);
+        }
+         @Override
+        public void forcePulseLedLight(int color, int onTime, int offTime) {
+            forcePulseLed(color, onTime, offTime);
+        }
     };
 
     private void applyAdjustment(NotificationRecord r, Adjustment adjustment) {
@@ -4864,7 +4895,7 @@ public class NotificationManagerService extends SystemService {
         // light
         // release the light
         boolean wasShowLights = mLights.remove(key);
-        if (canShowLightsLocked(record, aboveThreshold)) {
+        if (canShowLightsLocked(record, aboveThreshold)  || isLedForcedOn(record)) {
             mLights.add(key);
             updateLightsLocked();
             if (mUseAttentionLight) {
@@ -4896,6 +4927,21 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
+    private void forceShowLed(int color) {
+        if (color != -1) {
+            mNotificationLight.setColor(color);
+        } else {
+            mNotificationLight.turnOff();
+        }
+    }
+     private void forcePulseLed(int color, int onTime, int offTime) {
+        if (color != -1) {
+            mNotificationLight.setFlashing(color, Light.LIGHT_FLASH_TIMED, onTime, offTime);
+        } else {
+            mNotificationLight.turnOff();
+        }
+    }
+
     @GuardedBy("mNotificationLock")
     boolean canShowLightsLocked(final NotificationRecord record, boolean aboveThreshold) {
         // device lacks light
@@ -4906,12 +4952,12 @@ public class NotificationManagerService extends SystemService {
         if (!mNotificationPulseEnabled) {
             return false;
         }
-        // the notification/channel has no light
-        if (record.getLight() == null) {
-            return false;
-        }
         // unimportant notification
         if (!aboveThreshold) {
+            return false;
+        }
+        // the notification/channel has no light
+        if (record.getLight() == null) {
             return false;
         }
         // suppressed due to DND
@@ -6019,17 +6065,33 @@ public class NotificationManagerService extends SystemService {
             }
         }
 
-        // Don't flash while we are in a call or screen is on
-        if (ledNotification == null || mInCall || mScreenOn) {
+        NotificationRecord.Light light = ledNotification != null ?
+                ledNotification.getLight() : null;
+        if (ledNotification == null || mNotificationLights == null ||
+                light == null || !mNotificationPulseEnabled) {
+            mNotificationLight.turnOff();
+            return;
+        }
+
+        LedValues ledValues = new LedValues(light.color, light.onMs, light.offMs);
+        final boolean defaultLights =
+                (ledNotification.sbn.getNotification().defaults
+                        & Notification.DEFAULT_LIGHTS) != 0;
+        mNotificationLights.calcLights(ledValues, ledNotification.sbn.getPackageName(),
+                ledNotification.sbn.getNotification(), mScreenOn,
+                mInCall, defaultLights, ledNotification.getSuppressedVisualEffects());
+
+        if (!ledValues.isEnabled()) {
             mNotificationLight.turnOff();
         } else {
-            NotificationRecord.Light light = ledNotification.getLight();
-            if (light != null && mNotificationPulseEnabled) {
-                // pulse repeatedly
-                mNotificationLight.setFlashing(light.color, Light.LIGHT_FLASH_TIMED,
-                        light.onMs, light.offMs);
-            }
+            mNotificationLight.setFlashing(ledValues.getColor(), Light.LIGHT_FLASH_TIMED,
+                    ledValues.getOnMs(), ledValues.getOffMs());
         }
+    }
+
+    private boolean isLedForcedOn(NotificationRecord nr) {
+        return nr != null ?
+                mNotificationLights.isForcedOn(nr.sbn.getNotification()) : false;
     }
 
     @GuardedBy("mNotificationLock")
