@@ -967,6 +967,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE),
                     false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -988,6 +991,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             setForceAmbient();
             updateDozeBrightness();
             setBrightnessSlider();
+            if (mNavigationBar != null) {
+                boolean navLeftInLandscape =
+                        Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0) == 1;
+                mNavigationBar.setLeftInLandscape(navLeftInLandscape);
+
+            }
         }
     }
     private BenzoSettingsObserver mBenzoSettingsObserver;

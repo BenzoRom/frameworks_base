@@ -228,15 +228,15 @@ public class SystemGesturesPointerEventListener implements PointerEventListener 
                 && elapsed < SWIPE_TIMEOUT_MS) {
             return SWIPE_FROM_BOTTOM;
         }
-        if (fromX >= screenWidth - mSwipeStartThreshold
-                && x < fromX - mSwipeDistanceThreshold
-                && elapsed < SWIPE_TIMEOUT_MS) {
-            return SWIPE_FROM_RIGHT;
-        }
         if (fromX <= mSwipeStartThreshold
                 && x > fromX + mSwipeDistanceThreshold
                 && elapsed < SWIPE_TIMEOUT_MS) {
             return SWIPE_FROM_LEFT;
+        }
+        if (fromX >= screenWidth - mSwipeStartThreshold
+                && x < fromX - mSwipeDistanceThreshold
+                && elapsed < SWIPE_TIMEOUT_MS) {
+            return SWIPE_FROM_RIGHT;
         }
         return SWIPE_NONE;
     }

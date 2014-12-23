@@ -472,6 +472,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHasNavigationBar = false;
     boolean mNavigationBarCanMove = false; // can the navigation bar ever move to the side?
     int mNavigationBarPosition = NAV_BAR_BOTTOM;
+    boolean mNavigationBarLeftInLandscape = false; // Navigation bar left handed?
     int[] mNavigationBarHeightForRotationDefault = new int[4];
     int[] mNavigationBarWidthForRotationDefault = new int[4];
     int[] mNavigationBarHeightForRotationInCarMode = new int[4];
@@ -1061,6 +1062,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_BUTTON_MUSIC_CONTROL), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this,
+                    UserHandle.USER_ALL);
             updateSettings();
         }
 
@@ -1171,6 +1175,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 target = mNavigationBar;
             } else if (position == EdgeGesturePosition.RIGHT && mNavigationBarPosition != NAV_BAR_BOTTOM) {
                 target = mNavigationBar;
+            } else if (position == EdgeGesturePosition.LEFT
+                    && mNavigationBarPosition != NAV_BAR_BOTTOM && mNavigationBarLeftInLandscape) {
+                target = mNavigationBar;
             }
 
             if (target != null) {
@@ -1197,6 +1204,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mNavigationBar != null && !mNavigationBar.isVisibleLw() && !isStatusBarKeyguard()) {
                 if (mNavigationBarPosition == NAV_BAR_BOTTOM) {
                     flags |= EdgeGesturePosition.BOTTOM.FLAG;
+                } else if (mNavigationBarLeftInLandscape) {
+                    flags |= EdgeGesturePosition.LEFT.FLAG;
                 } else {
                     flags |= EdgeGesturePosition.RIGHT.FLAG;
                 }
@@ -2270,13 +2279,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     @Override
                     public void onSwipeFromRight() {
-                        if (mNavigationBar != null && mNavigationBarPosition == NAV_BAR_RIGHT) {
+                        if (mNavigationBar != null && !mNavigationBarLeftInLandscape &&
+                                mNavigationBarPosition == NAV_BAR_RIGHT) {
                             requestTransientBars(mNavigationBar);
                         }
                     }
                     @Override
                     public void onSwipeFromLeft() {
-                        if (mNavigationBar != null && mNavigationBarPosition == NAV_BAR_LEFT) {
+                        if (mNavigationBar != null && mNavigationBarLeftInLandscape &&
+                                mNavigationBarPosition == NAV_BAR_LEFT) {
                             requestTransientBars(mNavigationBar);
                         }
                     }
@@ -2558,6 +2569,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             // navbar
             mHasNavigationBar = DeviceUtils.deviceSupportNavigationBar(mContext);
+            mNavigationBarLeftInLandscape = Settings.System.getInt(resolver,
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0) == 1;
 
 	    //Three Finger Gesture
             boolean threeFingerGesture = Settings.System.getIntForUser(resolver,
@@ -3467,10 +3480,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             } else if (mNavigationBarPosition == NAV_BAR_RIGHT) {
                 if (transit == TRANSIT_EXIT
                         || transit == TRANSIT_HIDE) {
-                    return R.anim.dock_right_exit;
+                    return mNavigationBarLeftInLandscape
+                            ? R.anim.dock_left_exit : R.anim.dock_right_exit;
                 } else if (transit == TRANSIT_ENTER
                         || transit == TRANSIT_SHOW) {
-                    return R.anim.dock_right_enter;
+                    return mNavigationBarLeftInLandscape
+                            ? R.anim.dock_left_enter : R.anim.dock_right_enter;
                 }
             } else if (mNavigationBarPosition == NAV_BAR_LEFT) {
                 if (transit == TRANSIT_EXIT
@@ -4992,6 +5007,34 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // and not in the process of animating on or off, then
                     // we can tell the app that it is covered by it.
                     mSystemBottom = mTmpNavigationFrame.top;
+                }
+            } else if (mNavigationBarLeftInLandscape) {
+                // Landscape screen; nav bar goes to the left.
+                int right = overscanLeft + getNavigationBarWidth(displayRotation, uiMode);
+                mTmpNavigationFrame.set(0, 0, right, displayHeight);
+                mStableLeft = mStableFullscreenLeft = mTmpNavigationFrame.right;
+                mStableFullscreenLeft = mTmpNavigationFrame.right;
+                if (transientNavBarShowing) {
+                    mNavigationBarController.setBarShowingLw(true);
+                } else if (navVisible) {
+                    mNavigationBarController.setBarShowingLw(true);
+                    mDockLeft = mTmpNavigationFrame.right;
+                    mRestrictedScreenLeft = mDockLeft;
+                    mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
+                    mRestrictedOverscanScreenLeft = mRestrictedScreenLeft;
+                    mRestrictedOverscanScreenWidth = mDockRight
+                            - mRestrictedOverscanScreenLeft;
+                } else {
+                    // We currently want to hide the navigation UI.
+                    mNavigationBarController.setBarShowingLw(false);
+                }
+
+                if (navVisible && !navTranslucent && !mNavigationBar.isAnimatingLw()
+                        && !mNavigationBarController.wasRecentlyTranslucent()) {
+                    // If the nav bar is currently requested to be visible,
+                    // and not in the process of animating on or off, then
+                    // we can tell the app that it is covered by it.
+                    mSystemLeft = mTmpNavigationFrame.right;
                 }
             } else if (mNavigationBarPosition == NAV_BAR_RIGHT) {
                 // Landscape screen; nav bar goes to the right.
