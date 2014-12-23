@@ -83,6 +83,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     boolean mVertical;
     private int mCurrentRotation = -1;
+    boolean mLeftInLandscape;
 
     boolean mShowMenu;
     boolean mShowAccessibilityButton;
@@ -668,13 +669,18 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         return mVertical;
     }
 
+    public void setLeftInLandscape(boolean leftInLandscape) {
+        mLeftInLandscape = leftInLandscape;
+        mDeadZone.setStartFromRight(leftInLandscape);
+    }
+
     public void reorient() {
         updateCurrentView();
 
         mDeadZone = (DeadZone) mCurrentView.findViewById(R.id.deadzone);
+        mDeadZone.setStartFromRight(mLeftInLandscape);
 
         ((NavigationBarFrame) getRootView()).setDeadZone(mDeadZone);
-        mDeadZone.setDisplayRotation(mCurrentRotation);
 
         // force the low profile & disabled states into compliance
         mBarTransitions.init();

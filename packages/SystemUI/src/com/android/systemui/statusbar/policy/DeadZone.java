@@ -24,7 +24,6 @@ import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.View;
 
 import com.android.systemui.R;
@@ -57,8 +56,8 @@ public class DeadZone extends View {
     // mHold ms, then move back over the course of mDecay ms
     private int mHold, mDecay;
     private boolean mVertical;
+    private boolean mStartFromRight;
     private long mLastPokeTime;
-    private int mDisplayRotation;
 
     private final Runnable mDebugFlash = new Runnable() {
         @Override
@@ -85,6 +84,7 @@ public class DeadZone extends View {
 
         int index = a.getInt(R.styleable.DeadZone_orientation, -1);
         mVertical = (index == VERTICAL);
+        mStartFromRight = false; // Assume deadzone is starting from the left side of the zone
 
         if (DEBUG)
             Slog.v(TAG, this + " size=[" + mSizeMin + "-" + mSizeMax + "] hold=" + mHold
@@ -115,6 +115,7 @@ public class DeadZone extends View {
         mShouldFlash = dbg;
         mFlashFrac = 0f;
         postInvalidate();
+        mFlashFrac = dbg ? 1f : 0f;
     }
 
     // I made you a touch event...
@@ -140,19 +141,19 @@ public class DeadZone extends View {
             }
             if (mStatusBar != null) mStatusBar.touchAutoDim();
             int size = (int) getSize(event.getEventTime());
-            // In the vertical orientation consume taps along the left edge.
-            // In horizontal orientation consume taps along the top edge.
-            final boolean consumeEvent;
-            if (mVertical) {
-                if (mDisplayRotation == Surface.ROTATION_270) {
-                    consumeEvent = event.getX() > getWidth() - size;
-                } else {
-                    consumeEvent = event.getX() < size;
-                }
+            boolean isCaptured;
+            if (mVertical && mStartFromRight) {
+                // Landscape on the left side of the screen
+                float pixelsFromRight = getWidth() - event.getX();
+                isCaptured = 0 <= pixelsFromRight && pixelsFromRight < size;
+            } else if (mVertical) {
+                // Landscape
+                isCaptured = event.getX() < size;
             } else {
-                consumeEvent = event.getY() < size;
+                // Portrait
+                isCaptured = event.getY() < size;
             }
-            if (consumeEvent) {
+            if (isCaptured) {
                 if (CHATTY) {
                     Slog.v(TAG, "consuming errant click: (" + event.getX() + "," + event.getY() + ")");
                 }
@@ -182,6 +183,11 @@ public class DeadZone extends View {
         return mFlashFrac;
     }
 
+    public void setStartFromRight(boolean startFromRight) {
+        mStartFromRight = startFromRight;
+        if (mShouldFlash) postInvalidate();
+    }
+
     @Override
     public void onDraw(Canvas can) {
         if (!mShouldFlash || mFlashFrac <= 0f) {
@@ -189,13 +195,14 @@ public class DeadZone extends View {
         }
 
         final int size = (int) getSize(SystemClock.uptimeMillis());
-        if (mVertical) {
-            if (mDisplayRotation == Surface.ROTATION_270) {
-                can.clipRect(can.getWidth() - size, 0, can.getWidth(), can.getHeight());
-            } else {
-                can.clipRect(0, 0, size, can.getHeight());
-            }
+        if (mVertical && mStartFromRight) {
+            // Landscape on the left side of the screen
+            can.clipRect(can.getWidth() - size, 0, can.getWidth(), can.getHeight());
+        } else if (mVertical) {
+            // Landscape
+            can.clipRect(0, 0, size, can.getHeight());
         } else {
+            // Portrait
             can.clipRect(0, 0, can.getWidth(), size);
         }
 
@@ -205,9 +212,5 @@ public class DeadZone extends View {
         if (DEBUG && size > mSizeMin)
             // crazy aggressive redrawing here, for debugging only
             postInvalidateDelayed(100);
-    }
-
-    public void setDisplayRotation(int rotation) {
-        mDisplayRotation = rotation;
     }
 }

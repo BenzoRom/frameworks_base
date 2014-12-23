@@ -702,4 +702,10 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         fragmentHost.addTagListener(TAG, listener);
         return navigationBarView;
     }
+
+    public void setLeftInLandscape(boolean leftInLandscape) {
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setLeftInLandscape(leftInLandscape);
+        }
+    }
 }
