@@ -428,6 +428,7 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/widget/ILockSettings.aidl \
 	core/java/com/android/internal/widget/IRemoteViewsFactory.aidl \
 	core/java/com/android/internal/widget/IRemoteViewsAdapterConnection.aidl \
+	core/java/com/android/internal/mirrorpowersave/ILcdPowerSave.aidl \
 	keystore/java/android/security/IKeyChainAliasCallback.aidl \
 	keystore/java/android/security/IKeyChainService.aidl \
 	location/java/android/location/IBatchedLocationCallback.aidl \
