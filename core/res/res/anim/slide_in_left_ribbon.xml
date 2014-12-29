@@ -18,10 +18,9 @@
 */
 -->
 
-<translate
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:fromYDelta="0"
-    android:toYDelta="-100%p"
-
-    android:duration="@android:integer/config_longAnimTime" />
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate android:fromXDelta="-50%p" android:toXDelta="0"
+        android:duration="1000"/>
+    <alpha android:fromAlpha="0.0" android:toAlpha="1.0"
+        android:duration="1000" />
+</set>

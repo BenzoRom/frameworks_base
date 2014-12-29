@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/*
-** Copyright 2009, The Android Open Source Project
++/*
+* Copyright 2009, The Android Open Source Project
 ** Copyright 2013, The Android Open Kang Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,13 @@
 */
 -->
 
-<translate
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:fromYDelta="0"
-    android:toYDelta="-100%p"
-
-    android:duration="@android:integer/config_longAnimTime" />
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:shareInterpolator="false">
+    <scale  android:interpolator="@interpolator/decelerate_quint"
+            android:fromXScale="0.5" android:toXScale="1.0"
+            android:fromYScale="0.5" android:toYScale="1.0"
+            android:pivotX="50%" android:pivotY="50%"
+            android:duration="1000" />
+    <alpha  android:interpolator="@interpolator/decelerate_cubic"
+            android:fromAlpha="0.0" android:toAlpha="1.0"
+            android:duration="1000" />
+</set>
