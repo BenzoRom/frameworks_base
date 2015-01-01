@@ -8656,6 +8656,15 @@ public final class Settings {
         public static final int VR_DISPLAY_MODE_OFF = 1;
 
         /**
+         * Whether to vibrate when quick settings tile is pressed.
+         *
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_TILES_VIBRATE = "quick_settings_vibrate";
+
+        private static final Validator QUICK_SETTINGS_TILES_VIBRATE_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Whether CarrierAppUtils#disableCarrierAppsUntilPrivileged has been executed at least
          * once.
          *
@@ -9201,7 +9210,8 @@ public final class Settings {
             GLOBAL_ACTIONS_PANEL_ENABLED,
             AWARE_LOCK_ENABLED,
             AWARE_TAP_PAUSE_GESTURE_COUNT,
-            AWARE_TAP_PAUSE_TOUCH_COUNT
+            AWARE_TAP_PAUSE_TOUCH_COUNT,
+            QUICK_SETTINGS_TILES_VIBRATE
         };
 
         /**
@@ -9399,6 +9409,7 @@ public final class Settings {
             VALIDATORS.put(AWARE_TAP_PAUSE_GESTURE_COUNT, NON_NEGATIVE_INTEGER_VALIDATOR);
             VALIDATORS.put(AWARE_TAP_PAUSE_TOUCH_COUNT, NON_NEGATIVE_INTEGER_VALIDATOR);
             VALIDATORS.put(TAP_GESTURE, TAP_GESTURE_VALIDATOR);
+            VALIDATORS.put(QUICK_SETTINGS_TILES_VIBRATE, QUICK_SETTINGS_TILES_VIBRATE_VALIDATOR);
         }
 
         /**
