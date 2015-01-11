@@ -61,8 +61,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     private static final String TAG = "QSPanel";
 
-    public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
-
     protected final Context mContext;
     protected final ArrayList<TileRecord> mRecords = new ArrayList<TileRecord>();
     protected final View mBrightnessView;
@@ -161,7 +159,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Dependency.get(TunerService.class).addTunable(this, QS_SHOW_BRIGHTNESS);
         if (mHost != null) {
             setTiles(mHost.getTiles());
         }
@@ -192,10 +189,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (QS_SHOW_BRIGHTNESS.equals(key)) {
-            mBrightnessView.setVisibility(newValue == null || Integer.parseInt(newValue) != 0
-                    ? VISIBLE : GONE);
-        }
+        // No tunings for you.
     }
 
     public void openDetails(String subPanel) {
@@ -212,11 +206,31 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         return mHost.createTile(subPanel);
     }
 
+    public boolean showBrightnessSlider() {
+        boolean brightnessSliderEnabled = Settings.Secure.getIntForUser(
+            mContext.getContentResolver(), Settings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
+                1, UserHandle.USER_CURRENT) == 1;
+        ToggleSliderView brightnessSlider = (ToggleSliderView) findViewById(R.id.brightness_slider);
+        if (brightnessSliderEnabled && isExpanded()) {
+            mBrightnessView.setVisibility(VISIBLE);
+            brightnessSlider.setVisibility(VISIBLE);
+        } else {
+            mBrightnessView.setVisibility(GONE);
+            brightnessSlider.setVisibility(GONE);
+        }
+        updateResources();
+        return brightnessSliderEnabled;
+    }
+
     private void setBrightnessIcon() {
         boolean brightnessIconEnabled = Settings.System.getIntForUser(
             mContext.getContentResolver(), Settings.System.QS_SHOW_BRIGHTNESS_ICON,
                 0, UserHandle.USER_CURRENT) == 1;
-        mBrightnessIcon.setVisibility(brightnessIconEnabled ? View.VISIBLE : View.GONE);
+        if (showBrightnessSlider()) {
+            mBrightnessIcon.setVisibility(brightnessIconEnabled ? View.VISIBLE : View.GONE);
+        } else {
+            mBrightnessIcon.setVisibility(View.GONE);
+        }
         updateResources();
     }
 
@@ -328,7 +342,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             refreshAllTiles();
         }
         if (mBrightnessView.getVisibility() == View.VISIBLE) {
-            if (listening) {
+            if (listening && showBrightnessSlider()) {
                 mBrightnessController.registerCallbacks();
             } else {
                 mBrightnessController.unregisterCallbacks();
@@ -521,7 +535,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     void setGridContentVisibility(boolean visible) {
         int newVis = visible ? VISIBLE : INVISIBLE;
-        setVisibility(newVis);
+        setVisibility(showBrightnessSlider() ? newVis : GONE);
         if (mGridContentVisible != visible) {
             mMetricsLogger.visibility(MetricsEvent.QS_PANEL, newVis);
         }
