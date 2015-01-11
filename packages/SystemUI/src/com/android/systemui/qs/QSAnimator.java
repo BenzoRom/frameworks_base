@@ -334,6 +334,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         for (int i = 0; i < N; i++) {
             mTopFiveQs.get(i).setVisibility(View.VISIBLE);
         }
+        mQsPanel.showBrightnessSlider();
     }
 
     @Override
