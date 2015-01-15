@@ -18,8 +18,10 @@ package com.android.keyguard;
 
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -46,13 +48,16 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.util.benzo.WeatherController;
+import com.android.internal.util.benzo.WeatherControllerImpl;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.ChargingView;
 import com.android.systemui.statusbar.policy.DateView;
 
 import java.util.Locale;
 
-public class KeyguardStatusView extends GridLayout {
+public class KeyguardStatusView extends GridLayout implements
+        WeatherController.Callback  {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardStatusView";
     private static final int MARQUEE_DELAY_MS = 2000;
@@ -69,6 +74,20 @@ public class KeyguardStatusView extends GridLayout {
     private View mKeyguardStatusArea;
     private Runnable mPendingMarqueeStart;
     private Handler mHandler;
+    private View mWeatherView;
+    private TextView mWeatherCity;
+    private TextView mWeatherWind;
+    private ImageView mWeatherConditionImage;
+    private Drawable mWeatherConditionDrawable;
+    private TextView mWeatherCurrentTemp;
+    private TextView mWeatherHumidity;
+    private TextView mWeatherConditionText;
+    private TextView mWeatherTimestamp;
+
+    private boolean mShowWeather;
+    private int mIconNameValue = 0;
+
+    private WeatherController mWeatherController;
 
     private View[] mVisibleInDoze;
     private boolean mPulsing;
@@ -123,6 +142,7 @@ public class KeyguardStatusView extends GridLayout {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mLockPatternUtils = new LockPatternUtils(getContext());
         mHandler = new Handler(Looper.myLooper());
+        mWeatherController = new WeatherControllerImpl(mContext);
     }
 
     private void setEnableMarquee(boolean enabled) {
@@ -168,7 +188,14 @@ public class KeyguardStatusView extends GridLayout {
         mTextColor = mClockView.getCurrentTextColor();
         mDateTextColor = mDateView.getCurrentTextColor();
         mAlarmTextColor = mAlarmStatusView.getCurrentTextColor();
-
+        mWeatherView = findViewById(R.id.keyguard_weather_view);
+        mWeatherCity = (TextView) findViewById(R.id.city);
+        mWeatherWind = (TextView) findViewById(R.id.wind);
+        mWeatherConditionImage = (ImageView) findViewById(R.id.weather_image);
+        mWeatherCurrentTemp = (TextView) findViewById(R.id.current_temp);
+        mWeatherHumidity = (TextView) findViewById(R.id.humidity);
+        mWeatherConditionText = (TextView) findViewById(R.id.condition);
+        mWeatherTimestamp = (TextView) findViewById(R.id.timestamp);
         boolean shouldMarquee = KeyguardUpdateMonitor.getInstance(mContext).isDeviceInteractive();
         setEnableMarquee(shouldMarquee);
         refresh();
@@ -211,6 +238,7 @@ public class KeyguardStatusView extends GridLayout {
 
         refreshTime();
         refreshAlarmStatus(nextAlarm);
+        updateWeatherSettings(false);
     }
 
     void refreshAlarmStatus(AlarmManager.AlarmClockInfo nextAlarm) {
@@ -259,12 +287,15 @@ public class KeyguardStatusView extends GridLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
+        updateWeatherSettings(false);
+        mWeatherController.addCallback(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
+        mWeatherController.removeCallback(this);
     }
 
     private String getOwnerInfo() {
@@ -287,6 +318,107 @@ public class KeyguardStatusView extends GridLayout {
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+ 
+    @Override
+    public void onWeatherChanged(WeatherController.WeatherInfo info) {
+        if (info.temp == null || info.condition == null) {
+            mWeatherCity.setText(null);
+            mWeatherWind.setText(null);
+            mWeatherConditionDrawable = null;
+            mWeatherCurrentTemp.setText(null);
+            mWeatherHumidity.setText(null);
+            mWeatherConditionText.setText(null);
+            mWeatherTimestamp.setText(null);
+            mWeatherView.setVisibility(View.GONE);
+            updateWeatherSettings(true);
+        } else {
+            mWeatherCity.setText(info.city);
+            mWeatherWind.setText(info.wind);
+            mWeatherConditionDrawable = info.conditionDrawable;
+            mWeatherCurrentTemp.setText(info.temp);
+            mWeatherHumidity.setText(info.humidity);
+            mWeatherConditionText.setText(info.condition);
+            mWeatherTimestamp.setText(getCurrentDate());
+            mWeatherView.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
+            updateWeatherSettings(false);
+        }
+    }
+
+    private String getCurrentDate() {
+        Date now = new Date();
+        long nowMillis = now.getTime();
+        StringBuilder sb = new StringBuilder();
+        sb.append(DateFormat.format("E", nowMillis));
+        sb.append(" ");
+        sb.append(DateFormat.getTimeFormat(getContext()).format(nowMillis));
+        return sb.toString();
+    }
+
+    private void updateWeatherSettings(boolean forceHide) {
+        final ContentResolver resolver = getContext().getContentResolver();
+        final Resources res = getContext().getResources();
+        View weatherPanel = findViewById(R.id.weather_panel);
+        TextView noWeatherInfo = (TextView) findViewById(R.id.no_weather_info_text);
+
+        mShowWeather = Settings.System.getInt(resolver,
+                Settings.System.LOCK_SCREEN_SHOW_WEATHER, 0) == 1;
+        boolean showLocation = Settings.System.getInt(resolver,
+                Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION, 1) == 1;
+        boolean showTimestamp = Settings.System.getInt(resolver,
+                Settings.System.LOCK_SCREEN_SHOW_WEATHER_TIMESTAMP, 1) == 1;
+        int iconNameValue = Settings.System.getInt(resolver,
+                Settings.System.LOCK_SCREEN_WEATHER_CONDITION_ICON, 0);
+        int primaryTextColor =
+                res.getColor(R.color.keyguard_default_primary_text_color);
+        // primaryTextColor with a transparency of 70%
+        int secondaryTextColor = (179 << 24) | (primaryTextColor & 0x00ffffff);
+        // primaryTextColor with a transparency of 50%
+        int alarmTextAndIconColor = (128 << 24) | (primaryTextColor & 0x00ffffff);
+        int defaultIconColor =
+                res.getColor(R.color.keyguard_default_icon_color);
+
+        mWeatherView.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
+        if (forceHide) {
+            noWeatherInfo.setVisibility(View.VISIBLE);
+            weatherPanel.setVisibility(View.GONE);
+            mWeatherConditionText.setVisibility(View.GONE);
+            mWeatherTimestamp.setVisibility(View.GONE);
+        } else {
+            noWeatherInfo.setVisibility(View.GONE);
+            weatherPanel.setVisibility(View.VISIBLE);
+            mWeatherConditionText.setVisibility(View.VISIBLE);
+            mWeatherCity.setVisibility(showLocation ? View.VISIBLE : View.INVISIBLE);
+            mWeatherTimestamp.setVisibility(showTimestamp ? View.VISIBLE : View.GONE);
+        }
+
+        mAlarmStatusView.setTextColor(alarmTextAndIconColor);
+        mDateView.setTextColor(primaryTextColor);
+        mClockView.setTextColor(primaryTextColor);
+        noWeatherInfo.setTextColor(primaryTextColor);
+        mWeatherCity.setTextColor(primaryTextColor);
+        mWeatherConditionText.setTextColor(primaryTextColor);
+        mWeatherCurrentTemp.setTextColor(primaryTextColor);
+        mWeatherHumidity.setTextColor(secondaryTextColor);
+        mWeatherWind.setTextColor(secondaryTextColor);
+        mWeatherTimestamp.setTextColor(secondaryTextColor);
+
+        if (mIconNameValue != iconNameValue) {
+            mIconNameValue = iconNameValue;
+            mWeatherController.updateWeather();
+        }
+        Drawable[] drawables = mAlarmStatusView.getCompoundDrawablesRelative();
+        Drawable alarmIcon = null;
+        mAlarmStatusView.setCompoundDrawablesRelative(null, null, null, null);
+        if (drawables[0] != null) {
+            alarmIcon = drawables[0];
+            alarmIcon.setColorFilter(alarmTextAndIconColor, Mode.MULTIPLY);
+        }
+        mAlarmStatusView.setCompoundDrawablesRelative(alarmIcon, null, null, null);
+        mWeatherConditionImage.setImageDrawable(null);
+        Drawable weatherIcon = mWeatherConditionDrawable;
+        mWeatherConditionImage.setImageDrawable(weatherIcon);
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.

@@ -67,6 +67,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/clock_view" />
+
+        <include layout="@layout/keyguard_weather_view" />
+
         </RelativeLayout>
 
         <include layout="@layout/keyguard_shortcuts"
