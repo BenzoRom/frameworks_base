@@ -1055,6 +1055,17 @@ public final class PowerManager {
         }
     }
 
+    public String getSeenWakeLocks()
+    {
+	try {
+	    if (mService != null) {
+		return mService.getSeenWakeLocks();
+	    }
+	} catch (RemoteException e) {
+	}
+	return null;
+    }
+
     /**
      * Get data about the battery saver mode for a specific service
      * @param serviceType unique key for the service, one of
