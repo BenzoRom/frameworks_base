@@ -5394,8 +5394,11 @@ public final class Settings {
         public static final String STATUS_BAR_BATTERY_SHOW_PERCENT = "status_bar_battery_show_percent";
 
         /**
-         * Style of battery to show.
-         *
+         * Style of battery to show:
+         *    0 - Display the battery an icon in portrait mode
+         *    1 - Display the battery as a circle
+         *    2 - Display the battery as text
+         *    3 - Display the battery as a dotted circle
          * @hide
          */
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
