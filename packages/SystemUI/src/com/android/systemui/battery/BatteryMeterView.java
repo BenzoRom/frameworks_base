@@ -64,6 +64,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
     protected static final int BATTERY_STYLE_PORTRAIT = 0;
     protected static final int BATTERY_STYLE_CIRCLE = 1;
     protected static final int BATTERY_STYLE_TEXT = 2;
+    protected static final int BATTERY_STYLE_DOTTED_CIRCLE = 3;
 
     @Retention(SOURCE)
     @IntDef({MODE_DEFAULT, MODE_ON, MODE_OFF, MODE_ESTIMATE})
@@ -422,9 +423,12 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
         res.getValue(R.dimen.status_bar_icon_scale_factor, typedValue, true);
         float iconScaleFactor = typedValue.getFloat();
 
+        boolean isCircleStyle = getBatteryStyle() == BATTERY_STYLE_CIRCLE
+                || getBatteryStyle() == BATTERY_STYLE_DOTTED_CIRCLE;
+
         float mainBatteryHeight =
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height) * iconScaleFactor;
-        float mainBatteryWidth = (getBatteryStyle() == BATTERY_STYLE_CIRCLE ?
+        float mainBatteryWidth = (isCircleStyle ?
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_circle_width) :
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width)) * iconScaleFactor;
 
@@ -471,10 +475,16 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
             case BATTERY_STYLE_CIRCLE:
                 mBatteryIconView.setImageDrawable(mCircleDrawable);
                 mBatteryIconView.setVisibility(View.VISIBLE);
+                mCircleDrawable.setUseDottedCircle(false);
                 break;
             case BATTERY_STYLE_TEXT:
                 mBatteryIconView.setVisibility(View.GONE);
                 mBatteryIconView.setImageDrawable(null);
+                break;
+            case BATTERY_STYLE_DOTTED_CIRCLE:
+                mBatteryIconView.setImageDrawable(mCircleDrawable);
+                mBatteryIconView.setVisibility(View.VISIBLE);
+                mCircleDrawable.setUseDottedCircle(true);
                 break;
         }
     }

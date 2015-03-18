@@ -81,6 +81,12 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
             postInvalidate()
         }
 
+    var useDottedCircle = false
+        set(value) {
+            field = value
+            postInvalidate()
+        }
+
     // an approximation of View.postInvalidate()
     private fun postInvalidate() {
         unscheduleSelf { invalidateSelf() }
@@ -158,6 +164,11 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
         framePaint.style = Paint.Style.STROKE
         batteryPaint.strokeWidth = strokeWidth
         batteryPaint.style = Paint.Style.STROKE
+        if (useDottedCircle) {
+            batteryPaint.pathEffect = DashPathEffect(floatArrayOf(3f, 2f), 0f)
+        } else {
+            batteryPaint.pathEffect = null
+        }
         powerSavePaint.strokeWidth = strokeWidth
         frame[
                 strokeWidth / 2.0f + padding.left, strokeWidth / 2.0f,
