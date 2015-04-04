@@ -5162,6 +5162,12 @@ public final class Settings {
         /** @hide */
         private static final Validator STATUSBAR_SHOW_WIFI_ACTIVITY_VALIDATOR = BOOLEAN_VALIDATOR;
 
+	/**
+         * show the membar in recents
+         *  @hide
+         */
+        public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "systemui_recents_mem_display";
+
         /**
          * Which component to use for Recents UI
          * 0 - Pie Recents (Quickstep)
