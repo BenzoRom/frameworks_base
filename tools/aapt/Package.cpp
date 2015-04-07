@@ -323,13 +323,8 @@ bool processFile(Bundle* bundle, ZipFile* zip,
     if (fromGzip) {
         result = zip->addGzip(file->getSourceFile().string(), storageName.string(), &entry);
     } else if (!hasData) {
-        /* don't compress certain files, e.g. PNGs */
-        int compressionMethod = bundle->getCompressionMethod();
-        if (!okayToCompress(bundle, storageName)) {
-            compressionMethod = ZipEntry::kCompressStored;
-        }
-        result = zip->add(file->getSourceFile().string(), storageName.string(), compressionMethod,
-                            &entry);
+        result = zip->add(file->getSourceFile().string(), storageName.string(),
+                           ZipEntry::kCompressStored, &entry);
     } else {
         result = zip->add(file->getData(), file->getSize(), storageName.string(),
                            file->getCompressionMethod(), &entry);

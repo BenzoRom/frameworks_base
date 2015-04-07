@@ -141,7 +141,7 @@ status_t compileXmlFile(const Bundle* bundle,
         printXMLBlock(&tree);
     }
 
-    target->setCompressionMethod(ZipEntry::kCompressDeflated);
+    target->setCompressionMethod(ZipEntry::kCompressStored);
     
     return err;
 }
