@@ -6501,6 +6501,7 @@ message MetricsEvent {
 
     // Benzo Rom
     BENZO = 1800;
+    TILE_LOCATION_DETAIL = 1801;
 
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
