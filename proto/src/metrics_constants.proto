@@ -4574,6 +4574,7 @@ message MetricsEvent {
     LOCKSCREEN_WEATHER_SETTINGS = 1201;
     OMNI_QS_WEATHER = 1202;
     OMNI_QS_WEATHER_DETAILS = 1203;
+    TILE_LOCATION_DETAIL = 1204;
 
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
