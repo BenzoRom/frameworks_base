@@ -10338,6 +10338,13 @@ public final class Settings {
         public static final String POWER_MENU_HIDE_ON_SECURE = "power_menu_hide_on_secure";
 
         /**
+         * Show music visualizer on the lockscreen when playing.
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer_enabled";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

@@ -199,6 +199,7 @@ public class SecureSettings {
         Settings.Secure.QUICK_SETTINGS_TILES_ANIM_DURATION,
         Settings.Secure.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT,
         Settings.Secure.POWER_MENU_HIDE_ON_SECURE,
-        Settings.Secure.TORCH_POWER_BUTTON_GESTURE
+        Settings.Secure.TORCH_POWER_BUTTON_GESTURE,
+        Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED
     };
 }
