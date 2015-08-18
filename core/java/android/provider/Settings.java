@@ -9285,6 +9285,14 @@ public final class Settings {
         private static final Validator ADVANCED_REBOOT_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Whether to show the brightness slider in quick settings panel
+         * @hide
+         */
+        public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer_enabled";
+
+        private static final Validator LOCKSCREEN_VISUALIZER_ENABLED_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -9423,7 +9431,8 @@ public final class Settings {
             AWARE_TAP_PAUSE_TOUCH_COUNT,
             QUICK_SETTINGS_TILES_VIBRATE,
             ADVANCED_REBOOT,
-            TORCH_POWER_BUTTON_GESTURE
+            TORCH_POWER_BUTTON_GESTURE,
+            LOCKSCREEN_VISUALIZER_ENABLED
         };
 
         /**
@@ -9624,6 +9633,7 @@ public final class Settings {
             VALIDATORS.put(QUICK_SETTINGS_TILES_VIBRATE, QUICK_SETTINGS_TILES_VIBRATE_VALIDATOR);
             VALIDATORS.put(ADVANCED_REBOOT, ADVANCED_REBOOT_VALIDATOR);
             VALIDATORS.put(TORCH_POWER_BUTTON_GESTURE, TORCH_POWER_BUTTON_GESTURE_VALIDATOR);
+            VALIDATORS.put(LOCKSCREEN_VISUALIZER_ENABLED, LOCKSCREEN_VISUALIZER_ENABLED_VALIDATOR);
         }
 
         /**
