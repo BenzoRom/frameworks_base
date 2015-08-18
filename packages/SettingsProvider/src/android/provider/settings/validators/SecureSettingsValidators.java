@@ -260,5 +260,6 @@ public class SecureSettingsValidators {
         VALIDATORS.put(Secure.ADVANCED_REBOOT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.POWER_MENU_HIDE_ON_SECURE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.TORCH_POWER_BUTTON_GESTURE, new InclusiveIntegerRangeValidator(0, 2));
+        VALIDATORS.put(Secure.LOCKSCREEN_VISUALIZER_ENABLED, BOOLEAN_VALIDATOR);
     }
 }
