@@ -2380,6 +2380,7 @@
         <item>settings</item>
         <item>lockdown</item>
         <item>flashlight</item>
+        <item>onthego</item>
         <item>users</item>
         <item>silent</item>
     </string-array>
