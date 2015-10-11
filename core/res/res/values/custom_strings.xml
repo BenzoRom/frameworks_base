@@ -26,4 +26,7 @@
     <string name="reboot_system_title">Restart system</string>
     <string name="reboot_system_message">Restarting system\u2026</string>
 
+    <!-- kill app long press back -->
+    <string name="app_killed_message">App killed</string>
+
 </resources>
