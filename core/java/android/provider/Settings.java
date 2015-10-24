@@ -9398,6 +9398,15 @@ public final class Settings {
         private static final Validator VOLUME_LINK_NOTIFICATION_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Disable power menu on secure lock screens
+         *
+         * @hide
+         */
+        public static final String POWER_MENU_HIDE_ON_SECURE = "power_menu_hide_on_secure";
+
+        private static final Validator POWER_MENU_HIDE_ON_SECURE_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -9538,7 +9547,8 @@ public final class Settings {
             ADVANCED_REBOOT,
             TORCH_POWER_BUTTON_GESTURE,
             LOCKSCREEN_VISUALIZER_ENABLED,
-            VOLUME_LINK_NOTIFICATION
+            VOLUME_LINK_NOTIFICATION,
+            POWER_MENU_HIDE_ON_SECURE
         };
 
         /**
@@ -9741,6 +9751,7 @@ public final class Settings {
             VALIDATORS.put(TORCH_POWER_BUTTON_GESTURE, TORCH_POWER_BUTTON_GESTURE_VALIDATOR);
             VALIDATORS.put(LOCKSCREEN_VISUALIZER_ENABLED, LOCKSCREEN_VISUALIZER_ENABLED_VALIDATOR);
             VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
+            VALIDATORS.put(POWER_MENU_HIDE_ON_SECURE, POWER_MENU_HIDE_ON_SECURE_VALIDATOR);
         }
 
         /**
