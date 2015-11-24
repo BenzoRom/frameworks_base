@@ -21,6 +21,7 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.RequiresPermission;
 import android.annotation.SuppressAutoDoc;
+import android.annotation.SuppressLint;
 import android.annotation.SystemApi;
 import android.annotation.TestApi;
 import android.app.ActivityThread;
@@ -68,6 +69,10 @@ public class Build {
 
     /** The name of the underlying board, like "goldfish". */
     public static final String BOARD = getString("ro.product.board");
+
+    /** Benzo Rom build version. */
+    @SuppressLint("MissingNullability")
+    public static final String BENZO = getString("ro.benzo.version");
 
     /**
      * The name of the instruction set (CPU type + ABI convention) of native code.
