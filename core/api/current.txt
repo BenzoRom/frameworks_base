@@ -30890,6 +30890,7 @@ package android.os {
     method @NonNull public static java.util.List<android.os.Build.Partition> getFingerprintedPartitions();
     method public static String getRadioVersion();
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public static String getSerial();
+    field public static final String BENZO_VERSION;
     field public static final String BOARD;
     field public static final String BOOTLOADER;
     field public static final String BRAND;
