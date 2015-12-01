@@ -219,5 +219,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.STATUS_BAR_BRIGHTNESS_CONTROL, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.STATUS_BAR_SHOW_ACTIVITY_INDICATORS, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.STATUS_BAR_QUICK_QS_PULLDOWN, new InclusiveIntegerRangeValidator(0, 3));
+        VALIDATORS.put(System.VOLUME_ROCKER_WAKE, BOOLEAN_VALIDATOR);
     }
 }
