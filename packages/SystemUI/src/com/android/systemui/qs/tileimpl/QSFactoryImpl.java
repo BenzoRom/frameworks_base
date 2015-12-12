@@ -25,6 +25,7 @@ import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AlwaysOnDisplayTile;
+import com.android.systemui.qs.tiles.AmbientDisplayTile;
 import com.android.systemui.qs.tiles.BatterySaverTile;
 import com.android.systemui.qs.tiles.BenzoExtrasTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
@@ -134,6 +135,8 @@ public class QSFactoryImpl implements QSFactory {
                 return new HeadsUpTile(mHost);
             case "caffeine":
                 return new CaffeineTile(mHost);
+            case "ambient_display":
+                return new AmbientDisplayTile(mHost);
         }
 
         // Intent tiles.
