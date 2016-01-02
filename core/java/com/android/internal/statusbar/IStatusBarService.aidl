@@ -78,4 +78,5 @@ interface IStatusBarService
     void clickTile(in ComponentName tile);
     void handleSystemKey(in int key);
     void restartUI();
+    void setAutoRotate(boolean enabled);
 }
