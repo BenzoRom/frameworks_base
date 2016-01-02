@@ -116,6 +116,7 @@ public class CommandQueue extends IStatusBar.Stub implements CallbackController<
     private static final int MSG_SHOW_PINNING_TOAST_ENTER_EXIT = 45 << MSG_SHIFT;
     private static final int MSG_SHOW_PINNING_TOAST_ESCAPE     = 46 << MSG_SHIFT;
     private static final int MSG_RECENTS_ANIMATION_STATE_CHANGED = 47 << MSG_SHIFT;
+    private static final int MSG_SET_AUTOROTATE_STATUS         = 48 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -292,6 +293,8 @@ public class CommandQueue extends IStatusBar.Stub implements CallbackController<
          * @see IStatusBar#onRecentsAnimationStateChanged(boolean)
          */
         default void onRecentsAnimationStateChanged(boolean running) { }
+
+        default void setAutoRotate(boolean enabled) { }
     }
 
     @VisibleForTesting
@@ -826,6 +829,15 @@ public class CommandQueue extends IStatusBar.Stub implements CallbackController<
         }
     }
 
+    @Override
+    public void setAutoRotate(boolean enabled) {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_SET_AUTOROTATE_STATUS);
+            mHandler.obtainMessage(MSG_SET_AUTOROTATE_STATUS,
+                enabled ? 1 : 0, 0, null).sendToTarget();
+        }
+    }
+
     private final class H extends Handler {
         private H(Looper l) {
             super(l);
@@ -1089,6 +1101,11 @@ public class CommandQueue extends IStatusBar.Stub implements CallbackController<
                 case MSG_RECENTS_ANIMATION_STATE_CHANGED:
                     for (int i = 0; i < mCallbacks.size(); i++) {
                         mCallbacks.get(i).onRecentsAnimationStateChanged(msg.arg1 > 0);
+                    }
+                    break;
+                case MSG_SET_AUTOROTATE_STATUS:
+                    for (int i = 0; i < mCallbacks.size(); i++) {
+                        mCallbacks.get(i).setAutoRotate(msg.arg1 != 0);
                     }
                     break;
             }
