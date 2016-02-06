@@ -5290,6 +5290,24 @@ public final class Settings {
         public static final String AMBIENT_DISPLAY_WEATHER = "ambient_display_weather";
 
         /**
+         * Hide lockscreen date
+         * @hide
+         */
+        public static final String SHOW_LOCKSCREEN_DATE = "show_lockscreen_date";
+
+        /**
+         * Hide lockscreen clock
+         * @hide
+         */
+        public static final String SHOW_LOCKSCREEN_CLOCK = "show_lockscreen_clock";
+
+        /**
+         * Hide lockscreen alarm
+         * @hide
+         */
+        public static final String SHOW_LOCKSCREEN_ALARM = "show_lockscreen_alarm";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5516,6 +5534,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUS_BAR_BRIGHTNESS_CONTROL);
             PRIVATE_SETTINGS.add(FP_WAKE_AND_UNLOCK);
             PRIVATE_SETTINGS.add(FINGERPRINT_SUCCESS_VIB);
+            PRIVATE_SETTINGS.add(SHOW_LOCKSCREEN_DATE);
+            PRIVATE_SETTINGS.add(SHOW_LOCKSCREEN_CLOCK);
+            PRIVATE_SETTINGS.add(SHOW_LOCKSCREEN_ALARM);
         }
 
         /**
