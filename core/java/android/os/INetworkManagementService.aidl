@@ -457,5 +457,5 @@ interface INetworkManagementService
      * Restrict UID from accessing data/wifi
      */
     void restrictAppOnData(int uid, boolean restrict);
-    void restrictAppOnWifi(int uid, boolean restrict);
+    void restrictAppOnWlan(int uid, boolean restrict);
 }

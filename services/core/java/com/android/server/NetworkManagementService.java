@@ -224,7 +224,8 @@ public class NetworkManagementService extends INetworkManagementService.Stub
 
     private INetd mNetdService;
 
-    private String mWifiInterfaceName, mDataInterfaceName;
+    private String mDataInterfaceName;
+    private String mWlanInterfaceName;
     private BroadcastReceiver mPendingDataRestrictReceiver;
 
     private IBatteryStats mBatteryStats;
@@ -260,12 +261,12 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     /** Set of UIDs whitelisted on metered networks. */
     @GuardedBy("mRulesLock")
     private SparseBooleanArray mUidAllowOnMetered = new SparseBooleanArray();
-    /** Set of UIDs blacklisted on WiFi networks. */
-    @GuardedBy("mQuotaLock")
-    final SparseBooleanArray mWifiBlacklist = new SparseBooleanArray();
     /** Set of UIDs blacklisted on cellular networks. */
     @GuardedBy("mQuotaLock")
     final SparseBooleanArray mDataBlacklist = new SparseBooleanArray();
+    /** Set of UIDs blacklisted on WiFi networks. */
+    @GuardedBy("mQuotaLock")
+    final SparseBooleanArray mWlanBlacklist = new SparseBooleanArray();
     /** Set of UIDs with cleartext penalties. */
     @GuardedBy("mQuotaLock")
     private SparseIntArray mUidCleartextPolicy = new SparseIntArray();
@@ -348,7 +349,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 FgThread.get().getLooper());
         mThread = new Thread(mConnector, NETD_TAG);
 
-        mWifiInterfaceName = SystemProperties.get("wifi.interface");
+        mWlanInterfaceName = SystemProperties.get("wifi.interface");
 
         mDaemonHandler = new Handler(FgThread.get().getLooper());
 
@@ -1803,28 +1804,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         }
     }
 
-    private void processPendingDataRestrictRequests() {
-        initDataInterface();
-        if (TextUtils.isEmpty(mDataInterfaceName)) {
-            return;
-        }
-        if (mPendingDataRestrictReceiver != null) {
-            mContext.unregisterReceiver(mPendingDataRestrictReceiver);
-            mPendingDataRestrictReceiver = null;
-        }
-        int count = mPendingRestrictOnData.size();
-        for (int i = 0; i < count; i++) {
-            restrictAppOnData(mPendingRestrictOnData.keyAt(i),
-                    mPendingRestrictOnData.valueAt(i));
-        }
-        mPendingRestrictOnData.clear();
-    }
-
     @Override
     public void restrictAppOnData(int uid, boolean restrict) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
         // silently discard when control disabled
-        // TODO: eventually migrate to be always enabled
         if (!mBandwidthControlEnabled) return;
 
         initDataInterface();
@@ -1853,29 +1836,43 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     @Override
-    public void restrictAppOnWifi(int uid, boolean restrict) {
+    public void restrictAppOnWlan(int uid, boolean restrict) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-
         // silently discard when control disabled
-        // TODO: eventually migrate to be always enabled
         if (!mBandwidthControlEnabled) return;
 
         synchronized (mQuotaLock) {
-            boolean oldValue = mWifiBlacklist.get(uid, false);
+            boolean oldValue = mWlanBlacklist.get(uid, false);
             if (oldValue == restrict) {
                 return;
             }
-            mWifiBlacklist.put(uid, restrict);
+            mWlanBlacklist.put(uid, restrict);
         }
-
 
         try {
             final String action = restrict ? "add" : "remove";
             mConnector.execute("bandwidth", action + "restrictappsonwlan",
-                    mWifiInterfaceName, uid);
+                    mWlanInterfaceName, uid);
         } catch (NativeDaemonConnectorException e) {
             throw e.rethrowAsParcelableException();
         }
+    }
+
+    private void processPendingDataRestrictRequests() {
+        initDataInterface();
+        if (TextUtils.isEmpty(mDataInterfaceName)) {
+            return;
+        }
+        if (mPendingDataRestrictReceiver != null) {
+            mContext.unregisterReceiver(mPendingDataRestrictReceiver);
+            mPendingDataRestrictReceiver = null;
+        }
+        int count = mPendingRestrictOnData.size();
+        for (int i = 0; i < count; i++) {
+            restrictAppOnData(mPendingRestrictOnData.keyAt(i),
+                    mPendingRestrictOnData.valueAt(i));
+        }
+        mPendingRestrictOnData.clear();
     }
 
     @Override
