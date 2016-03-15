@@ -5333,12 +5333,19 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_BLACKLIST_VALUES),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ROTATION),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ROTATION))) {
+                updateLockScreenRotation();
+            }
             update();
         }
 
@@ -5347,6 +5354,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             final String blackString = Settings.System.getString(resolver,
                     Settings.System.HEADS_UP_BLACKLIST_VALUES);
             splitAndAddToArrayList(mBlacklist, blackString, "\\|");
+            updateLockScreenRotation();
+        }
+    }
+
+    private void updateLockScreenRotation() {
+        if (mStatusBarWindowManager != null) {
+            mStatusBarWindowManager.updateKeyguardScreenRotation();
         }
     }
 
