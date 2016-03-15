@@ -6202,6 +6202,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.APP_SIDEBAR_POSITION),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ROTATION),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -6233,7 +6236,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setFpToDismissNotifications();
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.APP_SIDEBAR_POSITION))) {
-            setAppSidebarSettings();
+                setAppSidebarSettings();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_ROTATION))) {
+                updateLockScreenRotation();
             }
         }
 
@@ -6250,6 +6256,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             setQsPanelOptions();
             setFpToDismissNotifications();
             setAppSidebarSettings();
+            updateLockScreenRotation();
         }
     }
 
@@ -6304,6 +6311,12 @@ public class StatusBar extends SystemUI implements DemoMode,
     protected void removeSidebarView() {
         if (mAppSidebar != null)
             mWindowManager.removeView(mAppSidebar);
+    }
+
+    private void updateLockScreenRotation() {
+        if (mStatusBarWindowManager != null) {
+            mStatusBarWindowManager.updateKeyguardScreenRotation();
+        }
     }
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
