@@ -107,5 +107,6 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT,
         Settings.System.STATUS_BAR_BATTERY_STYLE,
         Settings.System.VOLUME_ROCKER_WAKE,
+        Settings.System.VOLUME_BUTTON_MUSIC_CONTROL,
     };
 }
