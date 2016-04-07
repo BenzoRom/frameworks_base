@@ -106,6 +106,11 @@ public class KeyguardStatusView extends GridLayout implements
     private int mDateTextColor;
     private int mAlarmTextColor;
 
+    private TextView mAmbientDisplayBatteryView;
+    private final int mWarningColor = 0xfff4511e;
+    private int mIconColor;
+    private int mPrimaryTextColor;
+
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
@@ -195,7 +200,8 @@ public class KeyguardStatusView extends GridLayout implements
         mOwnerInfo = findViewById(R.id.owner_info);
         mBatteryDoze = findViewById(R.id.battery_doze);
         mKeyguardStatusArea = findViewById(R.id.keyguard_status_area);
-        mVisibleInDoze = new View[]{mBatteryDoze, mClockView, mKeyguardStatusArea};
+        mAmbientDisplayBatteryView = (TextView) findViewById(R.id.ambient_display_battery_view);
+        mVisibleInDoze = new View[]{mAmbientDisplayBatteryView, mClockView, mKeyguardStatusArea};
         mTextColor = mClockView.getCurrentTextColor();
         mDateTextColor = mDateView.getCurrentTextColor();
         mAlarmTextColor = mAlarmStatusView.getCurrentTextColor();
@@ -463,6 +469,93 @@ public class KeyguardStatusView extends GridLayout implements
             alarmIcon.setColorFilter(alarmTextAndIconColor, Mode.MULTIPLY);
         }
         mAlarmStatusView.setCompoundDrawablesRelative(alarmIcon, null, null, null);
+    }
+
+    private void refreshBatteryInfo() {
+        final Resources res = getContext().getResources();
+        KeyguardUpdateMonitor.BatteryStatus batteryStatus =
+                KeyguardUpdateMonitor.getInstance(mContext).getBatteryStatus();
+
+        mPrimaryTextColor =
+                res.getColor(R.color.keyguard_default_primary_text_color);
+        mIconColor =
+                res.getColor(R.color.keyguard_default_primary_text_color);
+
+        String percentage = "";
+        int resId = 0;
+        final int lowLevel = res.getInteger(
+                com.android.internal.R.integer.config_lowBatteryWarningLevel);
+        final boolean useWarningColor = batteryStatus == null || batteryStatus.status == 1
+                || (batteryStatus.level <= lowLevel && !batteryStatus.isPluggedIn());
+
+        if (batteryStatus != null) {
+            percentage = NumberFormat.getPercentInstance().format((double) batteryStatus.level / 100.0);
+        }
+        if (batteryStatus == null || batteryStatus.status == 1) {
+            resId = R.drawable.ic_battery_unknown;
+        } else {
+            if (batteryStatus.level >= 96) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_full : R.drawable.ic_battery_full;
+            } else if (batteryStatus.level >= 90) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_90 : R.drawable.ic_battery_90;
+            } else if (batteryStatus.level >= 80) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_80 : R.drawable.ic_battery_80;
+            } else if (batteryStatus.level >= 60) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_60 : R.drawable.ic_battery_60;
+            } else if (batteryStatus.level >= 50) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_50 : R.drawable.ic_battery_50;
+            } else if (batteryStatus.level >= 30) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_30 : R.drawable.ic_battery_30;
+            } else if (batteryStatus.level >= lowLevel) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_20 : R.drawable.ic_battery_20;
+            } else {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_20 : R.drawable.ic_battery_alert;
+            }
+        }
+        Drawable icon = resId > 0 ? res.getDrawable(resId).mutate() : null;
+        if (icon != null) {
+            icon.setTintList(ColorStateList.valueOf(useWarningColor ? mWarningColor : mIconColor));
+        }
+
+        if (showBatteryText()) {
+            mAmbientDisplayBatteryView.setText(percentage);
+        } else {
+            mAmbientDisplayBatteryView.setText("");
+        }
+        mAmbientDisplayBatteryView.setTextColor(useWarningColor
+                ? mWarningColor : mPrimaryTextColor);
+        mAmbientDisplayBatteryView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
+    }
+
+    public void setDozing(boolean dozing) {
+        if (dozing && showBattery()) {
+            refreshBatteryInfo();
+            if (mAmbientDisplayBatteryView.getVisibility() != View.VISIBLE) {
+                mAmbientDisplayBatteryView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mAmbientDisplayBatteryView.getVisibility() != View.GONE) {
+                mAmbientDisplayBatteryView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private boolean showBattery() {
+        return Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.AMBIENT_DISPLAY_SHOW_BATTERY, 1) == 1;
+    }
+
+    private boolean showBatteryText() {
+        return Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.AMBIENT_DISPLAY_SHOW_BATTERY_TEXT, 1) == 1;
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
