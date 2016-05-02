@@ -25,4 +25,10 @@
     <!-- Navigation keys swaped layout -->
     <string name="config_navBarLayoutSwapped" translatable="false">left[.5W],recent[1WC];home;back[1WC],right[.5W]</string>
 
+    <!-- Should we listen for fingerprints when the screen is off?  Devices
+         with a rear-mounted sensor want this, but certain devices have
+         the sensor embedded in the power key and listening all the time
+         causes a poor experience. -->
+    <bool name="config_fingerprintWakeAndUnlock">true</bool>
+
 </resources>
