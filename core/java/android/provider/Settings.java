@@ -4557,6 +4557,27 @@ public final class Settings {
          */
 
         /**
+         * Change quick settings tiles animation style
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_STYLE = "anim_tile_style";
+
+        /** @hide */
+        private static final Validator ANIM_TILE_STYLE_VALIDATOR =
+              new SettingsValidators.InclusiveIntegerRangeValidator(0, 2);
+
+        /**
+         * Change quick settings tiles animation duration
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_DURATION = "anim_tile_duration";
+
+        /** @hide */
+        private static final Validator ANIM_TILE_DURATION_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4623,6 +4644,8 @@ public final class Settings {
             NOTIFICATION_LIGHT_PULSE,
             LOCKSCREEN_PIN_SCRAMBLE_LAYOUT,
             LOCKSCREEN_QUICK_UNLOCK_CONTROL,
+            ANIM_TILE_STYLE,
+            ANIM_TILE_DURATION,
         };
 
         /**
@@ -4744,6 +4767,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
             PRIVATE_SETTINGS.add(LOCKSCREEN_PIN_SCRAMBLE_LAYOUT);
             PRIVATE_SETTINGS.add(LOCKSCREEN_QUICK_UNLOCK_CONTROL);
+            PRIVATE_SETTINGS.add(ANIM_TILE_STYLE);
+            PRIVATE_SETTINGS.add(ANIM_TILE_DURATION);
         }
 
         /**
@@ -4841,6 +4866,8 @@ public final class Settings {
                     LOCKSCREEN_PIN_SCRAMBLE_LAYOUT_VALIDATOR);
             VALIDATORS.put(LOCKSCREEN_QUICK_UNLOCK_CONTROL,
                     LOCKSCREEN_QUICK_UNLOCK_CONTROL_VALIDATOR);
+            VALIDATORS.put(ANIM_TILE_STYLE, ANIM_TILE_STYLE_VALIDATOR);
+            VALIDATORS.put(ANIM_TILE_DURATION, ANIM_TILE_DURATION_VALIDATOR);
         }
 
         /**
