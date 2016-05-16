@@ -221,6 +221,8 @@ public class SecureSettings {
         Settings.Secure.BLUETOOTH_LE_BROADCAST_APP_SOURCE_NAME,
         Settings.Secure.ADVANCED_REBOOT,
         Settings.Secure.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT,
-        Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE
+        Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE,
+        Settings.Secure.QUICK_SETTINGS_TILES_ANIM_STYLE,
+        Settings.Secure.QUICK_SETTINGS_TILES_ANIM_DURATION
     };
 }
