@@ -194,5 +194,7 @@ public class SecureSettings {
         Settings.Secure.LOCKSCREEN_USE_DOUBLE_LINE_CLOCK,
         Settings.Secure.ADVANCED_REBOOT,
         Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE,
+        Settings.Secure.QUICK_SETTINGS_TILES_ANIM_STYLE,
+        Settings.Secure.QUICK_SETTINGS_TILES_ANIM_DURATION,
     };
 }
