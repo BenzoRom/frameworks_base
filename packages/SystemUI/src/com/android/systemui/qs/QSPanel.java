@@ -18,6 +18,10 @@ package com.android.systemui.qs;
 
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.content.Context;
@@ -26,6 +30,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.UserHandle;
+import android.provider.Settings;
+import android.provider.Settings.Secure;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,6 +48,7 @@ import com.android.internal.widget.RemeasuringLinearLayout;
 import com.android.systemui.R;
 import com.android.systemui.plugins.qs.DetailAdapter;
 import com.android.systemui.plugins.qs.QSTile;
+import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.settings.brightness.BrightnessSlider;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.TunerService;
@@ -539,6 +547,7 @@ public class QSPanel extends LinearLayout implements Tunable {
 
         if (mTileLayout != null) {
             mTileLayout.addTile(tileRecord);
+            tileClickListener(tileRecord.tile, tileRecord.tileView);
         }
     }
 
@@ -796,5 +805,39 @@ public class QSPanel extends LinearLayout implements Tunable {
         }
         parent.removeView(child);
         parent.addView(child, index);
+    }
+
+    private void setAnimationTile(QSTileView v) {
+        ObjectAnimator animTile = null;
+        int animStyle =
+                Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.QUICK_SETTINGS_TILES_ANIM_STYLE, 0,
+                UserHandle.USER_CURRENT);
+        int animDuration =
+                Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.QUICK_SETTINGS_TILES_ANIM_DURATION, 2000,
+                UserHandle.USER_CURRENT);
+        if (animStyle == 0) {
+            //No animation
+        }
+        if (animStyle == 1) {
+            animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f);
+        }
+        if (animStyle == 2) {
+            animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
+        }
+        if (animTile != null) {
+            animTile.setDuration(animDuration);
+            animTile.start();
+        }
+    }
+
+    private void tileClickListener(QSTile t, QSTileView v) {
+        if (mTileLayout != null) {
+            v.setOnClickListener(view -> {
+                    t.click(v);
+                    setAnimationTile(v);
+            });
+        }
     }
 }
