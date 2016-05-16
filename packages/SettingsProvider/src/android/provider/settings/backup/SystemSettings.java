@@ -85,5 +85,7 @@ public class SystemSettings {
         Settings.System.ALARM_ALERT,
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT,
+        Settings.System.ANIM_TILE_STYLE,
+        Settings.System.ANIM_TILE_DURATION,
     };
 }
