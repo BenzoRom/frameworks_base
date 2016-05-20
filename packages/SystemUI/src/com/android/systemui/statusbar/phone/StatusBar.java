@@ -3633,7 +3633,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setInteracting(StatusBarManager.WINDOW_STATUS_BAR, true);
             }
         }
-        if (mBrightnessChanged && upOrCancel) {
+        if (mBrightnessChanged && upOrCancel && !mNotificationPanel.isQsExpanded()) {
             mBrightnessChanged = false;
             if (mJustPeeked && mExpandedVisible) {
                 mNotificationPanel.fling(10, false);
