@@ -212,5 +212,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.ANIM_TILE_STYLE, new InclusiveIntegerRangeValidator(0, 2));
         VALIDATORS.put(System.ANIM_TILE_DURATION, ANY_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.ANIM_TILE_INTERPOLATOR, new InclusiveIntegerRangeValidator(0, 7));
     }
 }
