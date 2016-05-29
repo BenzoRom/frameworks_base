@@ -4578,6 +4578,17 @@ public final class Settings {
         private static final Validator ANIM_TILE_DURATION_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
+         * Change quick settings tiles interpolator
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
+
+        /** @hide */
+        private static final Validator ANIM_TILE_INTERPOLATOR_VALIDATOR =
+              new SettingsValidators.InclusiveIntegerRangeValidator(0, 7);
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4646,6 +4657,7 @@ public final class Settings {
             LOCKSCREEN_QUICK_UNLOCK_CONTROL,
             ANIM_TILE_STYLE,
             ANIM_TILE_DURATION,
+            ANIM_TILE_INTERPOLATOR,
         };
 
         /**
@@ -4769,6 +4781,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCKSCREEN_QUICK_UNLOCK_CONTROL);
             PRIVATE_SETTINGS.add(ANIM_TILE_STYLE);
             PRIVATE_SETTINGS.add(ANIM_TILE_DURATION);
+            PRIVATE_SETTINGS.add(ANIM_TILE_INTERPOLATOR);
         }
 
         /**
@@ -4868,6 +4881,7 @@ public final class Settings {
                     LOCKSCREEN_QUICK_UNLOCK_CONTROL_VALIDATOR);
             VALIDATORS.put(ANIM_TILE_STYLE, ANIM_TILE_STYLE_VALIDATOR);
             VALIDATORS.put(ANIM_TILE_DURATION, ANIM_TILE_DURATION_VALIDATOR);
+            VALIDATORS.put(ANIM_TILE_INTERPOLATOR, ANIM_TILE_INTERPOLATOR_VALIDATOR);
         }
 
         /**
