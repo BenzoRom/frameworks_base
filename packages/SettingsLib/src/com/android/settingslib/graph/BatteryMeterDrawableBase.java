@@ -24,6 +24,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
@@ -49,6 +50,7 @@ public class BatteryMeterDrawableBase extends Drawable {
     public static final int BATTERY_STYLE_LANDSCAPE = 1;
     public static final int BATTERY_STYLE_CIRCLE = 2;
     public static final int BATTERY_STYLE_DOTTED_CIRCLE = 3;
+    public static final int BATTERY_STYLE_SOLID_CIRCLE = 4;
 
     protected final Context mContext;
     protected final Paint mFramePaint;
@@ -332,6 +334,7 @@ public class BatteryMeterDrawableBase extends Drawable {
                 break;
             case BATTERY_STYLE_CIRCLE:
             case BATTERY_STYLE_DOTTED_CIRCLE:
+            case BATTERY_STYLE_SOLID_CIRCLE:
                 drawCircle(c);
                 break;
             default:
@@ -552,7 +555,11 @@ public class BatteryMeterDrawableBase extends Drawable {
         mFramePaint.setStyle(Paint.Style.STROKE);
 
         mBatteryPaint.setStrokeWidth(strokeWidth);
-        mBatteryPaint.setStyle(Paint.Style.STROKE);
+        if (mMeterStyle == BATTERY_STYLE_SOLID_CIRCLE) {
+            mBatteryPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        } else {
+            mBatteryPaint.setStyle(Paint.Style.STROKE);
+        }
 
         if (mMeterStyle == BATTERY_STYLE_DOTTED_CIRCLE) {
             mBatteryPaint.setPathEffect(mPathEffect);
