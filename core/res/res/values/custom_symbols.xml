@@ -35,8 +35,8 @@
   <java-symbol type="style" name="GlobalActionsAnimationTop" />
   <java-symbol type="style" name="GlobalActionsAnimationEnter" />
 
-  <!-- Config IME switcher -->
-  <java-symbol type="bool" name="config_show_IMESwitcher" />
+  <!-- Config.xml entries -->
+  <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
 
   <!-- Shortcut actions -->
   <java-symbol type="drawable" name="ic_shortcut_action_silent" />
@@ -63,9 +63,6 @@
   <java-symbol type="drawable" name="ic_shortcut_action_ring_vib_silent" />
   <java-symbol type="drawable" name="ic_shortcut_action_screenshot" />
   <java-symbol type="drawable" name="ic_shortcut_action_search" />
-
-  <!-- Config IME switcher -->
-  <java-symbol type="bool" name="config_show_IMESwitcher" />
 
   <!-- Shortcut actions -->
   <java-symbol type="drawable" name="ic_shortcut_action_silent" />
