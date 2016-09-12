@@ -114,4 +114,7 @@
   <java-symbol type="layout" name="permission_confirmation_dialog" />
   <java-symbol type="array" name="app_ops_labels" />
 
+  <!-- IMESwitcher -->
+  <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
+
 </resources>
