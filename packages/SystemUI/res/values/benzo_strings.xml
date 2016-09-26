@@ -41,4 +41,9 @@
     <string name="global_action_screenrecord">Screenrecord</string>
     <string name="global_action_flashlight">Flashlight</string>
 
+    <!-- Sync QS Tile -->
+    <string name="quick_settings_sync_label">Account Sync</string>
+    <string name="accessibility_quick_settings_sync_off">Sync off</string>
+    <string name="accessibility_quick_settings_sync_on">Sync on</string>
+
 </resources>
