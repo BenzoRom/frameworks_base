@@ -297,6 +297,10 @@
     <!-- Permission for IDisplay/GMS(platformconfigurator) auth. -->
     <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />
 
+    <!-- Sync tile -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
