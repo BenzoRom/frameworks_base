@@ -68,4 +68,11 @@
     <string name="accessibility_quick_settings_onthego_changed_off">On-The-Go turned off</string>
     <string name="accessibility_quick_settings_onthego_changed_on">On-The-Go turned on</string>
 
+    <!-- Sync QS Tile -->
+    <string name="quick_settings_sync_label">Account Sync</string>
+    <string name="accessibility_quick_settings_sync_off">Sync off</string>
+    <string name="accessibility_quick_settings_sync_on">Sync on</string>
+    <string name="accessibility_quick_settings_sync_changed_off">Sync turned off</string>
+    <string name="accessibility_quick_settings_sync_changed_on">Sync turned on</string>
+
 </resources>
