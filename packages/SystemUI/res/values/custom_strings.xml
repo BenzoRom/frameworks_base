@@ -161,5 +161,7 @@
     <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
     <!-- USB tethering QS tile -->
     <string name="quick_settings_usb_tether_label">USB tethering</string>
+    <!-- BenzoExtras Tile -->
+    <string name="quick_settings_benzoextras_label">Benzo Extras</string>
 
 </resources>
