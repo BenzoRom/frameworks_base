@@ -19,6 +19,7 @@ package com.android.systemui.statusbar;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,6 +27,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -45,6 +47,13 @@ public class VisualizerView extends View
     private static final String LOCKSCREEN_VISUALIZER_ENABLED =
             "benzosecure:" + Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED;
 
+    private static final String VISUALIZER_USE_CUSTOM_COLOR =
+            "benzosecure:" + Settings.Secure.VISUALIZER_USE_CUSTOM_COLOR;
+
+    private static final String VISUALIZER_CUSTOM_COLOR =
+            "benzosecure:" + Settings.Secure.VISUALIZER_CUSTOM_COLOR;
+
+    private Context mContext;
     private Paint mPaint;
     private Visualizer mVisualizer;
     private ObjectAnimator mVisualizerColorAnimator;
@@ -60,7 +69,10 @@ public class VisualizerView extends View
     private boolean mDozing;
     private boolean mOccluded;
 
-    private int mColor;
+    private boolean mUseCustomColor;
+    private int mColorToUse;
+    private int mDefaultColor;
+    private int mCustomColor;
     private Bitmap mCurrentBitmap;
 
     private Visualizer.OnDataCaptureListener mVisualizerListener =
@@ -149,12 +161,15 @@ public class VisualizerView extends View
 
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
 
-        mColor = Color.TRANSPARENT;
+        mDefaultColor = Color.TRANSPARENT;
+        updateColorSettings();
+        mColorToUse = mUseCustomColor ? mCustomColor : mDefaultColor;
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(mColor);
+        mPaint.setColor(mColorToUse);
 
         mFFTPoints = new float[128];
         mValueAnimators = new ValueAnimator[32];
@@ -185,7 +200,8 @@ public class VisualizerView extends View
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Dependency.get(TunerService.class).addTunable(this, LOCKSCREEN_VISUALIZER_ENABLED);
+        Dependency.get(TunerService.class).addTunable(this, LOCKSCREEN_VISUALIZER_ENABLED,
+                VISUALIZER_USE_CUSTOM_COLOR, VISUALIZER_CUSTOM_COLOR);
     }
 
     @Override
@@ -201,6 +217,12 @@ public class VisualizerView extends View
             mVisualizerEnabled = TunerService.parseIntegerSwitch(newValue, false);
             checkStateChanged();
             updateViewVisibility();
+        } else if (VISUALIZER_USE_CUSTOM_COLOR.equals(key)) {
+            updateColorSettings();
+            setColor(mUseCustomColor ? mCustomColor : mDefaultColor);
+        } else if (VISUALIZER_CUSTOM_COLOR.equals(key)) {
+            updateColorSettings();
+            setColor(mUseCustomColor ? mCustomColor : mDefaultColor);
         }
     }
 
@@ -238,7 +260,10 @@ public class VisualizerView extends View
     public void onGenerated(Palette palette) {
         Swatch dominantSwatch = palette.getDominantSwatch();
         if (dominantSwatch != null) {
-            setColor(dominantSwatch.getInt());
+            mDefaultColor = dominantSwatch.getInt();
+            if (!mUseCustomColor) {
+                setColor(mDefaultColor);
+            }
         }
     }
 
@@ -297,7 +322,10 @@ public class VisualizerView extends View
         if (bitmap != null) {
             Palette.from(bitmap, null).generate(this);
         } else {
-            setColor(Color.TRANSPARENT);
+            mDefaultColor = Color.TRANSPARENT;
+            if (!mUseCustomColor) {
+                setColor(mDefaultColor);
+            }
         }
     }
 
@@ -306,10 +334,10 @@ public class VisualizerView extends View
             color = Color.WHITE;
         }
 
-        color = Color.argb(140, Color.red(color), Color.green(color), Color.blue(color));
+        color = (140 << 24) | (color & 0x00ffffff);
 
-        if (mColor != color) {
-            mColor = color;
+        if (mColorToUse != color) {
+            mColorToUse = color;
 
             if (mVisualizer != null) {
                 if (mVisualizerColorAnimator != null) {
@@ -317,12 +345,12 @@ public class VisualizerView extends View
                 }
 
                 mVisualizerColorAnimator = ObjectAnimator.ofArgb(mPaint, "color",
-                        mPaint.getColor(), mColor);
+                        mPaint.getColor(), mColorToUse);
                 mVisualizerColorAnimator.setStartDelay(600);
                 mVisualizerColorAnimator.setDuration(1200);
                 mVisualizerColorAnimator.start();
             } else {
-                mPaint.setColor(mColor);
+                mPaint.setColor(mColorToUse);
             }
         }
     }
@@ -347,5 +375,17 @@ public class VisualizerView extends View
                         .setDuration(mVisible ? 600 : 0);
             }
         }
+    }
+
+    private void updateColorSettings() {
+        ContentResolver contentResolver = mContext.getContentResolver();
+        mUseCustomColor = Settings.Secure.getIntForUser(contentResolver,
+                Settings.Secure.VISUALIZER_USE_CUSTOM_COLOR, 0,
+                UserHandle.USER_CURRENT) == 1;
+        final int color = Settings.Secure.getIntForUser(contentResolver,
+                Settings.Secure.VISUALIZER_CUSTOM_COLOR, 0xff1976d2,
+                UserHandle.USER_CURRENT);
+        // make sure custom color always has the right transparency
+        mCustomColor = (140 << 24) | (color & 0x00ffffff);
     }
 }

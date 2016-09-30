@@ -200,6 +200,8 @@ public class SecureSettings {
         Settings.Secure.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT,
         Settings.Secure.POWER_MENU_HIDE_ON_SECURE,
         Settings.Secure.TORCH_POWER_BUTTON_GESTURE,
-        Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED
+        Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED,
+        Settings.Secure.VISUALIZER_USE_CUSTOM_COLOR,
+        Settings.Secure.VISUALIZER_CUSTOM_COLOR
     };
 }

@@ -18,6 +18,7 @@ package android.provider.settings.validators;
 
 import static android.provider.settings.validators.SettingsValidators.ACCESSIBILITY_SHORTCUT_TARGET_LIST_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.ANY_INTEGER_VALIDATOR;
+import static android.provider.settings.validators.SettingsValidators.ANY_STRING_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.BOOLEAN_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.COLON_SEPARATED_COMPONENT_LIST_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.COLON_SEPARATED_PACKAGE_LIST_VALIDATOR;
@@ -299,5 +300,7 @@ public class SecureSettingsValidators {
         VALIDATORS.put(Secure.POWER_MENU_HIDE_ON_SECURE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.TORCH_POWER_BUTTON_GESTURE, new InclusiveIntegerRangeValidator(0, 2));
         VALIDATORS.put(Secure.LOCKSCREEN_VISUALIZER_ENABLED, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(Secure.VISUALIZER_USE_CUSTOM_COLOR, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(Secure.VISUALIZER_CUSTOM_COLOR, ANY_STRING_VALIDATOR);
     }
 }

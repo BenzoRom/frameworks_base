@@ -10345,6 +10345,20 @@ public final class Settings {
         public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer_enabled";
 
         /**
+         * Weather to use a custom color for the visualizer on the lock screen
+         *
+         * @hide
+         */
+        public static final String VISUALIZER_USE_CUSTOM_COLOR = "visualizer_use_custom_color";
+
+        /**
+         * Custom color of the visualizer on the lock screen
+         *
+         * @hide
+         */
+        public static final String VISUALIZER_CUSTOM_COLOR = "visualizer_custom_color";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
