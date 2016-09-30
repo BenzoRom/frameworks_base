@@ -4735,6 +4735,24 @@ public final class Settings {
         public static final String VOLUME_BUTTON_MUSIC_CONTROL = "volume_button_music_control";
 
         /**
+         *  Weather to use a custom color for the visualizer on the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR = "lock_screen_visualizer_use_custom_color";
+
+        /** @hide */
+        private static final Validator LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
+         *  Custom color of the visualizer on the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR = "lock_screen_visualizer_custom_color";
+
+        /** @hide */
+        private static final Validator LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR_VALIDATOR = ANY_STRING_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4805,6 +4823,8 @@ public final class Settings {
             ANIM_TILE_DURATION,
             ANIM_TILE_INTERPOLATOR,
             VOLUME_KEY_CURSOR_CONTROL,
+            LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR,
+            LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR,
         };
 
         /**
@@ -4930,6 +4950,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ANIM_TILE_DURATION);
             PRIVATE_SETTINGS.add(ANIM_TILE_INTERPOLATOR);
             PRIVATE_SETTINGS.add(VOLUME_KEY_CURSOR_CONTROL);
+            PRIVATE_SETTINGS.add(LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR);
+            PRIVATE_SETTINGS.add(LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR);
         }
 
         /**
@@ -5031,6 +5053,10 @@ public final class Settings {
             VALIDATORS.put(ANIM_TILE_DURATION, ANIM_TILE_DURATION_VALIDATOR);
             VALIDATORS.put(ANIM_TILE_INTERPOLATOR, ANIM_TILE_INTERPOLATOR_VALIDATOR);
             VALIDATORS.put(VOLUME_KEY_CURSOR_CONTROL, VOLUME_KEY_CURSOR_CONTROL_VALIDATOR);
+            VALIDATORS.put(LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR,
+                    LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR_VALIDATOR);
+            VALIDATORS.put(LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR,
+                    LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR_VALIDATOR);
         }
 
         /**
