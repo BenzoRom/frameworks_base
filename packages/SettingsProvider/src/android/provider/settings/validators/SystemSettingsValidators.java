@@ -17,6 +17,7 @@
 package android.provider.settings.validators;
 
 import static android.provider.settings.validators.SettingsValidators.ANY_INTEGER_VALIDATOR;
+import static android.provider.settings.validators.SettingsValidators.ANY_STRING_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.BOOLEAN_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.COMPONENT_NAME_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.DATE_FORMAT_VALIDATOR;
@@ -220,5 +221,7 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.STATUS_BAR_BRIGHTNESS_CONTROL, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.VOLUME_ROCKER_WAKE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.VOLUME_BUTTON_MUSIC_CONTROL, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.LOCKSCREEN_VISUALIZER_USE_CUSTOM_COLOR, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.LOCKSCREEN_VISUALIZER_CUSTOM_COLOR, ANY_STRING_VALIDATOR);
     }
 }

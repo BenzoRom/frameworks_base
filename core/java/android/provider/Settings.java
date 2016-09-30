@@ -5033,6 +5033,20 @@ public final class Settings {
         public static final String VOLUME_BUTTON_MUSIC_CONTROL = "volume_button_music_control";
 
         /**
+         * Weather to use a custom color for the visualizer on the lock screen
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_VISUALIZER_USE_CUSTOM_COLOR = "lockscreen_visualizer_use_custom_color";
+
+        /**
+         * Custom color of the visualizer on the lock screen
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_VISUALIZER_CUSTOM_COLOR = "lockscreen_visualizer_custom_color";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

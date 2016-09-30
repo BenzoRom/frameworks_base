@@ -95,5 +95,7 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
         Settings.System.VOLUME_ROCKER_WAKE,
         Settings.System.VOLUME_BUTTON_MUSIC_CONTROL,
+        Settings.System.LOCKSCREEN_VISUALIZER_USE_CUSTOM_COLOR,
+        Settings.System.LOCKSCREEN_VISUALIZER_CUSTOM_COLOR,
     };
 }

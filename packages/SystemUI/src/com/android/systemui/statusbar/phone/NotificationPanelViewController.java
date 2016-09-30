@@ -2215,6 +2215,7 @@ public class NotificationPanelViewController extends PanelViewController {
                         || mDelayShowingKeyguardStatusBar;
         mKeyguardStatusBar.setVisibility(
                 newAlpha != 0f && !mDozing && !hideForBypass ? View.VISIBLE : View.INVISIBLE);
+        mStatusBar.getVisualizerView().setAlpha(mKeyguardStatusBar.getAlpha());
     }
 
     private void updateKeyguardBottomAreaAlpha() {
