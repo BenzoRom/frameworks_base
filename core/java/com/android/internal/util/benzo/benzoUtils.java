@@ -39,6 +39,7 @@ import android.view.WindowManagerGlobal;
 import com.android.internal.statusbar.IStatusBarService;
 
 import java.util.List;
+import java.util.Locale;
 
 public class benzoUtils {
     public static final String INTENT_SCREENSHOT = "action_take_screenshot";
@@ -138,5 +139,10 @@ public class benzoUtils {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isChineseLanguage() {
+       return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
+               Locale.CHINESE.getLanguage());
     }
 }
