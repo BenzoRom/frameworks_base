@@ -49,4 +49,7 @@
     <color name="ripple_material_light">#40000000</color>
     <color name="ripple_material_dark">#40ffffff</color>
 
+    <!-- Custom Carrier Label -->
+    <color name="status_bar_carrier_color">#FFFFFFFF</color>
+
 </resources>
