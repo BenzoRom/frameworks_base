@@ -4351,6 +4351,12 @@ public final class Settings {
          */
         public static final String GLOBAL_ACTIONS_LOCKDOWN = "global_actions_lockdown";
 
+          /**
+          * Whether to show the negociated charger current in the lockscreen
+          * @hide
+          */
+         public static final String LOCKSCREEN_CHARGING_CURRENT = "lockscreen_charging_current";
+
         /**
          * Whether to display airplane in the power menu
          *
