@@ -98,6 +98,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     private KeyButtonDrawable mDockedIcon;
     private KeyButtonDrawable mImeIcon;
     private KeyButtonDrawable mMenuIcon;
+    private KeyButtonDrawable mSearchIcon;
     private KeyButtonDrawable mAccessibilityIcon;
 
     private GestureHelper mGestureHelper;
@@ -232,6 +233,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         mButtonDispatchers.put(R.id.home, new ButtonDispatcher(R.id.home));
         mButtonDispatchers.put(R.id.recent_apps, new ButtonDispatcher(R.id.recent_apps));
         mButtonDispatchers.put(R.id.menu, new ButtonDispatcher(R.id.menu));
+        mButtonDispatchers.put(R.id.menu_always_show, new ButtonDispatcher(R.id.menu_always_show));
+        mButtonDispatchers.put(R.id.search, new ButtonDispatcher(R.id.search));
         mButtonDispatchers.put(R.id.ime_switcher, new ButtonDispatcher(R.id.ime_switcher));
         mButtonDispatchers.put(R.id.accessibility_button,
                 new ButtonDispatcher(R.id.accessibility_button));
@@ -302,6 +305,10 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         return mButtonDispatchers.get(R.id.menu);
     }
 
+    public ButtonDispatcher getMenuAlwaysShowButton() {
+        return mButtonDispatchers.get(R.id.menu_always_show);
+    }
+
     public ButtonDispatcher getBackButton() {
         return mButtonDispatchers.get(R.id.back);
     }
@@ -312,6 +319,10 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     public ButtonDispatcher getImeSwitchButton() {
         return mButtonDispatchers.get(R.id.ime_switcher);
+    }
+
+    public ButtonDispatcher getSearchButton() {
+        return mButtonDispatchers.get(R.id.search);
     }
 
     public ButtonDispatcher getAccessibilityButton() {
@@ -363,6 +374,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
             Context lightContext = new ContextThemeWrapper(ctx, dualToneLightTheme);
             mImeIcon = getDrawable(darkContext, lightContext,
                     R.drawable.ic_ime_switcher_default, R.drawable.ic_ime_switcher_default);
+            mSearchIcon = getDrawable(darkContext, lightContext,
+                    R.drawable.ic_sysbar_search_default, R.drawable.ic_sysbar_search_default);
 
             if (ALTERNATE_CAR_MODE_UI) {
                 updateCarModeIcons(ctx);
@@ -454,6 +467,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         // Update menu button in case the IME state has changed.
         setMenuVisibility(mShowMenu, true);
         getMenuButton().setImageDrawable(mMenuIcon);
+        getSearchButton().setImageDrawable(mSearchIcon);
+        getMenuAlwaysShowButton().setImageDrawable(mMenuIcon);
 
         setAccessibilityButtonState(mShowAccessibilityButton, mLongClickableAccessibilityButton);
         getAccessibilityButton().setImageDrawable(mAccessibilityIcon);
@@ -477,6 +492,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                         || ((disabledFlags & View.STATUS_BAR_DISABLE_RECENT) != 0);
         final boolean disableBack = ((disabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0)
                 && ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) == 0);
+        final boolean disableSearch = ((disabledFlags & View.STATUS_BAR_DISABLE_SEARCH) != 0);
 
         ViewGroup navButtons = (ViewGroup) getCurrentView().findViewById(R.id.nav_buttons);
         if (navButtons != null) {
@@ -496,6 +512,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         getBackButton().setVisibility(disableBack      ? View.INVISIBLE : View.VISIBLE);
         getHomeButton().setVisibility(disableHome      ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
+        getSearchButton().setVisibility(disableSearch ? View.INVISIBLE : View.VISIBLE);
     }
 
     private boolean inLockTask() {
@@ -565,8 +582,12 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         // Only show Menu if IME switcher and Accessibility button not shown.
         final boolean shouldShow = mShowMenu && !mShowAccessibilityButton &&
                 ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) == 0);
+        final boolean shouldShowAlwaysMenu = (mNavigationIconHints &
+                StatusBarManager.NAVIGATION_HINT_IME_SHOWN) == 0;
 
         getMenuButton().setVisibility(shouldShow ? View.VISIBLE : View.INVISIBLE);
+        getMenuAlwaysShowButton().setVisibility(shouldShowAlwaysMenu ? View.VISIBLE : View.INVISIBLE);
+        getSearchButton().setVisibility(shouldShowAlwaysMenu ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setAccessibilityButtonState(final boolean visible, final boolean longClickable) {
