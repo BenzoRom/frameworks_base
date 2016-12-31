@@ -102,4 +102,5 @@ interface IStatusBarService
     void hideFingerprintDialog();
     void setAutoRotate(boolean enabled);
     void toggleCameraFlash();
+    void restartUI();
 }
