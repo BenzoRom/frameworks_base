@@ -163,4 +163,7 @@
   <!-- sensor block per-package -->
   <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 
+  <!-- OmniJaws icon -->
+  <java-symbol type="drawable" name="ic_qs_weather_default_on" />
+
 </resources>
