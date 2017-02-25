@@ -15,7 +15,7 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 */
-package com.android.keyguard;
+package com.android.internal.util.benzo;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -69,7 +69,9 @@ public class OmniJawsClient {
 
     final String[] SETTINGS_PROJECTION = new String[] {
             "enabled",
-            "units"
+            "units",
+            "provider",
+            "setup"
     };
 
     private static final String WEATHER_UPDATE = "org.omnirom.omnijaws.WEATHER_UPDATE";
@@ -89,6 +91,7 @@ public class OmniJawsClient {
         public List<DayForecast> forecasts;
         public String tempUnits;
         public String windUnits;
+        public String provider;
 
         public String toString() {
             return city + ":" + new Date(timeStamp) + ": " + windSpeed + ":" + windDirection + ":" +conditionCode + ":" + temp + ":" + humidity + ":" + condition + ":" + tempUnits + ":" + windUnits + ": " + forecasts;
@@ -188,14 +191,22 @@ public class OmniJawsClient {
         }
     }
 
-    public void updateWeather(boolean force) {
+    public void updateWeather() {
         if (isOmniJawsServiceInstalled()) {
             Intent updateIntent = new Intent(Intent.ACTION_MAIN)
                     .setClassName(SERVICE_PACKAGE, SERVICE_PACKAGE + ".WeatherService");
             updateIntent.setAction(SERVICE_PACKAGE + ".ACTION_UPDATE");
-            updateIntent.putExtra("force", force);
             mContext.startService(updateIntent);
         }
+    }
+
+    public Intent getSettingsIntent() {
+        if (isOmniJawsServiceInstalled()) {
+            Intent settings = new Intent(Intent.ACTION_MAIN)
+                    .setClassName("com.android.settings", "com.benzo.settings.Settings$LockScreenWeatherSettingsActivity");
+            return settings;
+        }
+        return null;
     }
 
     public WeatherInfo getWeatherInfo() {
@@ -338,12 +349,31 @@ public class OmniJawsClient {
 
     public void setOmniJawsEnabled(boolean value) {
         if (isOmniJawsServiceInstalled()) {
+            // check first time enablement and redirect to settings
+            // cause we need to enable gps for it
             Intent updateIntent = new Intent(Intent.ACTION_MAIN)
                     .setClassName(SERVICE_PACKAGE, SERVICE_PACKAGE + ".WeatherService");
             updateIntent.setAction(SERVICE_PACKAGE + ".ACTION_ENABLE");
             updateIntent.putExtra("enable", value);
             mContext.startService(updateIntent);
         }
+    }
+
+    public boolean isOmniJawsSetupDone() {
+        if (!isOmniJawsServiceInstalled()) {
+            return false;
+        }
+        final Cursor c = mContext.getContentResolver().query(SETTINGS_URI, SETTINGS_PROJECTION,
+                null, null, null);
+        if (c != null) {
+            int count = c.getCount();
+            if (count == 1) {
+                c.moveToPosition(0);
+                boolean setupDone = c.getInt(3) == 1;
+                return setupDone;
+            }
+        }
+        return true;
     }
 
     private void updateUnits() {
@@ -360,6 +390,7 @@ public class OmniJawsClient {
                 if (mCachedInfo != null) {
                     mCachedInfo.tempUnits = getTemperatureUnit();
                     mCachedInfo.windUnits = getWindUnit();
+                    mCachedInfo.provider = c.getString(2);
                 }
             }
         }
@@ -399,7 +430,7 @@ public class OmniJawsClient {
     }
 
     public Drawable getDefaultWeatherConditionImage() {
-        return mContext.getResources().getDrawable(R.drawable.keyguard_weather_default_on);
+        return mContext.getResources().getDrawable(com.android.internal.R.drawable.ic_qs_weather_default_on);
     }
 
     public void addObserver(OmniJawsObserver observer) {

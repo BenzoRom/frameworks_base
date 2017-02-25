@@ -53,6 +53,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.util.benzo.OmniJawsClient;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.ChargingView;
 import com.android.systemui.statusbar.policy.DateView;
