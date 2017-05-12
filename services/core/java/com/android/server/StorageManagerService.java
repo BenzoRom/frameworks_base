@@ -1317,7 +1317,9 @@ class StorageManagerService extends IStorageManager.Stub
 
             // Adoptable public disks are visible to apps, since they meet
             // public API requirement of being in a stable location.
-            if (vol.disk.isAdoptable()) {
+            // If FBE is enabled, sdcard is no longer considered adoptable,
+            // make sdcard visible.
+            if (vol.disk.isAdoptable() || vol.disk.isSd()) {
                 vol.mountFlags |= VolumeInfo.MOUNT_FLAG_VISIBLE;
             }
 
