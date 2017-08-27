@@ -243,4 +243,9 @@
     <string name="chamber_name_toast">Using default name</string>
     <string name="shortcut_clear_notifications">Clear notifications</string>
 
+    <!-- Content description for Accessibility on unlocked tasks in recents -->
+    <string name="task_unlocked_desc">Lock %1$s. Currently unlocked</string>
+    <!-- Content description for Accessibility on locked tasks in recents -->
+    <string name="task_locked_desc">Unlock %1$s. Currently locked</string>
+
 </resources>
