@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2021 Benzo Rom
+     Copyright (C) 2022 Benzo Rom
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,13 +15,6 @@
      limitations under the License.
 -->
 <resources>
-
-    <!-- Package Manager -->
-    <java-symbol type="array" name="config_deviceDisabledComponents" />
-    <java-symbol type="array" name="config_globallyDisabledComponents" />
-    <java-symbol type="array" name="config_forceEnabledComponents" />
-
-    <!-- Power menu -->
-    <java-symbol type="array" name="config_rebootActionsList" />
-
+    <!-- Power Menu Lite: drawable padding -->
+    <dimen name="global_actions_light_icon_padding">32dp</dimen>
 </resources>

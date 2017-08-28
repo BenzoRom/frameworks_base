@@ -88,5 +88,16 @@ public class SystemSettings {
         Settings.System.ALARM_ALERT,
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.STATUS_BAR_SHOW_ACTIVITY_INDICATORS,
+        Settings.System.GLOBAL_ACTIONS_AIRPLANE,
+        Settings.System.GLOBAL_ACTIONS_EMERGENCY,
+        Settings.System.GLOBAL_ACTIONS_FLASHLIGHT,
+        Settings.System.GLOBAL_ACTIONS_LOCKDOWN,
+        Settings.System.GLOBAL_ACTIONS_SOUNDPANEL,
+        Settings.System.GLOBAL_ACTIONS_SCREENSHOT,
+        Settings.System.GLOBAL_ACTIONS_SCREENRECORD,
+        Settings.System.GLOBAL_ACTIONS_SETTINGS,
+        Settings.System.GLOBAL_ACTIONS_USERS,
+        Settings.System.GLOBAL_ACTIONS_MAX_COLUMNS,
+        Settings.System.GLOBAL_ACTIONS_MAX_ROWS,
     };
 }
