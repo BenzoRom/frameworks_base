@@ -23,4 +23,5 @@
 
     android:fromYDelta="-100%p"
     android:toYDelta="0"
+
     android:duration="@android:integer/config_longAnimTime" />
