@@ -22,6 +22,19 @@
   <!-- System update service -->
   <java-symbol type="array" name="config_forceEnabledComponents" />
 
+  <!-- Power menu reboot -->
+  <java-symbol name="reboot_to_bootloader_title" type="string" />
+  <java-symbol name="reboot_to_bootloader_message" type="string" />
+  <java-symbol name="reboot_to_recovery_title" type="string" />
+  <java-symbol name="reboot_to_recovery_message" type="string" />
+  <java-symbol name="reboot_system_title" type="string" />
+  <java-symbol name="reboot_system_message" type="string" />
+  <java-symbol type="array" name="config_rebootActionsList" />
+  <java-symbol type="array" name="values_globalActionsList" />
+  <java-symbol type="style" name="GlobalActionsAnimation" />
+  <java-symbol type="style" name="GlobalActionsAnimationTop" />
+  <java-symbol type="style" name="GlobalActionsAnimationEnter" />
+
   <!-- AOKP custom system animations -->
   <java-symbol type="string" name="action_null"/>
   <java-symbol type="string" name="animation_fade"/>
