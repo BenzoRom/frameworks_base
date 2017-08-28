@@ -14,13 +14,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-  <!-- Package Manager -->
-  <java-symbol type="array" name="config_deviceDisabledComponents" />
-  <java-symbol type="array" name="config_globallyDisabledComponents" />
-  <java-symbol type="array" name="config_forceEnabledComponents" />
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-  <!-- Power menu -->
-  <java-symbol type="array" name="config_rebootActionsList" />
+    <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
+    <dimen name="global_actions_avatar_size">24dp</dimen>
 
 </resources>
