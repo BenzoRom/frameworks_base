@@ -4110,6 +4110,16 @@ public final class Settings {
         public static final String QS_LAYOUT_ROWS = "qs_layout_rows";
 
         /**
+         * @hide
+         */
+        public static final String GLOBAL_ACTIONS_LIST = "global_actions_list";
+
+        /**
+         * @hide
+         */
+         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -7284,6 +7294,17 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_BADGING = "notification_badging";
+
+        /**
+         *
+         * @hide
+         */
+        public static final String GLOBAL_ACTION_DNAA = "global_action_dnaa";
+
+        /**
+         * @hide
+         */
+        public static final String ADVANCED_REBOOT = "advanced_reboot";
 
         /**
          * Comma separated list of QS tiles that have been auto-added already.
