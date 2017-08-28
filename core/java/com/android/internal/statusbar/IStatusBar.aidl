@@ -150,7 +150,7 @@ oneway interface IStatusBar
     void showPinningEnterExitToast(boolean entering);
     void showPinningEscapeToast();
 
-    void showShutdownUi(boolean isReboot, String reason);
+    void showShutdownUi(boolean isReboot, String reason, boolean rebootCustom);
 
     // Used to show the dialog when BiometricService starts authentication
     void showBiometricDialog(in Bundle bundle, IBiometricServiceReceiverInternal receiver, int type,
