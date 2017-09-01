@@ -19,6 +19,8 @@ package com.android.internal.util.benzo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.os.PowerManager;
+import android.os.SystemClock;
 
 public class benzoUtils {
 
@@ -26,5 +28,12 @@ public class benzoUtils {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         return (cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE) == false);
+    }
+
+    public static void switchScreenOff(Context ctx) {
+        PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+        if (pm!= null) {
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
     }
 }
