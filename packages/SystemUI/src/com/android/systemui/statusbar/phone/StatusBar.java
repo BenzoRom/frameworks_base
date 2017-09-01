@@ -6069,6 +6069,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SYSTEM_UI_THEME),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -6092,6 +6095,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SYSTEM_UI_THEME))) {
                 updateTheme();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN))) {
+                setLockscreenDoubleTapToSleep();
             }
         }
 
@@ -6104,6 +6110,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             mFingerprintQuickPulldown = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP, 0, UserHandle.USER_CURRENT) == 1;
             updateRecentsIconPack();
+            setLockscreenDoubleTapToSleep();
         }
     }
 
@@ -6112,6 +6119,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             Settings.System.RECENTS_ICON_PACK, mCurrentUserId);
         IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
         mRecents.resetIconCache();
+    }
+
+    private void setLockscreenDoubleTapToSleep() {
+        if (mStatusBarWindow != null) {
+            mStatusBarWindow.setLockscreenDoubleTapToSleep();
+        }
     }
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
