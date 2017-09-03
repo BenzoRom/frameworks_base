@@ -112,4 +112,5 @@ interface IStatusBarService
     void hideBiometricDialog();
     // Used to disable keyboard rotation
     void setAutoRotate(boolean enabled);
+    void toggleCameraFlash();
 }
