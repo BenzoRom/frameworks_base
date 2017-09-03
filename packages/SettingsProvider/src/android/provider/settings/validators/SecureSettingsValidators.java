@@ -259,5 +259,6 @@ public class SecureSettingsValidators {
         VALIDATORS.put(Secure.LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.ADVANCED_REBOOT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.POWER_MENU_HIDE_ON_SECURE, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(Secure.TORCH_POWER_BUTTON_GESTURE, new InclusiveIntegerRangeValidator(0, 2));
     }
 }

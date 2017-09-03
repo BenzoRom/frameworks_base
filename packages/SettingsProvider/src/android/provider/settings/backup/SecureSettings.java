@@ -173,6 +173,7 @@ public class SecureSettings {
         Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE,
         Settings.Secure.LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED,
         Settings.Secure.ADVANCED_REBOOT,
-        Settings.Secure.POWER_MENU_HIDE_ON_SECURE
+        Settings.Secure.POWER_MENU_HIDE_ON_SECURE,
+        Settings.Secure.TORCH_POWER_BUTTON_GESTURE
     };
 }
