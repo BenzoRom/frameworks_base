@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2020 The Android Open Source Project
+<!--
+     Copyright (C) 2020 Benzo Rom
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,8 +14,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- A content description for work profile app [CHAR LIMIT=35] -->
-    <string name="accessibility_work_profile_app_description">Work <xliff:g id="app_name" example="Camera">%s</xliff:g></string>
+
+    <!-- The CPU temperature sensor path, defaults to empty -->
+    <string name="config_cpuTempSensor" translatable="false"></string>
+    <!-- The battery temperature divider, if needed -->
+    <integer name="config_battTempDivider" translatable="false">10</integer>
+    <!-- The CPU temperature divider, if needed -->
+    <integer name="config_cpuTempDivider" translatable="false">1</integer>
+    <!-- The CPUs to display in CPUInfoService view -->
+    <string name="config_displayCpus" translatable="false"></string>
+
 </resources>
