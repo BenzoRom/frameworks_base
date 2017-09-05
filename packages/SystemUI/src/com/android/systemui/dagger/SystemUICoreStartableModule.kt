@@ -18,6 +18,7 @@ package com.android.systemui.dagger
 
 import com.android.keyguard.KeyguardBiometricLockoutLogger
 import com.android.systemui.ChooserSelector
+import com.android.systemui.CPUInfoManager
 import com.android.systemui.CoreStartable
 import com.android.systemui.LatencyTester
 import com.android.systemui.ScreenDecorations
@@ -279,4 +280,10 @@ abstract class SystemUICoreStartableModule {
     @IntoMap
     @ClassKey(StylusUsiPowerStartable::class)
     abstract fun bindStylusUsiPowerStartable(sysui: StylusUsiPowerStartable): CoreStartable
+
+    /** Inject into CPUInfoManager. */
+    @Binds
+    @IntoMap
+    @ClassKey(CPUInfoManager::class)
+    abstract fun bindCPUInfoManager(sysui: CPUInfoManager): CoreStartable
 }

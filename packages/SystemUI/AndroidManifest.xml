@@ -1031,5 +1031,11 @@
             android:exported="true"
             android:permission="android.permission.CUSTOMIZE_SYSTEM_UI"
             />
+
+        <!-- CPU Info -->
+        <service
+            android:name=".CPUInfoService"
+            android:exported="false" />
+
     </application>
 </manifest>

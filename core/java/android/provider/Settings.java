@@ -16217,6 +16217,13 @@ public final class Settings {
         public static final String ONE_HANDED_KEYGUARD_SIDE = "one_handed_keyguard_side";
 
         /**
+         * Show overlay of CPU core speeds
+         *
+         * @hide
+         */
+        public static final String SHOW_CPU_OVERLAY = "show_cpu_overlay";
+
+        /**
          * Global settings that shouldn't be persisted.
          *
          * @hide
