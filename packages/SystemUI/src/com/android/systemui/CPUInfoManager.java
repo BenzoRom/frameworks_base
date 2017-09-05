@@ -1,0 +1,91 @@
+/*
+ * Copyright (C) 2017 The OmniROM Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.systemui;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
+
+import com.android.systemui.R;
+import com.android.systemui.SystemUI;
+
+public class CPUInfoManager extends SystemUI {
+    private final String TAG = "CPUInfoManager";
+    private Handler mHandler = new Handler();
+    private SettingsObserver mSettingsObserver;
+    private Context mContext;
+
+    public CPUInfoManager(Context context) {
+        super(context);
+        mContext = context;
+    }
+
+    @Override
+    public void start() {
+    }
+
+    @Override
+    protected void onBootCompleted() {
+        try {
+            if (mSettingsObserver ==  null) {
+                mSettingsObserver = new SettingsObserver(mHandler);
+                mSettingsObserver.observe();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Can't start CPUInfo service", e);
+        }
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.Global.getUriFor(Settings.Global.SHOW_CPU_OVERLAY), false, this);
+            updateCPUInfoOverlay();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateCPUInfoOverlay();
+        }
+
+        public void update() {
+            updateCPUInfoOverlay();
+        }
+    }
+
+    private void updateCPUInfoOverlay() {
+        try {
+            Intent cpuinfo = new Intent(mContext, com.android.systemui.CPUInfoService.class);
+            if (Settings.Global.getInt(mContext.getContentResolver(),
+                        Settings.Global.SHOW_CPU_OVERLAY, 0) != 0) {
+                mContext.startService(cpuinfo);
+            } else {
+                mContext.stopService(cpuinfo);
+            }
+        } catch (Exception ex) {
+                Log.e(TAG, "CPUInfoManager update ", ex);
+        }
+    }
+}
