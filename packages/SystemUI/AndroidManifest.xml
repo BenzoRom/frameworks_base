@@ -893,5 +893,9 @@
             </intent-filter>
         </receiver>
 
+        <!-- CPU Info -->
+        <service android:name=".CPUInfoService"
+                android:exported="false" />
+
     </application>
 </manifest>
