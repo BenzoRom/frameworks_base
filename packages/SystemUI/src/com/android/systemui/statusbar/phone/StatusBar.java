@@ -6076,6 +6076,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_FOOTER_WARNINGS),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -6115,6 +6118,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP, 0, UserHandle.USER_CURRENT) == 1;
             updateRecentsIconPack();
             setLockscreenDoubleTapToSleep();
+            setQsPanelOptions();
         }
     }
 
@@ -6128,6 +6132,12 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void setLockscreenDoubleTapToSleep() {
         if (mStatusBarWindow != null) {
             mStatusBarWindow.setLockscreenDoubleTapToSleep();
+        }
+    }
+
+    private void setQsPanelOptions() {
+        if (mQSPanel != null) {
+            mQSPanel.updateSettings();
         }
     }
 
