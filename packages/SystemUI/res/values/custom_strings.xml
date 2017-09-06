@@ -97,6 +97,7 @@
     <string name="quick_settings_cpuinfo_label">CPU Info</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Screenshot</string>
+    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
 
     <!-- Screenrecord Notification Ticker -->
     <string name="screenrecord_notif_ticker">Screen is being recorded</string>
