@@ -4153,12 +4153,6 @@ public final class Settings {
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
-         * This preference enables showing the power menu on LockScreen.
-         * @hide
-         */
-        public static final String LOCKSCREEN_ENABLE_POWER_MENU = "lockscreen_enable_power_menu";
-
-        /**
          * Show four g instead of lte
          * @hide
          */
@@ -7387,6 +7381,13 @@ public final class Settings {
          * @hide
          */
         public static final String WAKE_GESTURE_ENABLED = "wake_gesture_enabled";
+
+        /**
+         * Disable power menu on secure lock screens
+         *
+         * @hide
+         */
+        public static final String LOCK_POWER_MENU_DISABLED = "lockscreen_power_menu_disabled";
 
         /**
          * Whether the device should doze if configured.
