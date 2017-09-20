@@ -19,4 +19,7 @@
     <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
     <dimen name="global_actions_avatar_size">24dp</dimen>
 
+    <!-- QS Tile Hide Label -->
+    <dimen name="qs_tile_height_wo_label">48dp</dimen>
+
 </resources>
