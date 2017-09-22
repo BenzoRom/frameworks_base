@@ -248,4 +248,8 @@
     <!-- Content description for Accessibility on locked tasks in recents -->
     <string name="task_locked_desc">Unlock %1$s. Currently locked</string>
 
+    <!-- Lockscreen bottom shortcuts -->
+    <string name="lockscreen_default">Default</string>
+    <string name="lockscreen_hidden">None</string>
+
 </resources>
