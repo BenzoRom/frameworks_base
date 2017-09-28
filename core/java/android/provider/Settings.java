@@ -4754,6 +4754,12 @@ public final class Settings {
         private static final Validator BOTTOM_GESTURE_SWIPE_START_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
+         * Whether to control brightness from status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4975,6 +4981,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BOTTOM_GESTURE_TRIGGER_TIMEOUT);
             PRIVATE_SETTINGS.add(BOTTOM_GESTURE_SWIPE_LIMIT);
             PRIVATE_SETTINGS.add(BOTTOM_GESTURE_SWIPE_START);
+            PRIVATE_SETTINGS.add(STATUS_BAR_BRIGHTNESS_CONTROL);
         }
 
         /**
