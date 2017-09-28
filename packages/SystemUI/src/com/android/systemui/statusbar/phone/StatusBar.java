@@ -7621,10 +7621,25 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         // Scrim opacity varies based on notification count
         mScrimController.setNotificationCount(mStackScroller.getNotGoneChildCount());
+
+        if (onKeyguard) {
+            hideWeatherPanelIfNecessary(visibleNotifications, getMaxKeyguardNotifications(true));
+        }
     }
 
     public boolean shouldShowOnKeyguard(StatusBarNotification sbn) {
         return mShowLockscreenNotifications && !mNotificationData.isAmbient(sbn.getKey());
+    }
+
+    private void hideWeatherPanelIfNecessary(int visibleNotifications, int maxKeyguardNotifications) {
+        final ContentResolver resolver = mContext.getContentResolver();
+        int notifications = visibleNotifications;
+        if (visibleNotifications > 0) {
+            notifications += 1;
+        }
+        Settings.System.putInt(resolver,
+                Settings.System.LOCK_SCREEN_VISIBLE_NOTIFICATIONS, notifications);
+        maxKeyguardNotifications = getMaxKeyguardNotifications(true);
     }
 
     // extended in StatusBar
