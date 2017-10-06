@@ -205,6 +205,7 @@ import com.android.systemui.recents.ScreenPinningRequest;
 import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.AppTransitionFinishedEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
+import com.android.systemui.recents.misc.IconPackHelper;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.stackdivider.WindowManagerProxy;
@@ -5999,6 +6000,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_ICON_PACK),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -6016,6 +6020,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                             updateRowStates();
                             updateClearAll();
                             updateEmptyShadeView();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.RECENTS_ICON_PACK))) {
+                updateRecentsIconPack();
             }
         }
 
@@ -6027,7 +6034,15 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG, 5, mCurrentUserId);
             mFingerprintQuickPulldown = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP, 0, UserHandle.USER_CURRENT) == 1;
+            updateRecentsIconPack();
         }
+    }
+
+    private void updateRecentsIconPack() {
+        String currentIconPack = Settings.System.getStringForUser(mContext.getContentResolver(),
+            Settings.System.RECENTS_ICON_PACK, mCurrentUserId);
+        IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
+        mRecents.resetIconCache();
     }
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
