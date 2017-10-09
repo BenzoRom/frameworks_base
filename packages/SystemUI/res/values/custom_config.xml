@@ -22,4 +22,7 @@
    <!-- configurable width dimension for the app sidebar trigger area -->
    <dimen name="config_app_sidebar_trigger_width">8dip</dimen>
 
+    <!-- Navigation keys swaped layout -->
+    <string name="config_navBarLayoutSwapped" translatable="false">left[.5W],recent[1WC];home;back[1WC],right[.5W]</string>
+
 </resources>
