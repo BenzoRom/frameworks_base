@@ -9442,6 +9442,25 @@ public final class Settings {
                 BOOLEAN_VALIDATOR;
 
         /**
+         * Whether to show the auto brightness icon in quick settings panel.
+         * @hide
+         */
+        public static final String QS_SHOW_AUTO_BRIGHTNESS = "qs_show_auto_brightness";
+
+        /** @hide */
+        private static final Validator QS_SHOW_AUTO_BRIGHTNESS_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
+         * Whether to show the brightness slider in quick settings panel.
+         * 0 = 0ff, 1 = on
+         * @hide
+         */
+        public static final String QS_SHOW_BRIGHTNESS_SLIDER = "qs_show_brightness_slider";
+
+        /** @hide */
+        private static final Validator QS_SHOW_BRIGHTNESS_SLIDER_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -9584,7 +9603,9 @@ public final class Settings {
             LOCKSCREEN_VISUALIZER_ENABLED,
             VOLUME_LINK_NOTIFICATION,
             POWER_MENU_HIDE_ON_SECURE,
-            LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED
+            LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED,
+            QS_SHOW_AUTO_BRIGHTNESS,
+            QS_SHOW_BRIGHTNESS_SLIDER
         };
 
         /**
@@ -9790,6 +9811,8 @@ public final class Settings {
             VALIDATORS.put(POWER_MENU_HIDE_ON_SECURE, POWER_MENU_HIDE_ON_SECURE_VALIDATOR);
             VALIDATORS.put(LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED,
                     LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED_VALIDATOR);
+            VALIDATORS.put(QS_SHOW_AUTO_BRIGHTNESS, QS_SHOW_AUTO_BRIGHTNESS_VALIDATOR);
+            VALIDATORS.put(QS_SHOW_BRIGHTNESS_SLIDER, QS_SHOW_BRIGHTNESS_SLIDER_VALIDATOR);
         }
 
         /**
