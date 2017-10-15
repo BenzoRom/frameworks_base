@@ -31,4 +31,9 @@
   <!-- Flashlight proximity check -->
   <java-symbol type="integer" name="config_flashlightProximityTimeout" />
 
+  <!-- ADB notification -->
+  <java-symbol type="string" name="adb_net_active_notification_title" />
+  <java-symbol type="string" name="adb_both_active_notification_title" />
+  <java-symbol type="string" name="adb_active_generic_notification_message" />
+
 </resources>

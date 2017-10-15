@@ -9407,6 +9407,18 @@ public final class Settings {
         private static final Validator POWER_MENU_HIDE_ON_SECURE_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Whether to display the ADB notification.
+         * @hide
+         */
+        public static final String ADB_NOTIFY = "adb_notify";
+
+        /**
+         * Which port to use for ADB Over Network
+         * @hide
+         */
+        public static final String ADB_PORT = "adb_port";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
