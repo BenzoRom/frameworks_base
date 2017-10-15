@@ -145,4 +145,9 @@
     <string name="notify_battery_fully_charged_text">Disconnect your device from the charger to improve battery longevity.</string>
     <string name="battery_charged_channel_name">Battery charged</string>
 
+    <!-- ADB over network -->
+    <string name="adb_net_active_notification_title">ADB over network enabled</string>
+    <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
+    <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
+
 </resources>
