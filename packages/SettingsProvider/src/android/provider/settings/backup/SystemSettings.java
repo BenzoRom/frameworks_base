@@ -101,5 +101,6 @@ public class SystemSettings {
         Settings.System.GLOBAL_ACTIONS_MAX_COLUMNS,
         Settings.System.GLOBAL_ACTIONS_MAX_ROWS,
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
+        Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
     };
 }
