@@ -15,16 +15,5 @@
      limitations under the License.
 -->
 <resources>
-
-    <!-- Package Manager -->
-    <java-symbol type="array" name="config_deviceDisabledComponents" />
-    <java-symbol type="array" name="config_globallyDisabledComponents" />
-    <java-symbol type="array" name="config_forceEnabledComponents" />
-
-    <!-- Power menu -->
-    <java-symbol type="array" name="config_rebootActionsList" />
-
-    <!-- Statusbar Brightness -->
-    <java-symbol type="dimen" name="quick_qs_total_height" />
-
+    <dimen name="quick_qs_total_height">176dp</dimen>
 </resources>
