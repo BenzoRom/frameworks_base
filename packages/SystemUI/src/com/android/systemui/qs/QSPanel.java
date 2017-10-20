@@ -58,6 +58,8 @@ import java.util.Collection;
 /** View that represents the quick settings tile panel. **/
 public class QSPanel extends LinearLayout implements Tunable, Callback, BrightnessMirrorListener {
 
+    private static final String TAG = "QSPanel";
+
     public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
 
     protected final Context mContext;
@@ -100,7 +102,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         mBrightnessView = LayoutInflater.from(context).inflate(
                 R.layout.quick_settings_brightness_dialog, this, false);
-        addView(mBrightnessView);
 
         mBrightnessIcon = (ImageView) mBrightnessView.findViewById(R.id.brightness_icon);
 
@@ -112,6 +113,11 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         if (mTileLayout instanceof PagedTileLayout) {
             ((PagedTileLayout) mTileLayout).setPageIndicator((PageIndicator) mPageIndicator);
         }
+
+        mBrightnessView.setPadding(mBrightnessView.getPaddingLeft(),
+                    mBrightnessView.getPaddingTop(), mBrightnessView.getPaddingRight(),
+                    mContext.getResources().getDimensionPixelSize(R.dimen.qs_brightness_footer_padding));
+        addView(mBrightnessView);
 
         addDivider();
 
