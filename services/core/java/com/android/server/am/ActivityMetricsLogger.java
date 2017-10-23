@@ -381,6 +381,10 @@ class ActivityMetricsLogger {
         }
     }
 
+    void abortTransition() {
+        reset(true /* abort */);
+    }
+
     private boolean allStacksWindowsDrawn() {
         for (int index = mStackTransitionInfo.size() - 1; index >= 0; index--) {
             if (!mStackTransitionInfo.valueAt(index).loggedWindowsDrawn) {
