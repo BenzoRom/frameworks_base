@@ -1654,6 +1654,8 @@ class ActivityStarter {
             if (DEBUG_TASKS) Slog.d(TAG_TASKS, "Bring to front target: " + mTargetStack
                     + " from " + intentActivity);
             mTargetStack.moveToFront("intentActivityFound");
+            // Not moving a task to front. Reset the tracker.
+            mSupervisor.mActivityMetricsLogger.abortTransition();
         }
 
         mSupervisor.handleNonResizableTaskIfNeeded(intentActivity.getTask(), INVALID_STACK_ID,
