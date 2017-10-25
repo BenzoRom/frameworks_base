@@ -1617,6 +1617,13 @@ public class CarrierConfigManager {
     public static final String KEY_CONVERT_CDMA_CALLER_ID_MMI_CODES_WHILE_ROAMING_ON_3GPP_BOOL =
             "convert_cdma_caller_id_mmi_codes_while_roaming_on_3gpp_bool";
 
+    /**
+     * Determines whether wifi calling location privacy policy is shown.
+     * @hide
+     */
+    public static final String KEY_SHOW_WFC_LOCATION_PRIVACY_POLICY_BOOL =
+            "show_wfc_location_privacy_policy_bool";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -1886,6 +1893,7 @@ public class CarrierConfigManager {
                 false);
         sDefaults.putStringArray(KEY_NON_ROAMING_OPERATOR_STRING_ARRAY, null);
         sDefaults.putStringArray(KEY_ROAMING_OPERATOR_STRING_ARRAY, null);
+        sDefaults.putBoolean(KEY_SHOW_WFC_LOCATION_PRIVACY_POLICY_BOOL, true);
     }
 
     /**
