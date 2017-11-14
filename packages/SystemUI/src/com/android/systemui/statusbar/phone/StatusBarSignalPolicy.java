@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
 import android.os.Handler;
+import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.util.ArraySet;
 import android.util.Log;
@@ -48,6 +49,9 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         SecurityController.SecurityControllerCallback, Tunable {
     private static final String TAG = "StatusBarSignalPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+
+    private static final String SHOW_ACTIVITY_INDICATORS =
+            "benzosystem:" + Settings.System.STATUS_BAR_SHOW_ACTIVITY_INDICATORS;
 
     private final String mSlotAirplane;
     private final String mSlotMobile;
@@ -113,7 +117,8 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         mActivityEnabled = mContext.getResources().getBoolean(R.bool.config_showActivity);
 
 
-        tunerService.addTunable(this, StatusBarIconController.ICON_HIDE_LIST);
+        tunerService.addTunable(this, StatusBarIconController.ICON_HIDE_LIST,
+                SHOW_ACTIVITY_INDICATORS);
         mNetworkController.addCallback(this);
         mSecurityController.addCallback(this);
     }
@@ -147,21 +152,25 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (!StatusBarIconController.ICON_HIDE_LIST.equals(key)) {
-            return;
-        }
-        ArraySet<String> hideList = StatusBarIconController.getIconHideList(mContext, newValue);
-        boolean hideAirplane = hideList.contains(mSlotAirplane);
-        boolean hideMobile = hideList.contains(mSlotMobile);
-        boolean hideWifi = hideList.contains(mSlotWifi);
-        boolean hideEthernet = hideList.contains(mSlotEthernet);
+        if (StatusBarIconController.ICON_HIDE_LIST.equals(key)) {
+            ArraySet<String> hideList = StatusBarIconController.getIconHideList(mContext, newValue);
+            boolean hideAirplane = hideList.contains(mSlotAirplane);
+            boolean hideMobile = hideList.contains(mSlotMobile);
+            boolean hideWifi = hideList.contains(mSlotWifi);
+            boolean hideEthernet = hideList.contains(mSlotEthernet);
 
-        if (hideAirplane != mHideAirplane || hideMobile != mHideMobile
-                || hideEthernet != mHideEthernet || hideWifi != mHideWifi) {
-            mHideAirplane = hideAirplane;
-            mHideMobile = hideMobile;
-            mHideEthernet = hideEthernet;
-            mHideWifi = hideWifi || mForceHideWifi;
+            if (hideAirplane != mHideAirplane || hideMobile != mHideMobile
+                    || hideEthernet != mHideEthernet || hideWifi != mHideWifi) {
+                mHideAirplane = hideAirplane;
+                mHideMobile = hideMobile;
+                mHideEthernet = hideEthernet;
+                mHideWifi = hideWifi || mForceHideWifi;
+                // Re-register to get new callbacks.
+                mNetworkController.removeCallback(this);
+                mNetworkController.addCallback(this);
+            }
+        } else if (SHOW_ACTIVITY_INDICATORS.equals(key)) {
+            mActivityEnabled = TunerService.parseIntegerSwitch(newValue, true);
             // Re-register to get new callbacks.
             mNetworkController.removeCallback(this);
             mNetworkController.addCallback(this);
