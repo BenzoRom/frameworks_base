@@ -82,4 +82,9 @@
     <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
     <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
 
+    <!-- Caffeine QS Tile -->
+    <string name="quick_settings_caffeine_label">Caffeine</string>
+    <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
+    <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
+
 </resources>
