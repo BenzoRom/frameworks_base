@@ -147,4 +147,11 @@
 
   <!-- Oreo's recents component activity -->
   <java-symbol type="string" name="config_recentsComponentNameOreo" />
+
+  <!-- Proximity check on screen on -->
+  <java-symbol type="bool" name="config_proximityCheckOnWake" />
+  <!-- Proximity check timeout -->
+  <java-symbol type="integer" name="config_proximityCheckTimeout" />
+  <!-- Proximity check on screen on default -->
+  <java-symbol type="bool" name="config_proximityCheckOnWakeEnabledByDefault" />
 </resources>
