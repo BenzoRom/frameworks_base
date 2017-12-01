@@ -33,4 +33,9 @@
          Power button. Set to -1 to disable the proximity sensor check -->
     <integer name="config_torchProximityTimeout">300</integer>
 
+    <!-- Default value for proximity check on screen wake -->
+    <bool name="config_proximityCheckOnWake">true</bool>
+    <integer name="config_proximityCheckTimeout">250</integer>
+    <bool name="config_proximityCheckOnWakeEnabledByDefault">false</bool>
+
 </resources>

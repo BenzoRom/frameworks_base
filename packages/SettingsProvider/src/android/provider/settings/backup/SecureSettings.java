@@ -202,6 +202,7 @@ public class SecureSettings {
         Settings.Secure.TORCH_POWER_BUTTON_GESTURE,
         Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED,
         Settings.Secure.VISUALIZER_USE_CUSTOM_COLOR,
-        Settings.Secure.VISUALIZER_CUSTOM_COLOR
+        Settings.Secure.VISUALIZER_CUSTOM_COLOR,
+        Settings.Secure.PROXIMITY_ON_WAKE
     };
 }

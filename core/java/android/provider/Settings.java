@@ -10389,6 +10389,13 @@ public final class Settings {
         public static final String VISUALIZER_CUSTOM_COLOR = "visualizer_custom_color";
 
         /**
+         * Check the proximity sensor during wakeup
+         *
+         * @hide
+         */
+        public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
