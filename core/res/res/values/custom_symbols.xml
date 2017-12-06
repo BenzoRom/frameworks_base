@@ -185,4 +185,7 @@
   <java-symbol type="array" name="notification_light_package_mapping" />
   <java-symbol type="integer" name="config_deviceLightCapabilities" />
 
+  <!-- Vendor platform signature -->
+  <java-symbol type="array" name="config_vendorPlatformSignatures" />
+
 </resources>
