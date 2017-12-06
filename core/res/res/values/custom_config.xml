@@ -61,4 +61,9 @@
          pulsating and RGB control would set this config to 75. -->
     <integer name="config_deviceLightCapabilities">8</integer>
 
+    <!-- The list of vendor package signatures that should also be considered
+        platform signatures, specifically for use on devices with a vendor partition. -->
+    <string-array name="config_vendorPlatformSignatures">
+    </string-array>
+
 </resources>
