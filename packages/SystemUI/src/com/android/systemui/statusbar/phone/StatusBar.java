@@ -563,7 +563,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     protected H mHandler = createHandler();
     final private ContentObserver mHeadsUpObserver = new ContentObserver(mHandler) {
         @Override
-        public void onChange(boolean selfChange) {
+        public void onChange(boolean selfChange, Uri uri) {
             boolean wasUsing = mUseHeadsUp;
             mUseHeadsUp = ENABLE_HEADS_UP && !mDisableNotificationAlerts
                     && Settings.Global.HEADS_UP_OFF != Settings.Global.getInt(
@@ -577,6 +577,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Log.d(TAG, "dismissing any existing heads up notification on disable event");
                     mHeadsUpManager.releaseAllImmediately();
                 }
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LAST_DOZE_AUTO_BRIGHTNESS))) {
+                updateDozeBrightness();
             }
         }
     };
@@ -919,6 +922,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FORCE_AMBIENT_FOR_MEDIA),
                     false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LAST_DOZE_AUTO_BRIGHTNESS),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -938,6 +944,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         public void update() {
             setForceAmbient();
+            updateDozeBrightness();
         }
     }
     private BenzoSettingsObserver mBenzoSettingsObserver;
@@ -6375,6 +6382,16 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private boolean isAmbientContainerAvailable() {
         return mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null;
+
+    }
+
+    private void updateDozeBrightness() {
+        int defaultDozeBrightness = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_screenBrightnessDoze);
+        int lastValue = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LAST_DOZE_AUTO_BRIGHTNESS, defaultDozeBrightness,
+                UserHandle.USER_CURRENT);
+        mStatusBarWindowManager.updateDozeBrightness(lastValue);
     }
 
     private void setFpToDismissNotifications() {
