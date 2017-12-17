@@ -4144,16 +4144,6 @@ public final class Settings {
         public static final String QS_LAYOUT_ROWS = "qs_layout_rows";
 
         /**
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_LIST = "global_actions_list";
-
-        /**
-         * @hide
-         */
-         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
-
-        /**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
           * 1 - Volume up/down moves cursor left/right
@@ -7714,17 +7704,6 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_BADGING = "notification_badging";
-
-        /**
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTION_DNAA = "global_action_dnaa";
-
-        /**
-         * @hide
-         */
-        public static final String ADVANCED_REBOOT = "advanced_reboot";
 
         /**
          * Comma separated list of QS tiles that have been auto-added already.
