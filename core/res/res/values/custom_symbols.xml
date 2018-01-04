@@ -129,4 +129,7 @@
   <java-symbol type="integer" name="nav_gesture_swipe_timout" />
   <java-symbol type="integer" name="nav_gesture_swipe_start" />
   <java-symbol type="integer" name="nav_gesture_move_threshold" />
+
+  <!-- Whether the device supports Smart Pixels -->
+  <java-symbol type="bool" name="config_enableSmartPixels" />
 </resources>

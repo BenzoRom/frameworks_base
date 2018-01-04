@@ -52,4 +52,9 @@
     <integer name="nav_gesture_swipe_start">20</integer>
     <!-- signification move threshold - if stays below will trigger action -->
     <integer name="nav_gesture_move_threshold">4</integer>
+
+    <!-- Whether the device supports Smart Pixels
+         Disable if it doesn't -->
+    <bool name="config_enableSmartPixels">true</bool>
+
 </resources>
