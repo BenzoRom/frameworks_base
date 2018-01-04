@@ -66,4 +66,8 @@
     <string-array name="config_vendorPlatformSignatures">
     </string-array>
 
+  <!-- Whether the device supports Smart Pixels
+       Disable if it doesn't -->
+  <bool name="config_enableSmartPixels">true</bool>
+
 </resources>
