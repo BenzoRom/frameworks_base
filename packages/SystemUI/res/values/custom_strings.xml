@@ -147,4 +147,7 @@
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
 
+    <!-- Battery saver tile -->
+    <string name="battery_saver_qs_tile_fully_charged">Fully Charged</string>
+
 </resources>
