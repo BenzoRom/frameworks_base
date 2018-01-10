@@ -27,4 +27,7 @@
     <!-- Statusbar Brightness -->
     <java-symbol type="dimen" name="quick_qs_total_height" />
 
+    <!-- Flashlight proximity check -->
+    <java-symbol type="integer" name="config_torchProximityTimeout" />
+
 </resources>
