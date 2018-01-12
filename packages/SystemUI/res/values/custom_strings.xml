@@ -192,6 +192,11 @@
     <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display turned on.</string>
     <!-- ADB over network QS tile -->
     <string name="quick_settings_network_adb_label">ADB-Over-Network</string>
+    <!-- Screenrecord QS tile -->
+    <string name="quick_settings_screenrecord_label">Screenrecord</string>
+    <string name="quick_settings_screenrecord_lq_label">Screenrecord LQ</string>
+    <string name="quick_settings_screenrecord_mq_label">Screenrecord MQ</string>
+    <string name="quick_settings_screenrecord_hq_label">Screenrecord HQ</string>
 
     <!-- Typing virtual buttons -->
     <string name="accessibility_dpad_left">Cursor left</string>

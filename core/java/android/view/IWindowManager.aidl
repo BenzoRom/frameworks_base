@@ -447,4 +447,9 @@ interface IWindowManager
     boolean isGestureButtonRegion(int i, int i2);
 
     boolean isKeyguardShowingAndNotOccluded();
+
+    /**
+     * Call screen record from WindowManager.
+     */
+    void screenRecordAction(int mode);
 }

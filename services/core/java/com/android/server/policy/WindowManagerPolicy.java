@@ -1809,4 +1809,9 @@ public interface WindowManagerPolicy extends WindowManagerPolicyConstants {
      * @return true if enable; false otherwise.
      */
     boolean isGestureButtonRegion(int i, int i2);
+
+    /**
+     * Call screen record from WindowManager.
+     */
+    void screenRecordAction(int mode);
 }
