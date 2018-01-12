@@ -98,6 +98,11 @@
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Screenshot</string>
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <!-- Screenrecord QS tile -->
+    <string name="quick_settings_screenrecord_label">Screenrecord</string>
+    <string name="quick_settings_screenrecord_lq_label">Screenrecord LQ</string>
+    <string name="quick_settings_screenrecord_mq_label">Screenrecord MQ</string>
+    <string name="quick_settings_screenrecord_hq_label">Screenrecord HQ</string>
 
     <!-- Screenrecord Notification Ticker -->
     <string name="screenrecord_notif_ticker">Screen is being recorded</string>
