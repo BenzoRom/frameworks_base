@@ -27,6 +27,7 @@ import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
+import com.android.systemui.qs.tiles.AlwaysOnDisplayTile;
 import com.android.systemui.qs.tiles.BatterySaverTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
@@ -77,6 +78,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<GarbageMonitor.MemoryTile> mMemoryTileProvider;
     private final Provider<UiModeNightTile> mUiModeNightTileProvider;
     private final Provider<SyncTile> mSyncTileProvider;
+    private final Provider<AlwaysOnDisplayTile> mAlwaysOnDisplayTileProvider;
 
     private QSTileHost mHost;
 
@@ -100,7 +102,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<NfcTile> nfcTileProvider,
             Provider<GarbageMonitor.MemoryTile> memoryTileProvider,
             Provider<UiModeNightTile> uiModeNightTileProvider,
-            Provider<SyncTile> syncTileProvider) {
+            Provider<SyncTile> syncTileProvider,
+            Provider<AlwaysOnDisplayTile> alwaysOnDisplayTileProvider) {
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
         mCellularTileProvider = cellularTileProvider;
@@ -121,6 +124,7 @@ public class QSFactoryImpl implements QSFactory {
         mMemoryTileProvider = memoryTileProvider;
         mUiModeNightTileProvider = uiModeNightTileProvider;
         mSyncTileProvider = syncTileProvider;
+        mAlwaysOnDisplayTileProvider = alwaysOnDisplayTileProvider;
     }
 
     public void setHost(QSTileHost host) {
@@ -176,6 +180,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mUiModeNightTileProvider.get();
             case "sync":
                 return mSyncTileProvider.get();
+            case "always_on_display":
+                return mAlwaysOnDisplayTileProvider.get();
         }
 
         // Intent tiles.
