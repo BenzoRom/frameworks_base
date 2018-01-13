@@ -23,6 +23,7 @@ import com.android.systemui.qs.tileimpl.QSFactoryImpl
 import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.AirplaneModeTile
 import com.android.systemui.qs.tiles.AlarmTile
+import com.android.systemui.qs.tiles.AlwaysOnDisplayTile
 import com.android.systemui.qs.tiles.BluetoothTile
 import com.android.systemui.qs.tiles.CameraToggleTile
 import com.android.systemui.qs.tiles.CastTile
@@ -92,7 +93,8 @@ class QSFactoryImplGoogle @Inject constructor(
     private val reverseChargingTileProvider: Provider<ReverseChargingTile>,
     cpuInfoTileProvider: Provider<CPUInfoTile>,
     onTheGoTileProvider: Provider<OnTheGoTile>,
-    syncTileProvider: Provider<SyncTile>
+    syncTileProvider: Provider<SyncTile>,
+    aodTileProvider: Provider<AlwaysOnDisplayTile>
 ) : QSFactoryImpl(
     qsHostLazy,
     customTileBuilderProvider,
@@ -125,7 +127,8 @@ class QSFactoryImplGoogle @Inject constructor(
     quickAccessWalletTileProvider,
     cpuInfoTileProvider,
     onTheGoTileProvider,
-    syncTileProvider
+    syncTileProvider,
+    aodTileProvider
 ) {
     override fun createTile(tileSpec: String): QSTile {
         val tile = createTileInternal(tileSpec)
