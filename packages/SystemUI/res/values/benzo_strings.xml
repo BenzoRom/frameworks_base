@@ -51,4 +51,10 @@
     <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
     <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
 
+    <!-- Always on Display Tile -->
+    <string name="quick_settings_always_on_display_label">Always On Display</string>
+    <string name="quick_settings_always_on_display_powersave_label">Always On Display off\nBattery saver</string>
+    <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+    <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+
 </resources>
