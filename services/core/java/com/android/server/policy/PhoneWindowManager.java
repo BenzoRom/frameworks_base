@@ -1743,7 +1743,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     && now <= mScreenshotChordPowerKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS) {
                 mScreenrecordChordVolumeUpKeyConsumed = true;
                 cancelPendingPowerKeyAction();
-
+                mScreenrecordRunnable.setMode(SCREEN_RECORD_MID_QUALITY);
                 mHandler.postDelayed(mScreenrecordRunnable, getScreenshotChordLongPressDelay());
             }
         }
