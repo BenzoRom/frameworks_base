@@ -22,6 +22,31 @@
 <familyset version="22">
     <!-- first font is default -->
     <family name="sans-serif">
+        <font weight="100" style="normal">GoogleSans-ExtraLight.ttf</font>
+        <font weight="100" style="italic">GoogleSans-ExtraLightItalic.ttf</font>
+        <font weight="300" style="normal">GoogleSans-Light.ttf</font>
+        <font weight="300" style="italic">GoogleSans-LightItalic.ttf</font>
+        <font weight="400" style="normal">GoogleSans-Regular.ttf</font>
+        <font weight="400" style="italic">GoogleSans-Italic.ttf</font>
+        <font weight="500" style="normal">GoogleSans-Medium.ttf</font>
+        <font weight="500" style="italic">GoogleSans-MediumItalic.ttf</font>
+        <font weight="700" style="normal">GoogleSans-Bold.ttf</font>
+        <font weight="700" style="italic">GoogleSans-BoldItalic.ttf</font>
+        <font weight="900" style="normal">GoogleSans-Black.ttf</font>
+        <font weight="900" style="italic">GoogleSans-BlackItalic.ttf</font>
+    </family>
+
+    <!-- Note that aliases must come after the fonts they reference. -->
+    <alias name="sans-serif-thin" to="sans-serif" weight="100" />
+    <alias name="sans-serif-light" to="sans-serif" weight="300" />
+    <alias name="sans-serif-medium" to="sans-serif" weight="500" />
+    <alias name="sans-serif-black" to="sans-serif" weight="900" />
+    <alias name="arial" to="sans-serif" />
+    <alias name="helvetica" to="sans-serif" />
+    <alias name="tahoma" to="sans-serif" />
+    <alias name="verdana" to="sans-serif" />
+
+    <family name="sans-serif-roboto">
         <font weight="100" style="normal">Roboto-Thin.ttf</font>
         <font weight="100" style="italic">Roboto-ThinItalic.ttf</font>
         <font weight="300" style="normal">Roboto-Light.ttf</font>
@@ -35,16 +60,6 @@
         <font weight="700" style="normal">Roboto-Bold.ttf</font>
         <font weight="700" style="italic">Roboto-BoldItalic.ttf</font>
     </family>
-
-    <!-- Note that aliases must come after the fonts they reference. -->
-    <alias name="sans-serif-thin" to="sans-serif" weight="100" />
-    <alias name="sans-serif-light" to="sans-serif" weight="300" />
-    <alias name="sans-serif-medium" to="sans-serif" weight="500" />
-    <alias name="sans-serif-black" to="sans-serif" weight="900" />
-    <alias name="arial" to="sans-serif" />
-    <alias name="helvetica" to="sans-serif" />
-    <alias name="tahoma" to="sans-serif" />
-    <alias name="verdana" to="sans-serif" />
 
     <family name="sans-serif-condensed">
         <font weight="300" style="normal">RobotoCondensed-Light.ttf</font>
