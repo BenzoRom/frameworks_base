@@ -5249,6 +5249,18 @@ public final class Settings {
         public static final Validator PROXIMITY_ON_WAKE_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Force an Ambient notification when a new media track is being played
+         * 0 - disabled
+         * 1 - show track info within normal Ambient Display and force a new Ambient clean layout when skipping tracks
+         * @hide
+         */
+        public static final String FORCE_AMBIENT_FOR_MEDIA = "force_ambient_for_media";
+
+        /** @hide */
+        private static final Validator FORCE_AMBIENT_FOR_MEDIA_VALIDATOR =
+              new SettingsValidators.InclusiveIntegerRangeValidator(0, 1);
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5344,6 +5356,7 @@ public final class Settings {
             ONE_HAND_MODE_ENABLED,
             STATUSBAR_SHOW_WIFI_ACTIVITY,
             PROXIMITY_ON_WAKE,
+            FORCE_AMBIENT_FOR_MEDIA,
         };
 
         /**
@@ -5515,6 +5528,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ONE_HAND_MODE_ENABLED);
             PRIVATE_SETTINGS.add(STATUSBAR_SHOW_WIFI_ACTIVITY);
             PRIVATE_SETTINGS.add(PROXIMITY_ON_WAKE);
+            PRIVATE_SETTINGS.add(FORCE_AMBIENT_FOR_MEDIA);
         }
 
         /**
@@ -5640,6 +5654,7 @@ public final class Settings {
             VALIDATORS.put(ONE_HAND_MODE_ENABLED, ONE_HAND_MODE_ENABLED_VALIDATOR);
             VALIDATORS.put(STATUSBAR_SHOW_WIFI_ACTIVITY, STATUSBAR_SHOW_WIFI_ACTIVITY_VALIDATOR);
             VALIDATORS.put(PROXIMITY_ON_WAKE, PROXIMITY_ON_WAKE_VALIDATOR);
+            VALIDATORS.put(FORCE_AMBIENT_FOR_MEDIA,FORCE_AMBIENT_FOR_MEDIA_VALIDATOR);
         }
 
         /**

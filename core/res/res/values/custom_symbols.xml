@@ -154,4 +154,7 @@
   <java-symbol type="integer" name="config_proximityCheckTimeout" />
   <!-- Proximity check on screen on default -->
   <java-symbol type="bool" name="config_proximityCheckOnWakeEnabledByDefault" />
+
+  <!-- Whether or not ambient media display opt-in setting is available on this device -->
+  <java-symbol type="bool" name="config_canForceDozeNotifications" />
 </resources>
