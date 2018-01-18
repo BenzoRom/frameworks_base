@@ -47,4 +47,5 @@
         <item>com.snapchat.android</item>
     </string-array>
 
+    <bool name="config_canForceDozeNotifications">true</bool>
 </resources>
