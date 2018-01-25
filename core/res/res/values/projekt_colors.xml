@@ -26,8 +26,8 @@
     <color name="sender_text_color">@android:color/black</color>
 
     <!-- Toast text and bg colors -->
-    <color name="toast_bg_color">#E6EEEEEE</color>
-    <color name="toast_text_color">@color/primary_text_default_material_light</color>
+    <color name="toast_bg_color">#E621272b</color>
+    <color name="toast_text_color">@color/primary_text_default_material_dark</color>
 
     <!-- Resolver -->
     <color name="resolver_list_bg">@color/white</color>
