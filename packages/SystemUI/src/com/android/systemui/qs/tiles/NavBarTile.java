@@ -83,7 +83,7 @@ public class NavBarTile extends QSTileImpl<BooleanState> {
 
     @Override
     public CharSequence getTileLabel() {
-        return mContext.getString(R.string.quick_settings_navbar_title);
+        return mContext.getString(R.string.quick_settings_navbar);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class NavBarTile extends QSTileImpl<BooleanState> {
            state.label = mContext.getString(R.string.quick_settings_navbar);
 	} else {
            state.icon = ResourceIcon.get(R.drawable.ic_qs_navbar_off);
-           state.label = mContext.getString(R.string.quick_settings_navbar_off);
+           state.label = mContext.getString(R.string.quick_settings_navbar);
 	}
     }
 
