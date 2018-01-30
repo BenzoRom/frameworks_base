@@ -32,8 +32,8 @@ import java.lang.annotation.Retention;
  * @hide
  */
 public final class FontConfig {
-    public final @NonNull Family[] mFamilies;
-    public final @NonNull Alias[] mAliases;
+    private final @NonNull Family[] mFamilies;
+    private final @NonNull Alias[] mAliases;
 
     public FontConfig(@NonNull Family[] families, @NonNull Alias[] aliases) {
         mFamilies = families;
@@ -58,12 +58,12 @@ public final class FontConfig {
      * Class that holds information about a Font.
      */
     public static final class Font {
-        public final @NonNull String mFontName;
-        public final int mTtcIndex;
-        public final @NonNull FontVariationAxis[] mAxes;
-        public final int mWeight;
-        public final boolean mIsItalic;
-        public Uri mUri;
+        private final @NonNull String mFontName;
+        private final int mTtcIndex;
+        private final @NonNull FontVariationAxis[] mAxes;
+        private final int mWeight;
+        private final boolean mIsItalic;
+        private Uri mUri;
 
         /**
          * @hide
@@ -131,9 +131,9 @@ public final class FontConfig {
      * Class that holds information about a Font alias.
      */
     public static final class Alias {
-        public final @NonNull String mName;
-        public final @NonNull String mToName;
-        public final int mWeight;
+        private final @NonNull String mName;
+        private final @NonNull String mToName;
+        private final int mWeight;
 
         public Alias(@NonNull String name, @NonNull String toName, int weight) {
             mName = name;
@@ -167,9 +167,9 @@ public final class FontConfig {
      * Class that holds information about a Font family.
      */
     public static final class Family {
-        public final @NonNull String mName;
-        public final @NonNull Font[] mFonts;
-        public final @NonNull String mLanguage;
+        private final @NonNull String mName;
+        private final @NonNull Font[] mFonts;
+        private final @NonNull String mLanguage;
 
         /** @hide */
         @Retention(SOURCE)
