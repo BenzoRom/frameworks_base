@@ -111,8 +111,6 @@ public class Typeface {
 
     static final String FONTS_CONFIG = "fonts.xml";
 
-    static final String SANS_SERIF_FAMILY_NAME = "sans-serif";
-
     /**
      * @hide
      */
@@ -924,80 +922,6 @@ public class Typeface {
         return fontFamily;
     }
 
-    /**
-     * Adds the family from src with the name familyName as a fallback font in dst
-     * @param src Source font config
-     * @param dst Destination font config
-     * @param familyName Name of family to add as a fallback
-     */
-    private static void addFallbackFontsForFamilyName(FontConfig src,
-                                                      FontConfig dst,
-                                                      String familyName) {
-        List<FontConfig.Family> families = Arrays.asList(dst.getFamilies());
-        for (FontConfig.Family srcFamily : src.getFamilies()) {
-            if (familyName.equals(srcFamily.getName())) {
-                // set the name to null so that it will be added as a fallback
-                String name = srcFamily.getName();
-                name = null;
-                families.add(srcFamily);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Adds any font families in src that do not exist in dst
-     * @param src Source font config
-     * @param dst Destination font config
-     */
-    private static void addMissingFontFamilies(FontConfig src,
-                                               FontConfig dst) {
-        List<FontConfig.Family> families = new ArrayList<>();
-        final int N = dst.getFamilies().length;
-
-        // add missing families
-        for (FontConfig.Family srcFamily : src.getFamilies()) {
-            String name = srcFamily.getName();
-            boolean addFamily = true;
-            for (int i = 0; i < N && addFamily; i++) {
-                final FontConfig.Family dstFamily = families.get(i);
-                final String dstFamilyName = dstFamily.getName();
-                if (dstFamilyName != null && dstFamilyName.equals(srcFamily.getName())) {
-                    addFamily = false;
-                    break;
-                }
-            }
-            if (addFamily) {
-                families.add(srcFamily);
-            }
-        }
-    }
-
-    /**
-     * Adds any aliases in src that do not exist in dst
-     * @param src Source font config
-     * @param dst Destination font config
-     */
-    private static void addMissingFontAliases(FontConfig src,
-                                              FontConfig dst) {
-        List<FontConfig.Alias> dstAliases = Arrays.asList(dst.getAliases());
-        final int N = dstAliases.size();
-        // add missing aliases
-        for (FontConfig.Alias alias : src.getAliases()) {
-            boolean addAlias = true;
-            for (int i = 0; i < N && addAlias; i++) {
-                final String dstAliasName = dstAliases.get(i).getName();
-                if (dstAliasName != null && dstAliasName.equals(alias.getName())) {
-                    addAlias = false;
-                    break;
-                }
-            }
-            if (addAlias) {
-                dstAliases.add(alias);
-            }
-        }
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -1015,11 +939,9 @@ public class Typeface {
 
         if (themeConfigFile.exists()) {
             // /data/system/theme/fonts/ exits so use it and copy default fonts
-            Log.d("projekt", "using theme file");
             configFile = themeConfigFile;
             fontDir = getThemeFontDirLocation();
         } else {
-            Log.d("projekt", "using system file");
             configFile = systemConfigFile;
             fontDir = getSystemFontDirLocation();
         }
@@ -1031,10 +953,6 @@ public class Typeface {
             if (configFile == themeConfigFile) {
                 systemFontConfig = FontListParser.parse(systemConfigFile,
                         getSystemFontDirLocation().getAbsolutePath());
-                // TODO: Redo these methods
-                //addFallbackFontsForFamilyName(systemFontConfig, fontConfig, SANS_SERIF_FAMILY_NAME);
-                //addMissingFontFamilies(systemFontConfig, fontConfig);
-                //addMissingFontAliases(systemFontConfig, fontConfig);
             }
 
             Map<String, ByteBuffer> bufferForPath = new HashMap<String, ByteBuffer>();
