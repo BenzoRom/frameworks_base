@@ -132,7 +132,6 @@ public final class NotificationRecord {
     private boolean mShowBadge;
     private LogMaker mLogMaker;
     private Light mLight;
-    private boolean mLightOnZen;
     private String mGroupLogTag;
     private String mChannelIdLogTag;
 
@@ -157,7 +156,6 @@ public final class NotificationRecord {
         mImportance = calculateImportance();
         mLight = calculateLights();
         mAdjustments = new ArrayList<>();
-        mLightOnZen = calculateLightOnZen();
     }
 
     private boolean isPreChannelsNotification() {
@@ -205,40 +203,27 @@ public final class NotificationRecord {
                 com.android.internal.R.integer.config_defaultNotificationLedOn);
         int defaultLightOff = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_defaultNotificationLedOff);
-        int userSetLightColor = getChannel().getLightColor();
-        int userSetLightOnTime = getChannel().getLightOnTime();
-        int userSetLightOffTime = getChannel().getLightOffTime();
-        int channelLightColor = userSetLightColor != 0x00FFFFFF ? userSetLightColor
-                : defaultLightColor;
-        int channelLightOnTime = userSetLightOnTime != 0 ? userSetLightOnTime
-                : defaultLightOn;
-        int channelLightOffTime = userSetLightOffTime != 0 ? userSetLightOffTime
-                : defaultLightOff;
-        Light light = getChannel().shouldShowLights() ? new Light(channelLightColor,
-                channelLightOnTime, channelLightOffTime) : null;
 
+        int channelLightColor = getChannel().getLightColor() != 0 ? getChannel().getLightColor()
+                : defaultLightColor;
+        Light light = getChannel().shouldShowLights() ? new Light(channelLightColor,
+                defaultLightOn, defaultLightOff) : null;
         if (mPreChannelsNotification
                 && (getChannel().getUserLockedFields()
                 & NotificationChannel.USER_LOCKED_LIGHTS) == 0) {
             final Notification notification = sbn.getNotification();
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-                light = new Light(userSetLightColor != 0x00FFFFFF ? userSetLightColor : notification.ledARGB,
-                        userSetLightOnTime != 0 ? userSetLightOnTime : notification.ledOnMS,
-                        userSetLightOffTime != 0 ? userSetLightOffTime : notification.ledOffMS);
+                light = new Light(notification.ledARGB, notification.ledOnMS,
+                        notification.ledOffMS);
                 if ((notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
-                    light = new Light(userSetLightColor != 0x00FFFFFF ? userSetLightColor : defaultLightColor,
-                        userSetLightOnTime != 0 ? userSetLightOnTime : defaultLightOn,
-                        userSetLightOffTime != 0 ? userSetLightOffTime : defaultLightOff);
+                    light = new Light(defaultLightColor, defaultLightOn,
+                            defaultLightOff);
                 }
             } else {
                 light = null;
             }
         }
         return light;
-    }
-
-    private boolean calculateLightOnZen() {
-        return getChannel().shouldLightOnZen();
     }
 
     private long[] calculateVibration() {
@@ -868,10 +853,6 @@ public final class NotificationRecord {
 
     public Light getLight() {
         return mLight;
-    }
-
-    public boolean shouldLightOnZen() {
-        return mLightOnZen;
     }
 
     public Uri getSound() {
