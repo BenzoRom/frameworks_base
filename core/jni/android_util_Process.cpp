@@ -490,6 +490,30 @@ void android_os_Process_setThreadScheduler(JNIEnv* env, jclass clazz,
 #endif
 }
 
+void android_os_Process_setThreadSchedulerDL(JNIEnv* env, jclass clazz,
+                                                 jint tid,
+                                                 jlong runtime,
+                                                 jlong deadline,
+                                                 jlong period)
+{
+// linux has sched_setattr(), others don't.
+#ifdef __linux__
+    sched_attr attr = {
+        .size = sizeof(attr),
+        .sched_policy = SCHED_DEADLINE,
+    };
+
+    attr.sched_runtime = runtime;
+    attr.sched_deadline = deadline;
+    attr.sched_period = period;
+
+    if (sched_setattr(tid, &attr, 0))
+        signalExceptionForPriorityError(env, errno, tid);
+#else
+    signalExceptionForPriorityError(env, ENOSYS, tid);
+#endif
+}
+
 void android_os_Process_setThreadPriority(JNIEnv* env, jobject clazz,
                                               jint pid, jint pri)
 {
@@ -1214,6 +1238,7 @@ static const JNINativeMethod methods[] = {
     {"getGidForName",       "(Ljava/lang/String;)I", (void*)android_os_Process_getGidForName},
     {"setThreadPriority",   "(II)V", (void*)android_os_Process_setThreadPriority},
     {"setThreadScheduler",  "(III)V", (void*)android_os_Process_setThreadScheduler},
+    {"setThreadSchedulerDL",  "(IJJJ)V", (void*)android_os_Process_setThreadSchedulerDL},
     {"setCanSelfBackground", "(Z)V", (void*)android_os_Process_setCanSelfBackground},
     {"setThreadPriority",   "(I)V", (void*)android_os_Process_setCallingThreadPriority},
     {"getThreadPriority",   "(I)I", (void*)android_os_Process_getThreadPriority},
