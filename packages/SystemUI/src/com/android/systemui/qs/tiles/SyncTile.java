@@ -16,7 +16,6 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SyncStatusObserver;
@@ -51,14 +50,10 @@ public class SyncTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
-    public void handleLongClick() {
-        ContentResolver.setMasterSyncAutomatically(!mState.value);
-        refreshState();
-    }
-
-    @Override
     public Intent getLongClickIntent() {
-        return null;
+        Intent intent = new Intent("android.settings.SYNC_SETTINGS");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        return intent;
     }
 
     @Override
@@ -79,10 +74,12 @@ public class SyncTile extends QSTileImpl<BooleanState> {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_sync_on);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_sync_on);
+            state.state = Tile.STATE_ACTIVE;
         } else {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_sync_off);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_sync_off);
+            state.state = Tile.STATE_INACTIVE;
         }
     }
 
