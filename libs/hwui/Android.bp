@@ -14,7 +14,7 @@ cc_defaults {
     },
 
     lto: {
-        full: true,
+        thin: true,
     },
 
     cflags: [
