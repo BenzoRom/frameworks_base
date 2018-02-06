@@ -44,6 +44,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:thumb="@drawable/ic_brightness_thumb"
+        android:thumbTint="?android:attr/colorControlNormal"
         android:splitTrack="false"
         />
     <TextView
