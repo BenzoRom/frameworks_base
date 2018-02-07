@@ -1042,10 +1042,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Global.DEVELOPMENT_SETTINGS_ENABLED), false, this,
+                    UserHandle.USER_ALL);
             updateSettings();
         }
 
-        @Override public void onChange(boolean selfChange) {
+        @Override
+        public void onChange(boolean selfChange) {
             updateSettings();
             updateRotation(false);
         }
@@ -2327,6 +2331,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mGlobalKeyManager = new GlobalKeyManager(mContext);
 
+        setDevelopmentSettings();
+
         // Controls rotation and the like.
         initializeHdmiState();
 
@@ -2597,6 +2603,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         if (updateRotation) {
             updateRotation(true);
+        }
+        setDevelopmentSettings();
+    }
+
+    private void setDevelopmentSettings() {
+        int developmentSettingsEnabled = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 1);
+        if (developmentSettingsEnabled == 1) {
+            Slog.i(TAG, "Enabled Development Settings.");
+            Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 1);
+        } else {
+            Slog.i(TAG, "Disabled Development Settings.");
+            Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0);
+
         }
     }
 
@@ -4272,7 +4294,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void requestFullBugreport() {
         if ("1".equals(SystemProperties.get("ro.debuggable"))
                 || Settings.Global.getInt(mContext.getContentResolver(),
-                        Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) == 1) {
+                        Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 1) == 1) {
             try {
                 ActivityManager.getService()
                         .requestBugReport(ActivityManager.BUGREPORT_OPTION_FULL);
