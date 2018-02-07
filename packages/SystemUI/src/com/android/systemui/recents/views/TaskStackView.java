@@ -975,7 +975,9 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                 }
 
                 mLayoutAlgorithm.clearUnfocusedTaskOverrides();
-                willScroll = mAnimationHelper.startScrollToFocusedTaskAnimation(newFocusedTask,
+                willScroll = this.mKeyPatchWhenLowMemory.HandleScrollToTask(mStackScroller,
+                        newFocusedTaskIndex)
+                        || mAnimationHelper.startScrollToFocusedTaskAnimation(newFocusedTask,
                         requestViewFocus);
                 if (willScroll) {
                     sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SCROLLED);
@@ -1037,7 +1039,8 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                     }
                 } else {
                     // Try the next task if it is a stack task
-                    int tmpNewIndex = newIndex + (forward ? -1 : 1);
+                    int tmpNewIndex = newIndex
+                        + mKeyPatchWhenLowMemory.GetIndexDelta((forward ? -1 : 1));
                     if (0 <= tmpNewIndex && tmpNewIndex < tasks.size()) {
                         Task t = tasks.get(tmpNewIndex);
                         if (!t.isFreeformTask()) {
@@ -1049,7 +1052,8 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                 // No restrictions, lets just move to the new task (looping forward/backwards if
                 // necessary)
                 int taskCount = mStack.getTaskCount();
-                newIndex = (newIndex + (forward ? -1 : 1) + taskCount) % taskCount;
+                newIndex = (newIndex
+                    + mKeyPatchWhenLowMemory.GetIndexDelta((forward ? -1 : 1)) + taskCount) % taskCount;
             }
         } else {
             // We don't have a focused task
@@ -1987,7 +1991,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
         // Stop any scrolling
         mStackScroller.stopScroller();
         mStackScroller.stopBoundScrollAnimation();
-
+        if (mKeyPatchWhenLowMemory.HandleFocusNextTaskViewEvent(this, mFocusedTask)) return;
         setRelativeFocusedTask(true, false /* stackTasksOnly */, true /* animated */, false,
                 event.timerIndicatorDuration);
     }
@@ -1996,7 +2000,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
         // Stop any scrolling
         mStackScroller.stopScroller();
         mStackScroller.stopBoundScrollAnimation();
-
+        if (mKeyPatchWhenLowMemory.HandleFocusPreviousTaskViewEvent(this, mFocusedTask)) return;
         setRelativeFocusedTask(false, false /* stackTasksOnly */, true /* animated */);
     }
 
@@ -2008,6 +2012,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                     currentIndex, event.direction);
             setFocusedTask(nextIndex, false, true);
         } else {
+            mKeyPatchWhenLowMemory.OnHandleUpAndDownEvent();
             switch (event.direction) {
                 case UP:
                     EventBus.getDefault().send(new FocusPreviousTaskViewEvent());
@@ -2017,6 +2022,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                         new FocusNextTaskViewEvent(0 /* timerIndicatorDuration */));
                     break;
             }
+            mKeyPatchWhenLowMemory.OnHandleUpAndDownEventOver();
         }
     }
 
@@ -2470,5 +2476,58 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
 
         mLayoutAlgorithm.dump(innerPrefix, writer);
         mStackScroller.dump(innerPrefix, writer);
+    }
+
+    KeyPatchWhenLowMemory mKeyPatchWhenLowMemory = new KeyPatchWhenLowMemory();
+
+    public static class KeyPatchWhenLowMemory {
+        boolean mEnabled;
+        boolean mHandlingKeyEvent;
+        int mCurrentFocusedViewIndex = -1;
+
+        public KeyPatchWhenLowMemory() {
+            mEnabled = Recents.getConfiguration().isLowRamDevice;
+        }
+
+        public void OnHandleUpAndDownEventOver() {
+            if (!mEnabled) return;
+            mHandlingKeyEvent = false;
+        }
+
+        public void OnHandleUpAndDownEvent() {
+            if (!mEnabled) return;
+            mHandlingKeyEvent = true;
+        }
+
+        public boolean HandleFocusPreviousTaskViewEvent(TaskStackView taskStackView,
+                Task focusedTask) {
+            return HandleKeyEvent(taskStackView, focusedTask, false);
+        }
+
+        public boolean HandleFocusNextTaskViewEvent(TaskStackView taskStackView, Task focusedTask) {
+            return HandleKeyEvent(taskStackView, focusedTask, true);
+        }
+
+        public boolean HandleScrollToTask(TaskStackViewScroller stackScroller,
+                int newFocusedTaskIndex) {
+            if (!mEnabled || !mHandlingKeyEvent) return false;
+            int v = newFocusedTaskIndex > mCurrentFocusedViewIndex? -1000 : 1000;
+            stackScroller.scrollToClosestTask(v);
+            return true;
+        }
+
+        private boolean HandleKeyEvent(TaskStackView stackView, Task focusedTask, boolean forward) {
+            if (!mEnabled || !mHandlingKeyEvent) return false;
+            if (focusedTask == null) return false;
+            int invalidIndex = forward? (stackView.getStack().getStackTasks().size() - 1) : 0;
+            mCurrentFocusedViewIndex = stackView.getStack().getStackTasks().indexOf(focusedTask);
+            return mCurrentFocusedViewIndex == invalidIndex;
+        }
+
+        public int GetIndexDelta(int srcValue) {
+            if (!mEnabled || !mHandlingKeyEvent) return srcValue;
+            return -srcValue;
+        }
+
     }
 }
