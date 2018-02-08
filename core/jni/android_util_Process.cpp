@@ -45,6 +45,47 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+/*
+ * TODO
+ * This header cannot be included because "struct sched_param" is already
+ * defined in sched.h.
+#include <linux/sched/types.h>
+ */
+
+struct sched_attr {
+  __u32 size;
+
+  __u32 sched_policy;
+
+  __u64 sched_flags;
+
+  __s32 sched_nice;
+
+  __u32 sched_priority;
+
+  __u64 sched_runtime;
+  __u64 sched_deadline;
+  __u64 sched_period;
+};
+
+#include <linux/sched.h>
+#include <sys/syscall.h>
+
+int sched_setattr(pid_t pid,
+	const struct sched_attr *attr,
+	unsigned int flags)
+{
+       return syscall(SYS_sched_setattr, pid, attr, flags);
+}
+
+int sched_getattr(pid_t pid,
+	struct sched_attr *attr,
+	unsigned int size,
+	unsigned int flags)
+{
+       return syscall(SYS_sched_getattr, pid, attr, size, flags);
+}
+
 #define GUARD_THREAD_PRIORITY 0
 
 using namespace android;
