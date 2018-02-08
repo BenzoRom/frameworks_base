@@ -16,12 +16,12 @@
 
 package com.android.systemui.statusbar.policy;
 
-import android.util.ArraySet;
-import android.view.LayoutInflater;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.util.ArraySet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
@@ -181,8 +181,8 @@ public class BrightnessMirrorController
                     Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
                     UserHandle.USER_CURRENT) != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
             mIcon.setImageResource(automatic ?
-                    com.android.systemui.R.drawable.ic_qs_brightness_auto_on_new :
-                    com.android.systemui.R.drawable.ic_qs_brightness_auto_off_new);
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_on :
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_off);
         }
     }
 }
