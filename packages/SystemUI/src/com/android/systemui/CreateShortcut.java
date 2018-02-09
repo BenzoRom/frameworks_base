@@ -110,19 +110,19 @@ public class CreateShortcut extends LauncherActivity {
 
     private int returnIconResId(String c) {
         if (c.equals ("Rotation")) {
-            return R.drawable.ic_qs_auto_rotate;
+            return R.drawable.ic_shortcut_auto_rotate;
         } else if (c.equals("Torch")) {
-            return R.drawable.ic_signal_flashlight;
+            return R.drawable.ic_shortcut_flashlight;
         } else if (c.equals("SleepScreen")) {
-            return R.drawable.ic_qs_sleep;
+            return R.drawable.ic_shortcut_sleep;
         } else if (c.equals("Reboot")) {
-            return R.drawable.ic_qs_reboot;
+            return R.drawable.ic_shortcut_reboot;
         } else if (c.equals("Recovery")) {
-            return R.drawable.ic_qs_reboot_recovery;
+            return R.drawable.ic_shortcut_reboot_recovery;
         } else if (c.equals("ChamberOfSecrets")) {
-            return R.drawable.ic_qs_slim_action;
+            return R.drawable.ic_shortcut_benzo;
         } else if (c.equals("ClearNotifications")) {
-            return R.drawable.ic_qs_clear_notifications;
+            return R.drawable.ic_shortcut_clear_notifications;
         } else {
             // Oh-Noes, you found a wild derp.
             return R.drawable.ic_sysbar_null;
