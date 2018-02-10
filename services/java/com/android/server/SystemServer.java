@@ -1515,13 +1515,16 @@ public final class SystemServer {
             traceBeginAndSlog("StartLauncherAppsService");
             mSystemServiceManager.startService(LauncherAppsService.class);
             traceEnd();
+
+            traceBeginAndSlog("StartEdgeGestureService");
             try {
                 Slog.i(TAG, "EdgeGesture service");
                 edgeGestureService = new EdgeGestureService(context, inputManager);
                 ServiceManager.addService("edgegestureservice", edgeGestureService);
             } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting EdgeGesture service", e);
+                reportWtf("starting EdgeGesture service", e);
             }
+            traceEnd();
         }
 
         if (!disableNonCoreServices && !disableMediaProjection) {

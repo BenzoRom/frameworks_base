@@ -1129,7 +1129,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private SystemGesturesPointerEventListener mSystemGestures;
     private OPGesturesListener mOPGestures;
 
-    private EdgeGestureManager.EdgeGestureActivationListener mEdgeGestureActivationListener = new EdgeGestureManager.EdgeGestureActivationListener() {
+    private EdgeGestureManager.EdgeGestureActivationListener mEdgeGestureActivationListener
+            = new EdgeGestureManager.EdgeGestureActivationListener() {
 
         @Override
         public void onEdgeGestureActivation(int touchX, int touchY,
