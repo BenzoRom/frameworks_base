@@ -5097,6 +5097,12 @@ public final class Settings {
         public static final String HEADS_UP_WHITELIST_VALUES = "heads_up_whitelist_values";
 
         /**
+         * Whether to gently vibrate instead of playing a sound when in-call and a notification is pushed
+         * @hide
+         */
+        public static final String INCALL_NOTIFICATIONS_VIBRATE = "incall_notifications_vibrate";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
