@@ -4,7 +4,7 @@ cc_defaults {
         "hwui_static_deps",
 
         //"hwui_bugreport_font_cache_usage",
-        //"hwui_compile_for_perf",
+        "hwui_compile_for_perf",
     ],
 
     cflags: [
@@ -45,6 +45,12 @@ cc_defaults {
             cflags: ["-DUSE_HWC2"],
         },
     },
+
+    arch: {
+        arm: {
+            instruction_set: "arm",
+        },
+    },
 }
 
 cc_defaults {
@@ -83,7 +89,6 @@ cc_defaults {
     cflags: [
         "-fno-omit-frame-pointer",
         "-marm",
-        "-mapcs",
     ],
 }
 
@@ -249,7 +254,11 @@ cc_library {
         // If enabled, every GLES call is wrapped & error checked
         // Has moderate overhead
         //"hwui_enable_opengl_validation",
-],
+    ],
+
+    lto: {
+        thin: true,
+    },
 }
 
 // ------------------------
