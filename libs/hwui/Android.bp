@@ -4,18 +4,8 @@ cc_defaults {
         "hwui_static_deps",
 
         //"hwui_bugreport_font_cache_usage",
-        "hwui_compile_for_perf",
+        //"hwui_compile_for_perf",
     ],
-
-    arch: {
-        arm: {
-            instruction_set: "arm",
-        },
-    },
-
-    lto: {
-        thin: true,
-    },
 
     cflags: [
         "-DEGL_EGLEXT_PROTOTYPES",
@@ -93,6 +83,7 @@ cc_defaults {
     cflags: [
         "-fno-omit-frame-pointer",
         "-marm",
+        "-mapcs",
     ],
 }
 

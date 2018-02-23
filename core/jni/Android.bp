@@ -299,16 +299,4 @@ cc_library_shared {
             cflags: ["-D__ANDROID_TREBLE__"]
         },
     },
-
-    ldflags: ["-Wl,--no-fatal-warnings"],
-
-    arch: {
-        arm: {
-            instruction_set: "arm",
-        },
-    },
-
-    lto: {
-        thin: true,
-    },
 }
