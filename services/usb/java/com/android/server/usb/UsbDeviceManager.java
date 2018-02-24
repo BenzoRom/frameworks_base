@@ -658,11 +658,9 @@ public class UsbDeviceManager {
         }
 
         private boolean trySetEnabledFunctions(String functions, boolean forceRestart) {
-            if (functions == null && !mManualModeChange) {
+            if (functions == null || applyAdbFunction(functions)
+                    .equals(UsbManager.USB_FUNCTION_NONE)) {
                 functions = getDefaultFunctions();
-                if (functions != UsbManager.USB_FUNCTION_NONE) {
-                    mUsbDataUnlocked = true;
-                }
             }
             functions = applyAdbFunction(functions);
 
@@ -1251,15 +1249,32 @@ public class UsbDeviceManager {
             }
         }
 
+        private String getDefaultFunctionsSystem() {
+            String func = SystemProperties.get(getPersistProp(true),
+                    UsbManager.USB_FUNCTION_NONE);
+            // if ADB is enabled, reset functions to ADB
+            if (UsbManager.containsFunction(func, UsbManager.USB_FUNCTION_ADB)) {
+                return UsbManager.USB_FUNCTION_ADB;
+            } else {
+                return UsbManager.USB_FUNCTION_MTP;
+            }
+        }
+
         private String getDefaultFunctions() {
+            if (mManualModeChange) {
+                return getDefaultFunctionsSystem();
+            }
             String func = Settings.Global.getString(mContentResolver,
                     Settings.Global.USB_DEFAULT_CONFIGURATION);
-            if (DEBUG) Slog.i(TAG, "getDefaultFunctions settings = " + func);
             if (func == null) {
-                func = SystemProperties.get(getPersistProp(true),
-                        UsbManager.USB_FUNCTION_NONE);
-                if (DEBUG) Slog.i(TAG, "getDefaultFunctions property = " + func);
-
+                return getDefaultFunctionsSystem();
+            }
+            if (DEBUG) Slog.i(TAG, "getDefaultFunctions settings = " + func);
+            if (func.equals(UsbManager.USB_FUNCTION_NONE)) {
+                mUsbDataUnlocked = false;
+                func = UsbManager.USB_FUNCTION_MTP;
+            } else {
+                mUsbDataUnlocked = true;
             }
             return func;
         }
