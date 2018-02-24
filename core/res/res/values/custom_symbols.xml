@@ -169,17 +169,6 @@
   <!-- Ambient display music -->
   <java-symbol type="bool" name="config_canForceDozeNotifications" />
 
-  <!-- Notification light -->
-  <java-symbol type="bool" name="config_intrusiveNotificationLed" />
-  <java-symbol type="bool" name="config_multiColorNotificationLed" />
-  <java-symbol type="array" name="notification_light_package_mapping" />
-  <java-symbol type="array" name="config_notificationNoAlertsVibePattern" />
-  <!-- Battery light light -->
-  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
-  <java-symbol type="bool" name="config_multiColorBatteryLed" />
-  <!-- LED pulse -->
-  <java-symbol type="bool" name="config_ledCanPulse" />
-
   <!-- Unlink notif volume -->
   <java-symbol type="drawable" name="ic_audio_notification_new" />
   <java-symbol type="drawable" name="ic_audio_notification_mute_new" />
