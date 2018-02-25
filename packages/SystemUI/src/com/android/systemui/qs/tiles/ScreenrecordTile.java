@@ -36,10 +36,19 @@ public class ScreenrecordTile extends QSTileImpl<BooleanState> {
     private static final int SCREEN_RECORD_MID_QUALITY = WindowManager.SCREEN_RECORD_MID_QUALITY;
     private static final int SCREEN_RECORD_HIGH_QUALITY = WindowManager.SCREEN_RECORD_HIGH_QUALITY;
 
-    private int mMode = SCREEN_RECORD_LOW_QUALITY;
+    private int mMode;
 
     public ScreenrecordTile(QSHost host) {
         super(host);
+        int qualitySetting = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_RECORD_QUALITY, 0, UserHandle.USER_CURRENT);
+        if (qualitySetting == 0) {
+            mMode = SCREEN_RECORD_LOW_QUALITY;
+        } else if (qualitySetting == 1) {
+            mMode = SCREEN_RECORD_MID_QUALITY;
+        } else if (qualitySetting == 2) {
+            mMode = SCREEN_RECORD_HIGH_QUALITY;
+        }
     }
 
     @Override
@@ -57,18 +66,9 @@ public class ScreenrecordTile extends QSTileImpl<BooleanState> {
 
     @Override
     public void handleClick() {
-        int qualitySetting = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SCREEN_RECORD_QUALITY, 0, UserHandle.USER_CURRENT);
-        if (qualitySetting == 0) {
-            mMode = SCREEN_RECORD_LOW_QUALITY;
-        } else if (qualitySetting == 1) {
-            mMode = SCREEN_RECORD_MID_QUALITY;
-        } else if (qualitySetting == 2) {
-            mMode = SCREEN_RECORD_HIGH_QUALITY;
-        }
         mHost.collapsePanels();
         try {
-             Thread.sleep(1000); //1s
+             Thread.sleep(1000);
         } catch (InterruptedException ie) {}
         benzoUtils.takeScreenrecord(mMode);
     }
