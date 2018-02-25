@@ -206,4 +206,17 @@
   <java-symbol type="layout" name="permission_confirmation_dialog" />
   <java-symbol type="array" name="app_ops_labels" />
 
+  <!-- Power menu items -->
+  <java-symbol type="color" name="power_menu_power_off" />
+  <java-symbol type="color" name="power_menu_restart" />
+  <java-symbol type="color" name="power_menu_restart_advanced" />
+  <java-symbol type="color" name="power_menu_advanced_bootloader" />
+  <java-symbol type="color" name="power_menu_advanced_recovery" />
+  <java-symbol type="color" name="power_menu_flashlight" />
+  <java-symbol type="color" name="power_menu_lockdown" />
+  <java-symbol type="color" name="power_menu_onthego" />
+  <java-symbol type="color" name="power_menu_screenshot" />
+  <java-symbol type="color" name="power_menu_screenrecord" />
+  <java-symbol type="color" name="power_menu_settings" />
+
 </resources>

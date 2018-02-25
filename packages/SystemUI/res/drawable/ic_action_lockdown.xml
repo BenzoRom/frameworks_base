@@ -19,7 +19,7 @@
         android:width="24dp"
         android:viewportWidth="24"
         android:viewportHeight="24"
-        android:tint="?android:attr/colorControlNormal">
+        android:tint="@*android:color/power_menu_lockdown">
 
     <path
         android:fillColor="#FF000000"
