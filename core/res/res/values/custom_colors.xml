@@ -16,7 +16,23 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-  <!-- Dynamic Navbar -->
-  <color name="input_method_navigation_guard_dynamic">@android:color/transparent</color>
+    <!-- Dynamic Navbar -->
+    <color name="input_method_navigation_guard_dynamic">@android:color/transparent</color>
+
+    <!-- Power menu items -->
+    <color name="power_menu_power_off">?attr/colorControlNormal</color>
+    <color name="power_menu_restart">?attr/colorControlNormal</color>
+    <color name="power_menu_restart_advanced">?attr/colorControlNormal</color>
+    <color name="power_menu_advanced_bootloader">?attr/colorControlNormal</color>
+    <color name="power_menu_advanced_recovery">?attr/colorControlNormal</color>
+    <color name="power_menu_advanced_system_restart_ui">?attr/colorControlNormal</color>
+    <color name="power_menu_airplane_on">?attr/colorControlActivated</color>
+    <color name="power_menu_airplane_off">?attr/colorControlNormal</color>
+    <color name="power_menu_flashlight">?attr/colorControlNormal</color>
+    <color name="power_menu_lockdown">?attr/colorControlNormal</color>
+    <color name="power_menu_onthego">?attr/colorControlNormal</color>
+    <color name="power_menu_screenshot">?attr/colorControlNormal</color>
+    <color name="power_menu_screenrecord">?attr/colorControlNormal</color>
+    <color name="power_menu_settings">?attr/colorControlNormal</color>
 
 </resources>
