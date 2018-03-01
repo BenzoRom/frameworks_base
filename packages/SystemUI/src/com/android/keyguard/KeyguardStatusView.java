@@ -512,21 +512,30 @@ public class KeyguardStatusView extends GridLayout implements
             } else if (batteryStatus.level >= 80) {
                 resId = batteryStatus.isPluggedIn()
                         ? R.drawable.ic_battery_charging_80 : R.drawable.ic_battery_80;
+            } else if (batteryStatus.level >= 70) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_70 : R.drawable.ic_battery_70;
             } else if (batteryStatus.level >= 60) {
                 resId = batteryStatus.isPluggedIn()
                         ? R.drawable.ic_battery_charging_60 : R.drawable.ic_battery_60;
             } else if (batteryStatus.level >= 50) {
                 resId = batteryStatus.isPluggedIn()
                         ? R.drawable.ic_battery_charging_50 : R.drawable.ic_battery_50;
+            } else if (batteryStatus.level >= 40) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_40 : R.drawable.ic_battery_40;
             } else if (batteryStatus.level >= 30) {
                 resId = batteryStatus.isPluggedIn()
                         ? R.drawable.ic_battery_charging_30 : R.drawable.ic_battery_30;
-            } else if (batteryStatus.level >= lowLevel) {
+            } else if (batteryStatus.level >= 20) {
                 resId = batteryStatus.isPluggedIn()
                         ? R.drawable.ic_battery_charging_20 : R.drawable.ic_battery_20;
+            } else if (batteryStatus.level >= lowLevel) {
+                resId = batteryStatus.isPluggedIn()
+                        ? R.drawable.ic_battery_charging_10 : R.drawable.ic_battery_10;
             } else {
                 resId = batteryStatus.isPluggedIn()
-                        ? R.drawable.ic_battery_charging_20 : R.drawable.ic_battery_alert;
+                        ? R.drawable.ic_battery_charging_10 : R.drawable.ic_battery_alert;
             }
         }
         Drawable icon = resId > 0 ? res.getDrawable(resId).mutate() : null;
