@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2018 Projekt Substratum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,8 @@ public class SoundUtils {
         Settings.Global.putStringForUser(resolver, uri, val, UserHandle.USER_SYSTEM);
     }
 
-    public static boolean setUISounds(ContentResolver resolver, String sound_name, String
-            location) {
+    public static boolean setUISounds(ContentResolver resolver, String sound_name,
+            String location) {
         if (allowedUISound(sound_name)) {
             updateGlobalSettings(resolver, sound_name, location);
             return true;
@@ -65,8 +65,7 @@ public class SoundUtils {
     private static Boolean allowedUISound(String targetValue) {
         String[] allowed_themable = {
                 "lock_sound",
-                "unlock_sound",
-                "low_battery_sound"
+                "unlock_sound"
         };
 
         return Arrays.asList(allowed_themable).contains(targetValue);
@@ -97,16 +96,15 @@ public class SoundUtils {
         return path;
     }
 
-    public static boolean setAudible(Context context, File ringtone, File ringtoneCache, int type,
-                                     String name) {
+    public static boolean setAudible(Context context, File ringtone, int type, String name) {
         final String path = ringtone.getAbsolutePath();
         final String mimeType = name.endsWith(".ogg") ? "application/ogg" : "application/mp3";
-        ContentValues values = new ContentValues();
 
+        ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, path);
         values.put(MediaStore.MediaColumns.TITLE, name);
         values.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
-        values.put(MediaStore.MediaColumns.SIZE, ringtoneCache.length());
+        values.put(MediaStore.MediaColumns.SIZE, ringtone.length());
         values.put(MediaStore.Audio.Media.IS_RINGTONE, type == RingtoneManager.TYPE_RINGTONE);
         values.put(MediaStore.Audio.Media.IS_NOTIFICATION,
                 type == RingtoneManager.TYPE_NOTIFICATION);
@@ -116,9 +114,7 @@ public class SoundUtils {
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(path);
         Uri newUri = null;
         Cursor c = context.getContentResolver().query(uri,
-                new String[]{
-                        MediaStore.MediaColumns._ID
-                },
+                new String[]{ MediaStore.MediaColumns._ID },
                 MediaStore.MediaColumns.DATA + "='" + path + "'",
                 null, null);
 
@@ -139,24 +135,22 @@ public class SoundUtils {
         try {
             RingtoneManager.setActualDefaultRingtoneUri(context, type, newUri);
         } catch (Exception e) {
-            Log.e(TAG, "", e);
+            Log.e(TAG, "Failed to apply audible", e);
             return false;
         }
 
         return true;
     }
 
-    public static boolean setUIAudible(Context context, File localized_ringtone,
-                                       File ringtone_file, int type, String name) {
+    public static boolean setUIAudible(Context context, File ringtone_file, int type, String name) {
         final String path = ringtone_file.getAbsolutePath();
-
         final String path_clone = "/system/media/audio/ui/" + name + ".ogg";
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, path);
         values.put(MediaStore.MediaColumns.TITLE, name);
         values.put(MediaStore.MediaColumns.MIME_TYPE, "application/ogg");
-        values.put(MediaStore.MediaColumns.SIZE, localized_ringtone.length());
+        values.put(MediaStore.MediaColumns.SIZE, ringtone_file.length());
         values.put(MediaStore.Audio.Media.IS_RINGTONE, false);
         values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
         values.put(MediaStore.Audio.Media.IS_ALARM, false);
@@ -165,9 +159,7 @@ public class SoundUtils {
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(path);
         Uri newUri = null;
         Cursor c = context.getContentResolver().query(uri,
-                new String[]{
-                        MediaStore.MediaColumns._ID
-                },
+                new String[]{ MediaStore.MediaColumns._ID },
                 MediaStore.MediaColumns.DATA + "='" + path_clone + "'",
                 null, null);
 
@@ -176,15 +168,9 @@ public class SoundUtils {
             String id = String.valueOf(c.getLong(0));
             c.close();
 
-            Log.e(TAG, id);
             newUri = Uri.withAppendedPath(Uri.parse(MEDIA_CONTENT_URI), id);
-
-            try {
-                context.getContentResolver().update(uri, values,
-                        MediaStore.MediaColumns._ID + "=" + id, null);
-            } catch (Exception e) {
-                Log.d(TAG, "The content provider does not need to be updated.");
-            }
+            context.getContentResolver().update(uri, values,
+                    MediaStore.MediaColumns._ID + "=" + id, null);
         }
 
         if (newUri == null) {
@@ -194,7 +180,7 @@ public class SoundUtils {
         try {
             RingtoneManager.setActualDefaultRingtoneUri(context, type, newUri);
         } catch (Exception e) {
-            Log.e(TAG, "", e);
+            Log.e(TAG, "Failed to apply ui audible", e);
             return false;
         }
 
@@ -209,9 +195,7 @@ public class SoundUtils {
 
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(audiblePath);
         Cursor c = context.getContentResolver().query(uri,
-                new String[]{
-                        MediaStore.MediaColumns._ID
-                },
+                new String[]{ MediaStore.MediaColumns._ID },
                 MediaStore.MediaColumns.DATA + "='" + audiblePath + "'",
                 null, null);
 
@@ -226,7 +210,7 @@ public class SoundUtils {
         try {
             RingtoneManager.setActualDefaultRingtoneUri(context, type, uri);
         } catch (Exception e) {
-            Log.e(TAG, "", e);
+            Log.e(TAG, "Failed to apply default audible", e);
             return false;
         }
 

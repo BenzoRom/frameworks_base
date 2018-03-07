@@ -192,7 +192,7 @@ class ZygoteConnection {
             }
         }
 
-        if (parsedArgs.refreshTheme) {
+        if (parsedArgs.refreshFont) {
             Typeface.recreateDefaults();
         }
 
@@ -407,9 +407,6 @@ class ZygoteConnection {
          */
         String appDataDir;
 
-        /** from --refresh_theme */
-        boolean refreshTheme;
-
         /**
          * Whether to preload a package, with the package path in the remainingArgs.
          */
@@ -423,6 +420,11 @@ class ZygoteConnection {
          * it's started with --enable-lazy-preload).
          */
         boolean preloadDefault;
+
+        /**
+         * Whether to refresh displayed font
+         */
+        boolean refreshFont;
 
         /**
          * Constructs instance and parses args
@@ -590,8 +592,8 @@ class ZygoteConnection {
                     preloadPackageCacheKey = args[++curArg];
                 } else if (arg.equals("--preload-default")) {
                     preloadDefault = true;
-                } else if (arg.equals("--refresh_theme")) {
-                    refreshTheme = true;
+                } else if (arg.equals("--refresh-font")) {
+                    refreshFont = true;
                 } else {
                     break;
                 }

@@ -201,7 +201,7 @@ public final class FontConfig {
 
         // Must be same with Minikin's variant values.
         // See frameworks/minikin/include/minikin/FontFamily.h
-        public final @Variant int mVariant;
+        private final @Variant int mVariant;
 
         public Family(@NonNull String name, @NonNull Font[] fonts, @NonNull String language,
                 @Variant int variant) {
