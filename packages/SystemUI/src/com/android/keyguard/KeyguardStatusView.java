@@ -55,7 +55,7 @@ import android.widget.TextView;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.benzo.OmniJawsClient;
 import com.android.internal.widget.LockPatternUtils;
-import com.android.systemui.ChargingView;
+//import com.android.systemui.ChargingView;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.statusbar.policy.DateView;
 
@@ -77,7 +77,7 @@ public class KeyguardStatusView extends GridLayout implements
     private TextClock mClockView;
     private TextView mOwnerInfo;
     private ViewGroup mClockContainer;
-    private ChargingView mBatteryDoze;
+    //private ChargingView mBatteryDoze;
     private View mKeyguardStatusArea;
     private Runnable mPendingMarqueeStart;
     private Handler mHandler;
@@ -197,10 +197,10 @@ public class KeyguardStatusView extends GridLayout implements
         mClockView = findViewById(R.id.clock_view);
         mClockView.setShowCurrentUserTime(true);
         mOwnerInfo = findViewById(R.id.owner_info);
-        mBatteryDoze = findViewById(R.id.battery_doze);
+        //mBatteryDoze = findViewById(R.id.battery_doze);
         mKeyguardStatusArea = findViewById(R.id.keyguard_status_area);
         mAmbientDisplayBatteryView = (TextView) findViewById(R.id.ambient_display_battery_view);
-        mVisibleInDoze = new View[]{mAmbientDisplayBatteryView, mClockView, mKeyguardStatusArea};
+        mVisibleInDoze = new View[]{/*mBatteryDoze, */mClockView, mKeyguardStatusArea};
         mTextColor = mClockView.getCurrentTextColor();
         mDateTextColor = mDateView.getCurrentTextColor();
         mAlarmTextColor = mAlarmStatusView.getCurrentTextColor();
@@ -665,7 +665,7 @@ public class KeyguardStatusView extends GridLayout implements
         }
 
         updateDozeVisibleViews();
-        mBatteryDoze.setDark(dark);
+        //mBatteryDoze.setDark(dark);
         mClockView.setTextColor(ColorUtils.blendARGB(mTextColor, Color.WHITE, darkAmount));
         mDateView.setTextColor(ColorUtils.blendARGB(mDateTextColor, Color.WHITE, darkAmount));
         int blendedAlarmColor = ColorUtils.blendARGB(mAlarmTextColor, Color.WHITE, darkAmount);

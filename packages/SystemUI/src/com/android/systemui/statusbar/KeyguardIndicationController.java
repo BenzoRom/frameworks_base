@@ -41,6 +41,7 @@ import android.view.ViewGroup;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.app.IBatteryStats;
+import com.android.internal.util.benzo.OmniJawsClient;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.settingslib.Utils;
@@ -53,13 +54,17 @@ import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
 
+import java.text.NumberFormat;
+
 /**
  * Controls the indications and error messages shown on the Keyguard
  */
-public class KeyguardIndicationController {
+public class KeyguardIndicationController implements
+        OmniJawsClient.OmniJawsObserver {
 
     private static final String TAG = "KeyguardIndication";
     private static final boolean DEBUG_CHARGING_SPEED = false;
+    private static final boolean DEBUG = false;
 
     private static final int MSG_HIDE_TRANSIENT = 1;
     private static final int MSG_CLEAR_FP_MSG = 2;
@@ -96,6 +101,12 @@ public class KeyguardIndicationController {
 
     private final DevicePolicyManager mDevicePolicyManager;
     private boolean mDozing;
+
+    private OmniJawsClient mWeatherClient;
+    private OmniJawsClient.WeatherInfo mWeatherData;
+    private boolean mWeatherEnabled;
+    private String mWeatherCurrentTemp;
+    private String mWeatherConditionText;
 
     /**
      * Creates a new KeyguardIndicationController and registers callbacks.
@@ -135,6 +146,11 @@ public class KeyguardIndicationController {
         mDevicePolicyManager = (DevicePolicyManager) context.getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
 
+        mWeatherClient = new OmniJawsClient(mContext);
+        mWeatherEnabled = mWeatherClient.isOmniJawsEnabled();
+        mWeatherClient.addObserver(this);
+        queryAndUpdateWeather();
+
         updateDisclosure();
     }
 
@@ -161,6 +177,32 @@ public class KeyguardIndicationController {
             mUpdateMonitorCallback = new BaseKeyguardCallback();
         }
         return mUpdateMonitorCallback;
+    }
+
+    @Override
+    public void weatherUpdated() {
+        queryAndUpdateWeather();
+    }
+
+    @Override
+    public void weatherError() {
+        // nothing
+    }
+
+    public void queryAndUpdateWeather() {
+        try {
+                if (mWeatherEnabled) {
+                    mWeatherClient.queryWeather();
+                    mWeatherData = mWeatherClient.getWeatherInfo();
+                    mWeatherCurrentTemp = mWeatherData.temp + mWeatherData.tempUnits;
+                    mWeatherConditionText = mWeatherData.condition;
+                } else {
+                    mWeatherCurrentTemp = "";
+                    mWeatherConditionText = "";
+                }
+       } catch(Exception e) {
+          // Do nothing
+       }
     }
 
     private void updateDisclosure() {
@@ -295,7 +337,17 @@ public class KeyguardIndicationController {
                     mTextView.setTextColor(Color.WHITE);
                     mTextView.switchIndication(mTransientIndication);
                 } else {
-                    mTextView.switchIndication(null);
+                    boolean showAmbientWeather = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.AMBIENT_DISPLAY_WEATHER, 0, UserHandle.USER_CURRENT) != 0;
+                    if (showAmbientWeather){
+                        if (mWeatherEnabled && !mPowerPluggedIn) {
+                            CharSequence weatherIndicator = String.format(mContext.getResources().getString(R.string.ambient_weather_info),
+                                  mWeatherCurrentTemp, mWeatherConditionText);
+                            mTextView.switchIndication(weatherIndicator);
+                        }
+                    } else {
+                        mTextView.switchIndication(null);
+                    }
                 }
                 return;
             }
