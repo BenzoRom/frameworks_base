@@ -283,6 +283,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".SoundRefreshReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.android.systemui.action.REFRESH_SOUND" />
+            </intent-filter>
+        </receiver>
+
         <!-- started from PhoneWindowManager
              TODO: Should have an android:permission attribute -->
         <service android:name=".benzo.screenrecord.TakeScreenrecordService"
