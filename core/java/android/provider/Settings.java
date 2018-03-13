@@ -4925,9 +4925,13 @@ public final class Settings {
         public static final String SCREENSHOT_DEFAULT_MODE = "screenshot_default_mode";
 
         /**
+         * Controls which resolution is used with screen record.
+         * 0: Low Quality (480p)
+         * 1: Mid Quality (720p - 4mbs)
+         * 2: High Quality (720p - 8mbs)
          * @hide
          */
-        public static final String SCREENRECORD_QUALITY_MODE = "screenrecord_quality_mode";
+        public static final String SCREEN_RECORD_QUALITY = "screen_record_quality";
 
         /**
          * Force an Ambient notification when a new media track is being played
@@ -5184,7 +5188,8 @@ public final class Settings {
             STATUSBAR_CLOCK_AM_PM_STYLE,
             STATUSBAR_CLOCK_DATE_DISPLAY,
             STATUSBAR_CLOCK_DATE_STYLE,
-            STATUSBAR_CLOCK_DATE_FORMAT
+            STATUSBAR_CLOCK_DATE_FORMAT,
+            SCREEN_RECORD_QUALITY
         };
 
         /**

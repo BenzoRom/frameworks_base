@@ -36,13 +36,10 @@ public class ScreenrecordTile extends QSTileImpl<BooleanState> {
     private static final int SCREEN_RECORD_MID_QUALITY = WindowManager.SCREEN_RECORD_MID_QUALITY;
     private static final int SCREEN_RECORD_HIGH_QUALITY = WindowManager.SCREEN_RECORD_HIGH_QUALITY;
 
-    private int mMode;
+    private int mMode = SCREEN_RECORD_LOW_QUALITY;
 
     public ScreenrecordTile(QSHost host) {
         super(host);
-        mMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SCREENRECORD_QUALITY_MODE, SCREEN_RECORD_LOW_QUALITY,
-                UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -60,28 +57,16 @@ public class ScreenrecordTile extends QSTileImpl<BooleanState> {
 
     @Override
     public void handleClick() {
-        switchMode();
-        refreshState();
-    }
-
-
-    private void switchMode() {
-        if (mMode == SCREEN_RECORD_LOW_QUALITY) {
-            mMode = SCREEN_RECORD_MID_QUALITY;
-        } else if (mMode == SCREEN_RECORD_MID_QUALITY) {
-            mMode = SCREEN_RECORD_HIGH_QUALITY;
-        } else if (mMode == SCREEN_RECORD_HIGH_QUALITY) {
+        int qualitySetting = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_RECORD_QUALITY, 0, UserHandle.USER_CURRENT);
+        if (qualitySetting == 0) {
             mMode = SCREEN_RECORD_LOW_QUALITY;
+        } else if (qualitySetting == 1) {
+            mMode = SCREEN_RECORD_MID_QUALITY;
+        } else if (qualitySetting == 2) {
+            mMode = SCREEN_RECORD_HIGH_QUALITY;
         }
-        Settings.System.putIntForUser(mContext.getContentResolver(),
-                Settings.System.SCREENRECORD_QUALITY_MODE, mMode,
-                UserHandle.USER_CURRENT);
-    }
-
-    @Override
-    public void handleLongClick() {
         mHost.collapsePanels();
-        //finish collapsing the panel
         try {
              Thread.sleep(1000); //1s
         } catch (InterruptedException ie) {}
@@ -102,15 +87,7 @@ public class ScreenrecordTile extends QSTileImpl<BooleanState> {
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.contentDescription =  mContext.getString(
                 R.string.quick_settings_screenrecord_label);
-        if (mMode == SCREEN_RECORD_LOW_QUALITY) {
-            state.label = mContext.getString(R.string.quick_settings_screenrecord_lq_label);
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_screenrecord_lq);
-        } else if (mMode == SCREEN_RECORD_MID_QUALITY) {
-            state.label = mContext.getString(R.string.quick_settings_screenrecord_mq_label);
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_screenrecord_mq);
-        } else if (mMode == SCREEN_RECORD_HIGH_QUALITY) {
-            state.label = mContext.getString(R.string.quick_settings_screenrecord_hq_label);
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_screenrecord_hq);
-        }
+        state.label = mContext.getString(R.string.quick_settings_screenrecord_label);
+        state.icon = ResourceIcon.get(R.drawable.ic_qs_screenrecord);
     }
 }

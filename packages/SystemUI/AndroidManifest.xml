@@ -400,6 +400,13 @@
             android:process=":screenshot"
             android:exported="false" />
 
+        <!-- Callback for editing screenshot notification -->
+        <activity android:name=".screenshot.GlobalScreenshot$EditScreenshotActivity"
+                  android:process=":screenshot"
+                  android:exported="false"
+                  android:taskAffinity=""
+                  android:excludeFromRecents="true" />
+
         <!-- Springboard for launching the share activity -->
         <receiver android:name=".benzo.screenrecord.GlobalScreenrecord$ShareReceiver"
             android:process=":screenrecord"
@@ -414,13 +421,6 @@
         <receiver android:name=".benzo.screenrecord.GlobalScreenrecord$DeleteScreenrecordReceiver"
             android:process=":screenrecord"
             android:exported="false" />
-
-        <!-- Callback for editing screenshot notification -->
-        <activity android:name=".screenshot.GlobalScreenshot$EditScreenshotActivity"
-                  android:process=":screenshot"
-                  android:exported="false"
-                  android:taskAffinity=""
-                  android:excludeFromRecents="true" />
 
         <!-- started from UsbDeviceSettingsManager -->
         <activity android:name=".usb.UsbConfirmActivity"
