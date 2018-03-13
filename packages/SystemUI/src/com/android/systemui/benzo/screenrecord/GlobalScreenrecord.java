@@ -40,7 +40,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.provider.Settings;
 import android.content.res.Resources;
 import android.media.MediaScannerConnection;
@@ -52,15 +51,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.UserHandle;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.provider.Settings;
 import android.view.WindowManager;
 import android.util.Log;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.android.systemui.R;
 import com.android.systemui.util.NotificationChannels;
@@ -99,12 +92,9 @@ class GlobalScreenrecord {
 
     private Runnable mFinisher;
 
-    private FrameLayout mFrameLayout;
-    private LayoutInflater mInflater;
     private WindowManager mWindowManager;
 
     private String mNotifContent = null;
-    private boolean mHintShowing = false;
 
     private long mRecordingStartTime = 0;
     private long mRecordingTotalTime = 0;
@@ -115,7 +105,6 @@ class GlobalScreenrecord {
     }
 
     private class CaptureThread extends Thread {
-        private Runnable mFInisher;
         private int mMode;
 
         public void setMode(int mode) {
@@ -124,27 +113,31 @@ class GlobalScreenrecord {
 
         public void run() {
             Runtime rt = Runtime.getRuntime();
-
+            int qualitySetting = Settings.System.getIntForUser(mContext.getContentResolver(),
+                                 Settings.System.SCREEN_RECORD_QUALITY, 0, UserHandle.USER_CURRENT);
             // additional arguments to pass to screenrecord bin
             final String[] cmds = new String[6];
             cmds[0] = "/system/bin/screenrecord";
             cmds[1] = TMP_PATH;
-            switch (mMode) {
-                case WindowManager.SCREEN_RECORD_LOW_QUALITY:
+            switch (qualitySetting) {
+                case 0:
+                    mMode = WindowManager.SCREEN_RECORD_LOW_QUALITY;
                     // low resolution and 1.5Mbps
                     cmds[2] = "--size";
                     cmds[3] = "480x800";
                     cmds[4] = "--bit-rate";
                     cmds[5] = "1500000";
                     break;
-                case WindowManager.SCREEN_RECORD_MID_QUALITY:
+                case 1:
+                    mMode = WindowManager.SCREEN_RECORD_MID_QUALITY;
                     // default resolution (720p) and 4Mbps
                     cmds[2] = "--size";
                     cmds[3] = "720x1280";
                     cmds[4] = "--bit-rate";
                     cmds[5] = "4000000";
                     break;
-                case WindowManager.SCREEN_RECORD_HIGH_QUALITY:
+                case 2:
+                    mMode = WindowManager.SCREEN_RECORD_HIGH_QUALITY;
                     // default resolution (720p) and 8Mbps
                     cmds[2] = "--size";
                     cmds[3] = "720x1280";
@@ -217,7 +210,6 @@ class GlobalScreenrecord {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mWindowManager =
                 (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public boolean isRecording() {
@@ -238,7 +230,6 @@ class GlobalScreenrecord {
         mCaptureThread.setMode(mode);
         mCaptureThread.start();
 
-        showHint();
         updateNotification(mode);
     }
 
@@ -281,11 +272,6 @@ class GlobalScreenrecord {
         PendingIntent pointerPendIntent = PendingIntent.getService(mContext, 0, pointerIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent hintIntent = new Intent(mContext, TakeScreenrecordService.class)
-            .setAction(TakeScreenrecordService.ACTION_TOGGLE_HINT);
-        PendingIntent hintPendIntent = PendingIntent.getService(mContext, 0, hintIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT);
-
         boolean showTouches = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.SHOW_TOUCHES, 0, UserHandle.USER_CURRENT) != 0;
         int togglePointerIconId = showTouches ?
@@ -294,75 +280,14 @@ class GlobalScreenrecord {
         int togglePointerStringId = showTouches ?
                 R.string.screenrecord_notif_pointer_off :
                 R.string.screenrecord_notif_pointer_on;
-        int hideHintStringId = mHintShowing ?
-                R.string.screenrecord_hide_hint :
-                R.string.screenrecord_show_hint;
         builder
             .addAction(com.android.internal.R.drawable.ic_media_stop,
                 r.getString(R.string.screenrecord_notif_stop), stopPendIntent)
             .addAction(togglePointerIconId,
-                r.getString(togglePointerStringId), pointerPendIntent)
-            .addAction(R.drawable.ic_hide_hint,
-                r.getString(hideHintStringId), hintPendIntent);
+                r.getString(togglePointerStringId), pointerPendIntent);
 
         Notification notif = builder.build();
         mNotificationManager.notify(SCREENRECORD_NOTIFICATION_ID, notif);
-    }
-
-    private void showHint() {
-        mHintShowing = true;
-        final int size = (int) (mContext.getResources()
-                .getDimensionPixelSize(R.dimen.screenrecord_hint_size));
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE // don't get softkey inputs
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // allow outside inputs
-                PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-        params.width = size;
-        params.height = size;
-
-        mFrameLayout = new FrameLayout(mContext);
-
-        mWindowManager.addView(mFrameLayout, params);
-        mInflater.inflate(R.layout.screenrecord_hint, mFrameLayout);
-
-        final ImageView hint = (ImageView) mFrameLayout.findViewById(R.id.hint);
-        hint.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Turn off pointer in all cases
-                Settings.System.putIntForUser(mContext.getContentResolver(),
-                        Settings.System.SHOW_TOUCHES, 0, UserHandle.USER_CURRENT);
-                Message msg = Message.obtain(mHandler, MSG_TASK_ENDED);
-                mHandler.sendMessage(msg);
-            }
-        });
-
-        hint.startAnimation(getHintAnimation());
-    }
-
-    public void toggleHint() {
-        mHintShowing = !mHintShowing;
-        final ImageView hint = (ImageView) mFrameLayout.findViewById(R.id.hint);
-        if (mHintShowing) {
-            hint.setImageAlpha(255);
-            hint.startAnimation(getHintAnimation());
-        } else  {
-            hint.setImageAlpha(0);
-            hint.setAnimation(null);
-        }
-        updateNotification(-1);
-    }
-
-    private Animation getHintAnimation() {
-        Animation anim = new AlphaAnimation(0.0f, 1.0f);
-        anim.setDuration(500);
-        anim.setStartOffset(100);
-        anim.setRepeatMode(Animation.REVERSE);
-        anim.setRepeatCount(Animation.INFINITE);
-        return anim;
     }
 
     /**
@@ -385,10 +310,6 @@ class GlobalScreenrecord {
         while (mCaptureThread.isAlive()) {
             // wait...
         }
-
-        final ImageView hint = (ImageView) mFrameLayout.findViewById(R.id.hint);
-        hint.setAnimation(null);
-        mWindowManager.removeView(mFrameLayout);
 
         // Give a second to screenrecord to finish the file
         mHandler.postDelayed(new Runnable() { public void run() {
@@ -522,8 +443,8 @@ class GlobalScreenrecord {
 
         Notification.Builder builder = new Notification.Builder(mContext, NotificationChannels.SCREENRECORDS)
             .setTicker(r.getString(R.string.screenrecord_notif_final_ticker))
-            .setContentTitle(r.getString(R.string.screenrecord_notif_completed) + " - "
-                    + r.getString(R.string.screenrecord_notif_duration) + " " + totalTime + ", " + size + "MB")
+            .setContentTitle(r.getString(R.string.screenrecord_notif_completed) + " ("
+                    + totalTime + ", " + size + "MB" + ")")
             .setSmallIcon(R.drawable.ic_capture_video)
             .setWhen(System.currentTimeMillis())
             .setAutoCancel(true);

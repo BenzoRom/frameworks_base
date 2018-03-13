@@ -94,9 +94,6 @@
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
     <!-- Screenrecord QS tile -->
     <string name="quick_settings_screenrecord_label">Screenrecord</string>
-    <string name="quick_settings_screenrecord_lq_label">Screenrecord LQ</string>
-    <string name="quick_settings_screenrecord_mq_label">Screenrecord MQ</string>
-    <string name="quick_settings_screenrecord_hq_label">Screenrecord HQ</string>
     <!-- Reboot/Recovery QS Tile -->
     <string name="quick_settings_reboot_label">Reboot</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
@@ -142,15 +139,12 @@
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">Stop</string>
     <string name="screenrecord_notif_completed">Screen recorded successfully</string>
-    <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
     <string name="screenrecord_notif_pointer_on">Show pointer</string>
     <string name="screenrecord_notif_pointer_off">Hide pointer</string>
     <!-- Screen record notification error title -->
     <string name="screenrecord_notif_error">Unable to record screen</string>
     <string name="notification_channel_screenrecord">Screenrecords</string>
-    <string name="screenrecord_hide_hint">Hide hint</string>
-    <string name="screenrecord_show_hint">Show hint</string>
 
     <!-- Global actions -->
     <!-- string name="global_action_restart_advanced">Advanced reboot</string>
