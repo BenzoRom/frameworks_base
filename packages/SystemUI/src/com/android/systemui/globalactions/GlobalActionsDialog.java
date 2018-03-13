@@ -811,7 +811,6 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                 R.string.global_action_onthego) {
             @Override
             public void onPress() {
-                takeScreenrecord();
                 OnTheGoActions.processAction(mContext,
                         OnTheGoActions.ACTION_ONTHEGO_TOGGLE);
             }
