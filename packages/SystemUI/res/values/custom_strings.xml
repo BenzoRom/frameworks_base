@@ -69,6 +69,7 @@
     <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
     <string name="onthego_channel_name">Main</string>
+    <string name="global_action_onthego">On-The-Go</string>
 
     <!-- Global actions -->
     <!-- string name="global_action_restart_advanced">Advanced reboot</string>

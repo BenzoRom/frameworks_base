@@ -44,9 +44,6 @@
     <string name="animation_random">Random</string>
     <string name="action_null">Blank</string>
 
-    <!-- On-The-Go -->
-    <string name="global_action_onthego">On-The-Go</string>
-
     <!-- App ops requests -->
     <string name="app_ops_access_camera">access the camera</string>
     <string name="app_ops_access_location">access your location</string>
