@@ -221,7 +221,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     public boolean showBrightnessSlider() {
         boolean brightnessSliderEnabled = Settings.Secure.getIntForUser(
             mContext.getContentResolver(), Settings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
-                1, UserHandle.USER_CURRENT) == 1;
+                0, UserHandle.USER_CURRENT) == 1;
         ToggleSliderView brightnessSlider = (ToggleSliderView) findViewById(R.id.brightness_slider);
         if (brightnessSliderEnabled && isExpanded()) {
             mBrightnessView.setVisibility(VISIBLE);
