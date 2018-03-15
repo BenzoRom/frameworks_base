@@ -45,12 +45,6 @@ cc_defaults {
             cflags: ["-DUSE_HWC2"],
         },
     },
-
-    arch: {
-        arm: {
-            instruction_set: "arm",
-        },
-    },
 }
 
 cc_defaults {
