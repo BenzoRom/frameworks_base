@@ -79,4 +79,5 @@ interface IStatusBarService
     void handleSystemKey(in int key);
     void restartUI();
     void setAutoRotate(boolean enabled);
+    void startAssist(in Bundle args);
 }
