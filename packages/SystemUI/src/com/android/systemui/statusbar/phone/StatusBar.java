@@ -161,6 +161,7 @@ import com.android.internal.util.benzo.DeviceUtils;
 import com.android.internal.util.NotificationMessagingUtil;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
+import com.android.keyguard.KeyguardShortcuts;
 import com.android.keyguard.KeyguardStatusView;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -502,6 +503,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private int mMaxKeyguardNotifConfig;
     private boolean mCustomMaxKeyguard;
+    KeyguardShortcuts mKeyguardShortcuts;
 
     private boolean mFingerprintQuickPulldown;
 
@@ -1202,6 +1204,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 R.id.notification_container_parent));
         mKeyguardStatusBar = (KeyguardStatusBarView) mStatusBarWindow.findViewById(R.id.keyguard_header);
         mKeyguardStatusView = (KeyguardStatusView) mStatusBarWindow.findViewById(R.id.keyguard_status_view);
+        mKeyguardShortcuts = (KeyguardShortcuts) mStatusBarWindow.findViewById(R.id.shortcuts);
 
         mNotificationIconAreaController = SystemUIFactory.getInstance()
                 .createNotificationIconAreaController(context, this);
@@ -5026,6 +5029,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         updateQsExpansionEnabled();
         mDozeScrimController.setDozing(mDozing, animate);
         mKeyguardStatusView.setDozing(mDozing);
+        mKeyguardShortcuts.setDozing(mDozing);
         updateRowStates();
         Trace.endSection();
     }
