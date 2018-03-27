@@ -213,6 +213,7 @@ import com.android.systemui.recents.events.activity.AppTransitionFinishedEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
 import com.android.systemui.recents.misc.IconPackHelper;
 import com.android.systemui.recents.misc.SystemServicesProxy;
+import com.android.systemui.screenshot.GlobalScreenshot;
 import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.stackdivider.WindowManagerProxy;
 import com.android.systemui.statusbar.ActivatableNotificationView;
@@ -6471,7 +6472,24 @@ public class StatusBar extends SystemUI implements DemoMode,
             } catch (RemoteException e) {
             }
             final boolean isActivity = pendingIntent.isActivity();
-            if (isActivity) {
+            // HO-9922
+            // at commit ed376a36a3b33d66f532d72e1e809757e0dde90b, the type of screenshot's
+            // share pendingIntent was changed from activity to broadcast, actually it wants to
+            // start the wanted activity in broadcast receiver. So it need be treated as Activity
+            // and dismissKeyguard if necessary
+            boolean isScreenShotShareBroadcast = false;
+            if (!isActivity) {
+                Intent intent = pendingIntent.getIntent();
+                if (intent != null) {
+                    ComponentName cn = intent.getComponent();
+                    if (cn != null){
+                        isScreenShotShareBroadcast =
+                                GlobalScreenshot.ShareReceiver.class.getName().equals(cn.getClassName())
+                                        && intent.hasExtra(GlobalScreenshot.SHARING_INTENT);
+                    }
+                }
+            }
+            if (isActivity || isScreenShotShareBroadcast) {
                 final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
                 final boolean afterKeyguardGone = PreviewInflater.wouldLaunchResolverActivity(
                         mContext, pendingIntent.getIntent(), mCurrentUserId);

@@ -447,9 +447,9 @@ class DeleteImageInBackgroundTask extends AsyncTask<Uri, Void, Void> {
     }
 }
 
-class GlobalScreenshot {
+public class GlobalScreenshot {
     static final String SCREENSHOT_URI_ID = "android:screenshot_uri_id";
-    static final String SHARING_INTENT = "android:screenshot_sharing_intent";
+    public static final String SHARING_INTENT = "android:screenshot_sharing_intent";
     public static final String SCREENSHOT_FILE_PATH = "android:screenshot_file_path";
 
     private static final int SCREENSHOT_FLASH_TO_PEAK_DURATION = 130;
