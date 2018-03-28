@@ -54,6 +54,11 @@ LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res-keyguard $(LOCAL_PATH)/res
 
+ifneq ($(ANDROID_COMPILE_WITH_JACK),true)
+  LOCAL_PROGUARD_ENABLED := disabled
+  LOCAL_DX_FLAGS := --multi-dex
+endif
+
 ifneq ($(INCREMENTAL_BUILDS),)
     LOCAL_PROGUARD_ENABLED := disabled
     LOCAL_JACK_ENABLED := incremental
