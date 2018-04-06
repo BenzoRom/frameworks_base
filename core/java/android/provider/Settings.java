@@ -5256,6 +5256,20 @@ public final class Settings {
                 "volume_keys_control_media_stream";
 
         /**
+         * Show Settings icon in QS Footer
+         *
+         * @hide
+         */
+        public static final String QSFOOTER_SHOW_SETTINGS = "qs_footer_show_settings";
+
+        /**
+         * Show Running Services icon in QS Footer.
+         *
+         * @hide
+         */
+        public static final String QSFOOTER_SHOW_SERVICES = "qs_footer_show_services";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
