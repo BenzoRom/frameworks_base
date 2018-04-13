@@ -94,6 +94,7 @@ public class SyncTile extends QSTileImpl<BooleanState> {
 
     @Override
     public void handleSetListening(boolean listening) {
+        if (mSyncObserver == null) return;
         if (mListening == listening) return;
         mListening = listening;
 
