@@ -649,6 +649,15 @@ public class PackageHelper {
         }
     }
 
+    public static long calculateRawApkSize(PackageLite pkg) {
+        long sizeBytes = 0;
+        for (String codePath : pkg.getAllCodePaths()) {
+            final File codeFile = new File(codePath);
+            sizeBytes += codeFile.length();
+        }
+        return sizeBytes;
+    }
+
     public static long calculateInstalledSize(PackageLite pkg, NativeLibraryHelper.Handle handle,
             boolean isForwardLocked, String abiOverride) throws IOException {
         long sizeBytes = 0;
