@@ -170,7 +170,7 @@ public class PackageInstallerService extends IPackageInstaller.Stub {
     private static final FilenameFilter sStageFilter = new FilenameFilter() {
         @Override
         public boolean accept(File dir, String name) {
-            return isStageName(name);
+            return PackageHelper.isStageName(name);
         }
     };
 
@@ -247,7 +247,7 @@ public class PackageInstallerService extends IPackageInstaller.Stub {
         synchronized (mSessions) {
             final ArraySet<String> unclaimed = new ArraySet<>();
             for (String cid : PackageHelper.getSecureContainerList()) {
-                if (isStageName(cid)) {
+                if (PackageHelper.isStageName(cid)) {
                     unclaimed.add(cid);
                 }
             }
@@ -270,13 +270,6 @@ public class PackageInstallerService extends IPackageInstaller.Stub {
                 PackageHelper.destroySdDir(cid);
             }
         }
-    }
-
-    public static boolean isStageName(String name) {
-        final boolean isFile = name.startsWith("vmdl") && name.endsWith(".tmp");
-        final boolean isContainer = name.startsWith("smdl") && name.endsWith(".tmp");
-        final boolean isLegacyContainer = name.startsWith("smdl2tmp");
-        return isFile || isContainer || isLegacyContainer;
     }
 
     @Deprecated

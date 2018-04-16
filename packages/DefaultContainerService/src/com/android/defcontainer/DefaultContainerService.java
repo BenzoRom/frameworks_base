@@ -183,7 +183,7 @@ public class DefaultContainerService extends IntentService {
             final int recommendedInstallLocation;
             final long token = Binder.clearCallingIdentity();
             try {
-                if (isStageName(pkg.baseCodePath)) {
+                if (PackageHelper.isStageName(pkg.baseCodePath)) {
                     sizeBytes -= PackageHelper.calculateRawApkSize(pkg);
                 }
                 recommendedInstallLocation = PackageHelper.resolveInstallLocation(context,
@@ -399,12 +399,5 @@ public class DefaultContainerService extends IntentService {
         } else {
             Os.chmod(targetFile.getAbsolutePath(), 0644);
         }
-    }
-
-    public static boolean isStageName(String name) {
-        final boolean isFile = name.startsWith("vmdl") && name.endsWith(".tmp");
-        final boolean isContainer = name.startsWith("smdl") && name.endsWith(".tmp");
-        final boolean isLegacyContainer = name.startsWith("smdl2tmp");
-        return isFile || isContainer || isLegacyContainer;
     }
 }

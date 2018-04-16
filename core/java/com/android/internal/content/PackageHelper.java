@@ -678,6 +678,13 @@ public class PackageHelper {
         return sizeBytes;
     }
 
+    public static boolean isStageName(String name) {
+        final boolean isFile = name.startsWith("vmdl") && name.endsWith(".tmp");
+        final boolean isContainer = name.startsWith("smdl") && name.endsWith(".tmp");
+        final boolean isLegacyContainer = name.startsWith("smdl2tmp");
+        return isFile || isContainer || isLegacyContainer;
+    }
+
     public static String replaceEnd(String str, String before, String after) {
         if (!str.endsWith(before)) {
             throw new IllegalArgumentException(
