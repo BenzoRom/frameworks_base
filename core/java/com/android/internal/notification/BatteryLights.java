@@ -31,7 +31,7 @@ import com.android.internal.notification.LedValues;
 import com.android.internal.notification.LightsCapabilities;
 
 public final class BatteryLights {
-    private final String TAG = "LineageBatteryLights";
+    private final String TAG = "BatteryLights";
     private final boolean DEBUG = false;
 
     // Battery light capabilities.
