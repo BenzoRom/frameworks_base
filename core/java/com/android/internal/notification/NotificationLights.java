@@ -194,24 +194,37 @@ public final class NotificationLights {
         return mPackageNameMappings.get(pkg);
     }
 
+    public boolean isForcedOn(Notification n) {
+        if (n.extras != null) {
+            return n.extras.getBoolean(Notification.EXTRA_FORCE_SHOW_LIGHTS, false);
+        }
+        return false;
+    }
+
     // Called by NotificationManagerService updateLightsLocked().
     // Takes the lights values as requested by a notification and
     // updates them according to the active Lineage feature settings.
-    public void calcLights(LedValues ledValues, String packageName, boolean forcedOn,
+    public void calcLights(LedValues ledValues, String packageName, Notification n,
             boolean screenOn, boolean inCall, boolean isDefaultLights, int suppressedEffects) {
-        if (DEBUG) {
-            Slog.i(TAG, "calcLights input: ledValues={ " + ledValues + " } packageName="
-                    + packageName + " forcedOn=" + forcedOn + " screenOn=" + screenOn
-                    + " inCall=" + inCall + " isDefaultLights=" + isDefaultLights
-                    + " suppressedEffects=" + suppressedEffects);
-        }
-
+        final boolean forcedOn = isForcedOn(n);
         final boolean suppressScreenOff =
                 (suppressedEffects & SUPPRESSED_EFFECT_SCREEN_OFF) != 0;
         final boolean suppressScreenOn =
                 (suppressedEffects & SUPPRESSED_EFFECT_SCREEN_ON) != 0;
         final boolean screenActive = screenOn || inCall;
         final boolean enableLed;
+
+        if (DEBUG) {
+            Slog.i(TAG, "calcLights input: "
+                    + " ledValues={ " + ledValues + " }"
+                    + " packageName=" + packageName
+                    + " forcedOn=" + forcedOn
+                    + " screenOn=" + screenOn
+                    + " inCall=" + inCall
+                    + " isDefaultLights=" + isDefaultLights
+                    + " suppressedEffects=" + suppressedEffects);
+        }
+
         if (forcedOn) {
             // Forced on always enables
             enableLed = true;

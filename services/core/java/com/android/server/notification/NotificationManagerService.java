@@ -4179,7 +4179,7 @@ public class NotificationManagerService extends SystemService {
         // release the light
         boolean wasShowLights = mLights.remove(key);
         if (record.getLight() != null
-                && (aboveThreshold || isLedNotificationForcedOn(record))) {
+                && (aboveThreshold || isLedForcedOn(record))) {
             mLights.add(key);
             updateLightsLocked();
             if (mUseAttentionLight) {
@@ -5130,12 +5130,11 @@ public class NotificationManagerService extends SystemService {
         }
 
         LedValues ledValues = new LedValues(light.color, light.onMs, light.offMs);
-        final String packageName = ledNotification.sbn.getPackageName();
         final boolean defaultLights =
                 (ledNotification.sbn.getNotification().defaults
                         & Notification.DEFAULT_LIGHTS) != 0;
-        mNotificationLights.calcLights(ledValues, packageName,
-                isLedNotificationForcedOn(ledNotification), mScreenOn,
+        mNotificationLights.calcLights(ledValues, ledNotification.sbn.getPackageName(),
+                ledNotification.sbn.getNotification(), mScreenOn,
                 mInCall, defaultLights, ledNotification.getSuppressedVisualEffects());
 
         if (!ledValues.isEnabled()) {
@@ -5146,14 +5145,9 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
-    private boolean isLedNotificationForcedOn(NotificationRecord nr) {
-        if (nr != null) {
-            final Notification n = nr.sbn.getNotification();
-            if (n.extras != null) {
-                return n.extras.getBoolean(Notification.EXTRA_FORCE_SHOW_LIGHTS, false);
-            }
-        }
-        return false;
+    private boolean isLedForcedOn(NotificationRecord nr) {
+        return nr != null ?
+                mNotificationLights.isForcedOn(nr.sbn.getNotification()) : false;
     }
 
     @GuardedBy("mNotificationLock")

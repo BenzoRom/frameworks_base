@@ -936,6 +936,9 @@ public final class BatteryService extends SystemService {
                 Slog.w(TAG, "updateLightsLocked: mBatteryLights is not yet ready; skipping");
                 return;
             }
+            if (!mBatteryLights.isSupported()) {
+                return;
+            }
 
             LedValues ledValues = new LedValues(0 /* color */, mBatteryLedOn, mBatteryLedOff);
             mBatteryLights.calcLights(ledValues,
