@@ -16,32 +16,33 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/dpad_group"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clipChildren="false"
-        android:visibility="gone">
+    android:id="@+id/dpad_group"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipChildren="false">
 
         <com.android.systemui.statusbar.policy.KeyButtonView
-                android:id="@+id/dpad_left"
-                android:layout_width="@dimen/navigation_extra_key_width"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/ic_sysbar_ime_left"
-                systemui:keyCode="21"
-                systemui:keyRepeat="true"
-                android:scaleType="center"
-                android:contentDescription="@string/accessibility_dpad_left" />
+            android:id="@+id/dpad_left"
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_sysbar_ime_left"
+            systemui:keyCode="21"
+            systemui:keyRepeat="true"
+            android:visibility="gone"
+            android:scaleType="center"
+            android:contentDescription="@string/accessibility_dpad_left" />
 
         <com.android.systemui.statusbar.policy.KeyButtonView
-                android:id="@+id/dpad_right"
-                android:layout_width="@dimen/navigation_extra_key_width"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_sysbar_ime_right"
-                systemui:keyCode="22"
-                systemui:keyRepeat="true"
-                android:scaleType="center"
-                android:contentDescription="@string/accessibility_dpad_right" />
+            android:id="@+id/dpad_right"
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_sysbar_ime_right"
+            systemui:keyCode="22"
+            systemui:keyRepeat="true"
+            android:visibility="gone"
+            android:scaleType="center"
+            android:contentDescription="@string/accessibility_dpad_right" />
 
 </RelativeLayout>

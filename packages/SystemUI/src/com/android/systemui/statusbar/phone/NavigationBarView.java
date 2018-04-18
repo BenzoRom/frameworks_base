@@ -908,13 +908,11 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     });
 
     public void updateDpadKeys() {
-        if (mShowDpadArrowKeys) { // overrides IME button
-            final boolean showingIme = ((mNavigationIconHints
-                    & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0);
+        final int visibility = mShowDpadArrowKeys && (mNavigationIconHints
+                & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0 ? View.VISIBLE : View.GONE;
 
-            final int vis = showingIme ? View.VISIBLE : View.INVISIBLE;
-            getDpadView().setVisibility(vis);
-        }
+        getDpadView().findViewById(R.id.dpad_left).setVisibility(visibility);
+        getDpadView().findViewById(R.id.dpad_right).setVisibility(visibility);
     }
 
     class SettingsObserver extends ContentObserver {
