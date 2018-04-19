@@ -1,6 +1,7 @@
 package com.android.systemui.ambientmusic;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaMetadata;
 import android.os.Handler;
@@ -65,7 +66,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     public void setDozing(boolean dozing) {
         mDozing = dozing;
         setVisibility(dozing ? View.VISIBLE : View.INVISIBLE);
-        updatePosition();
     }
 
     public void setTickerMarquee(boolean enable) {
@@ -87,16 +87,13 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
         }
     }
 
+    public boolean isCleanLayout() {
+        return mForcedMediaDoze;
+    }
+
     public void setCleanLayout(int reason) {
         mForcedMediaDoze =
                 reason == DozeLog.PULSE_REASON_FORCED_MEDIA_NOTIFICATION;
-        updatePosition();
-    }
-
-    public void updatePosition() {
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) this.getLayoutParams();
-        lp.gravity = mForcedMediaDoze ? Gravity.CENTER : Gravity.BOTTOM;
-        this.setLayoutParams(lp);
     }
 
     public void setIndication(MediaMetadata mediaMetaData) {
