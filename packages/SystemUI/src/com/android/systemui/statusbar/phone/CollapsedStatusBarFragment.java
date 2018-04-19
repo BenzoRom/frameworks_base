@@ -371,9 +371,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void updateSettings(boolean animate) {
         mShowCarrierLabel = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUS_BAR_SHOW_CARRIER, 1, UserHandle.USER_CURRENT);
-        mShowWeather = Settings.System.getIntForUser(
-                getContext().getContentResolver(), Settings.System.STATUSBAR_SHOW_WEATHER_TEMP, 0,
-                UserHandle.USER_CURRENT);
+        mShowWeather = Settings.System.getIntForUser(mContentResolver,
+                Settings.System.STATUSBAR_SHOW_WEATHER_TEMP, 0, UserHandle.USER_CURRENT);
         setCarrierLabel(animate);
         ((Clock)mClock).updateSettings();
         ((Clock)mCenterClock).updateSettings();
