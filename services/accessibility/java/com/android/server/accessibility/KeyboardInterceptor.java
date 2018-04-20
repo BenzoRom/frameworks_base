@@ -32,6 +32,7 @@ import android.view.accessibility.AccessibilityEvent;
 public class KeyboardInterceptor implements EventStreamTransformation, Handler.Callback {
     private static final int MESSAGE_PROCESS_QUEUED_EVENTS = 1;
     private static final String LOG_TAG = "KeyboardInterceptor";
+    private static final boolean DEBUG = false;
 
     private final AccessibilityManagerService mAms;
     private final WindowManagerPolicy mPolicy;
@@ -86,7 +87,10 @@ public class KeyboardInterceptor implements EventStreamTransformation, Handler.C
             return;
         }
 
-        mAms.notifyKeyEvent(event, policyFlags);
+        if (!mAms.notifyKeyEvent(event, policyFlags) && mNext != null) {
+            if (DEBUG) Slog.i(LOG_TAG, "Key event was not consumed. Send it to the next handler.");
+            mNext.onKeyEvent(event, policyFlags);
+        }
     }
 
     @Override
