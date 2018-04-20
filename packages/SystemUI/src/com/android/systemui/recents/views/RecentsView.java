@@ -288,6 +288,7 @@ public class RecentsView extends FrameLayout {
             // If we are already occluded by the app, then set the final background scrim alpha now.
             // Otherwise, defer until the enter animation completes to animate the scrim alpha with
             // the tasks for the home animation.
+            Utilities.cancelAnimationWithoutCallbacks(mBackgroundScrimAnimator);
             if (launchState.launchedViaDockGesture || launchState.launchedFromApp
                     || isTaskStackEmpty) {
                 mBackgroundScrim.setAlpha((int) (getOpaqueScrimAlpha() * 255));
