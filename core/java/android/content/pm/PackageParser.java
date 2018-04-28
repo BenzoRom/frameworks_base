@@ -1857,6 +1857,9 @@ public class PackageParser {
             }
             return "bad character '" + c + "'";
         }
+        if (front) {
+            return "Each segment must start with a letter";
+        }
         if (requireFilename && !FileUtils.isValidExtFilename(name)) {
             return "Invalid filename";
         }
