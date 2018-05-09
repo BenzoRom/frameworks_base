@@ -59,7 +59,6 @@ public class KeyguardClockPositionAlgorithm {
     private float mDensity;
     private int mBurnInPreventionOffsetX;
     private int mBurnInPreventionOffsetY;
-    private int mBurnInPreventionOffsetYLand;
 
     /**
      * The number (fractional) of notifications the "more" card counts when calculating how many
@@ -80,9 +79,6 @@ public class KeyguardClockPositionAlgorithm {
     private int mClockBottom;
     private float mDarkAmount;
     private int mDozingStackPadding;
-    private boolean mIsLandscape;
-    private int mAmbientContainerHeight;
-    private boolean mAmbientContainerMinimal;
 
     /**
      * Refreshes the dimension values.
@@ -103,14 +99,11 @@ public class KeyguardClockPositionAlgorithm {
         mBurnInPreventionOffsetY = res.getDimensionPixelSize(
                 R.dimen.burn_in_prevention_offset_y);
         mDozingStackPadding = res.getDimensionPixelSize(R.dimen.dozing_stack_padding);
-        mBurnInPreventionOffsetYLand = res.getDimensionPixelSize(
-                R.dimen.burn_in_prevention_offset_y_land);
     }
 
     public void setup(int maxKeyguardNotifications, int maxPanelHeight, float expandedHeight,
             int notificationCount, int height, int keyguardStatusHeight, float emptyDragAmount,
-            int clockBottom, float dark, boolean isLandscape, int ambientContainerHeight,
-            boolean ambientContainerMinimal) {
+            int clockBottom, float dark) {
         mMaxKeyguardNotifications = maxKeyguardNotifications;
         mMaxPanelHeight = maxPanelHeight;
         mExpandedHeight = expandedHeight;
@@ -120,9 +113,6 @@ public class KeyguardClockPositionAlgorithm {
         mEmptyDragAmount = emptyDragAmount;
         mClockBottom = clockBottom;
         mDarkAmount = dark;
-        mIsLandscape = isLandscape;
-        mAmbientContainerHeight = ambientContainerHeight;
-        mAmbientContainerMinimal = ambientContainerMinimal;
     }
 
     public float getMinStackScrollerPadding(int height, int keyguardStatusHeight) {
@@ -131,7 +121,7 @@ public class KeyguardClockPositionAlgorithm {
     }
 
     public void run(Result result) {
-        int y = getClockY();
+        int y = getClockY() - mKeyguardStatusHeight / 2;
         float clockAdjustment = getClockYExpansionAdjustment();
         float topPaddingAdjMultiplier = getTopPaddingAdjMultiplier();
         result.stackScrollerPaddingAdjustment = (int) (clockAdjustment*topPaddingAdjMultiplier);
@@ -151,7 +141,6 @@ public class KeyguardClockPositionAlgorithm {
                 mDarkAmount);
 
         result.clockX = (int) interpolate(0, burnInPreventionOffsetX(), mDarkAmount);
-        result.ambientContainerY = getAmbientContainerY();
     }
 
     private float getClockScale(int notificationPadding, int clockY, int startPadding) {
@@ -178,37 +167,19 @@ public class KeyguardClockPositionAlgorithm {
     }
 
     private int getClockY() {
+        // Dark: Align the bottom edge of the clock at one third:
         // clockBottomEdge = result - mKeyguardStatusHeight / 2 + mClockBottom
-        float topY = 0.10f * mHeight;
-        float clockYDark = topY + burnInPreventionOffsetY();
-        if (clockYDark < 0) {
-            clockYDark = 0;
-        }
-        float clockYRegular = getClockYFraction() * mHeight - mKeyguardStatusHeight / 2;
-        int clockY = (int) interpolate(clockYRegular, clockYDark, mDarkAmount);
-        return clockY;
-    }
-
-    private int getAmbientContainerY() {
-        float ambientContainerY = 0f;
-        if (mAmbientContainerMinimal) {
-            ambientContainerY = 0.5f * mHeight - (float) mAmbientContainerHeight / 2 + burnInPreventionOffsetY();
-        } else {
-            float topY = 0.75f * mHeight;
-            ambientContainerY = topY + burnInPreventionOffsetY();
-            if (ambientContainerY + mAmbientContainerHeight > mHeight) {
-                ambientContainerY = mHeight - mAmbientContainerHeight;
-            }
-        }
-        return (int) ambientContainerY;
+        float clockYDark = (0.33f * mHeight + (float) mKeyguardStatusHeight / 2 - mClockBottom)
+                + burnInPreventionOffsetY();
+        float clockYRegular = getClockYFraction() * mHeight;
+        return (int) interpolate(clockYRegular, clockYDark, mDarkAmount);
     }
 
     private float burnInPreventionOffsetY() {
-        float offset = mIsLandscape ? mBurnInPreventionOffsetYLand : mBurnInPreventionOffsetY;
         return zigzag(System.currentTimeMillis() / MILLIS_PER_MINUTES,
-                offset * 2,
+                mBurnInPreventionOffsetY * 2,
                 BURN_IN_PREVENTION_PERIOD_Y)
-                - offset;
+                - mBurnInPreventionOffsetY;
     }
 
     private float burnInPreventionOffsetX() {
@@ -307,10 +278,5 @@ public class KeyguardClockPositionAlgorithm {
 
         /** The x translation of the clock. */
         public int clockX;
-
-        /**
-         * The y translation of the ambient indication container
-         */
-        public int ambientContainerY;
     }
 }
