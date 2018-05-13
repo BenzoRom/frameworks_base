@@ -99,11 +99,6 @@ android.animation.TimeInterpolator
 android.animation.TypeEvaluator
 android.animation.ValueAnimator
 android.animation.ValueAnimator$AnimatorUpdateListener
-android.app.-$Lambda$9I5WEMsoBc7l4QrNqZ4wx59yuHU
-android.app.-$Lambda$9I5WEMsoBc7l4QrNqZ4wx59yuHU$1
-android.app.-$Lambda$aS31cHIhRx41653CMnd4gZqshIQ
-android.app.-$Lambda$c44uHH2WE4sJvw5tZZB6gRzEaHI
-android.app.-$Lambda$vZ1qb742P9hE4drBY-TrOZB_qKo
 android.app.ActionBar
 android.app.ActionBar$LayoutParams
 android.app.Activity
@@ -669,7 +664,6 @@ android.database.MergeCursor
 android.database.MergeCursor$1
 android.database.Observable
 android.database.SQLException
-android.database.sqlite.-$Lambda$gPaS7kMbZ8xtrrEx06GlwJ2iDWE
 android.database.sqlite.DatabaseObjectNotClosedException
 android.database.sqlite.SQLiteClosable
 android.database.sqlite.SQLiteConnection
@@ -716,9 +710,6 @@ android.ddm.DdmHandleProfiling
 android.ddm.DdmHandleThread
 android.ddm.DdmHandleViewDebug
 android.ddm.DdmRegister
-android.graphics.-$Lambda$ZrP-zejiEXAqfwV-MyP5lE9mYC8
-android.graphics.-$Lambda$ZrP-zejiEXAqfwV-MyP5lE9mYC8$1
-android.graphics.-$Lambda$ZrP-zejiEXAqfwV-MyP5lE9mYC8$2
 android.graphics.BaseCanvas
 android.graphics.Bitmap
 android.graphics.Bitmap$1
@@ -1127,7 +1118,6 @@ android.icu.impl.ICUResourceBundle
 android.icu.impl.ICUResourceBundle$1
 android.icu.impl.ICUResourceBundle$2
 android.icu.impl.ICUResourceBundle$3
-android.icu.impl.ICUResourceBundle$3$1
 android.icu.impl.ICUResourceBundle$4
 android.icu.impl.ICUResourceBundle$AvailEntry
 android.icu.impl.ICUResourceBundle$Loader
@@ -1255,7 +1245,6 @@ android.icu.impl.locale.BaseLocale$Key
 android.icu.impl.locale.LocaleObjectCache
 android.icu.impl.locale.LocaleObjectCache$CacheEntry
 android.icu.impl.locale.LocaleSyntaxException
-android.icu.impl.number.Parse
 android.icu.lang.UCharacter
 android.icu.lang.UCharacterEnums$ECharacterCategory
 android.icu.lang.UCharacterEnums$ECharacterDirection
@@ -1700,7 +1689,6 @@ android.opengl.GLES32
 android.opengl.GLUtils
 android.opengl.Matrix
 android.opengl.Visibility
-android.os.-$Lambda$BcGBlsGjMZMF6Ej78rWJ608MYSM
 android.os.AsyncResult
 android.os.AsyncTask
 android.os.AsyncTask$1
@@ -1903,8 +1891,6 @@ android.os.storage.VolumeInfo$2
 android.preference.PreferenceManager
 android.preference.PreferenceManager$OnPreferenceTreeClickListener
 android.print.PrintManager
-android.provider.-$Lambda$a7Jyr6j_Mb70hHJ2ssL1AAhKh4c
-android.provider.-$Lambda$asz6VwQ86PPY-v8JLMb7rx-pSqg
 android.provider.BaseColumns
 android.provider.ContactsContract$CommonDataKinds$BaseTypes
 android.provider.ContactsContract$CommonDataKinds$CommonColumns
@@ -2237,9 +2223,6 @@ android.util.TimingsTraceLog
 android.util.TypedValue
 android.util.Xml
 android.util.jar.StrictJarFile
-android.view.-$Lambda$6k_RnLLpNi5zg27ubDxN4lDdBbk
-android.view.-$Lambda$6k_RnLLpNi5zg27ubDxN4lDdBbk$1
-android.view.-$Lambda$XmA8Y30pNAdQP9ujRlGx1qfDHH8
 android.view.AbsSavedState
 android.view.AbsSavedState$1
 android.view.AbsSavedState$2
@@ -2516,7 +2499,6 @@ android.view.WindowManagerGlobal
 android.view.WindowManagerGlobal$1
 android.view.WindowManagerGlobal$2
 android.view.WindowManagerImpl
-android.view.accessibility.-$Lambda$T3m_l9_RA18vCOcakSWp1lZCy5g$1
 android.view.accessibility.AccessibilityEvent
 android.view.accessibility.AccessibilityEvent$1
 android.view.accessibility.AccessibilityEventSource
@@ -2604,8 +2586,6 @@ android.webkit.WebViewFactory
 android.webkit.WebViewFactory$MissingWebViewPackageException
 android.webkit.WebViewLibraryLoader
 android.webkit.WebViewProviderResponse$1
-android.widget.-$Lambda$ISuHLqeK-K4pmesAfzlFglc3xF4
-android.widget.-$Lambda$ISuHLqeK-K4pmesAfzlFglc3xF4$1
 android.widget.AbsListView
 android.widget.AbsListView$AdapterDataSetObserver
 android.widget.AbsListView$LayoutParams
@@ -2677,7 +2657,6 @@ android.widget.GridLayout$3
 android.widget.GridLayout$4
 android.widget.GridLayout$5
 android.widget.GridLayout$6
-android.widget.GridLayout$6$1
 android.widget.GridLayout$7
 android.widget.GridLayout$8
 android.widget.GridLayout$Alignment
@@ -3239,7 +3218,6 @@ com.google.android.gles_jni.EGLSurfaceImpl
 com.google.android.gles_jni.GLImpl
 dalvik.annotation.optimization.CriticalNative
 dalvik.annotation.optimization.FastNative
-dalvik.system.-$Lambda$xxvwQBVHC44UYbpcpA8j0sUqLOo
 dalvik.system.BaseDexClassLoader
 dalvik.system.BaseDexClassLoader$Reporter
 dalvik.system.BlockGuard
@@ -3358,7 +3336,6 @@ java.io.StringWriter
 java.io.UnixFileSystem
 java.io.UnsupportedEncodingException
 java.io.Writer
-java.lang.-$Lambda$S9HjrJh0nDg7IyU6wZdPArnZWRQ
 java.lang.AbstractMethodError
 java.lang.AbstractStringBuilder
 java.lang.AndroidHardcodedSystemProperties
@@ -3818,9 +3795,6 @@ java.text.RuleBasedCollator
 java.text.SimpleDateFormat
 java.text.StringCharacterIterator
 java.time.DateTimeException
-java.util.-$Lambda$4EqhxufgNKat19m0CB0-toH_lzo
-java.util.-$Lambda$Hazqao1eYCE_pmZR5Jlrc2GvLhk
-java.util.-$Lambda$aUGKT4ItCOku5-JSG-x8Aqj2pJw
 java.util.AbstractCollection
 java.util.AbstractList
 java.util.AbstractList$Itr
@@ -4057,7 +4031,6 @@ java.util.WeakHashMap$KeyIterator
 java.util.WeakHashMap$KeySet
 java.util.WeakHashMap$ValueIterator
 java.util.WeakHashMap$Values
-java.util.concurrent.-$Lambda$xR9BLpu6SifNikvFgr4lEiECBsk
 java.util.concurrent.AbstractExecutorService
 java.util.concurrent.ArrayBlockingQueue
 java.util.concurrent.BlockingDeque
@@ -4177,7 +4150,6 @@ java.util.concurrent.TimeoutException
 java.util.concurrent.atomic.AtomicBoolean
 java.util.concurrent.atomic.AtomicInteger
 java.util.concurrent.atomic.AtomicIntegerFieldUpdater
-java.util.concurrent.atomic.AtomicIntegerFieldUpdater$AtomicIntegerFieldUpdaterImpl$1
 java.util.concurrent.atomic.AtomicLong
 java.util.concurrent.atomic.AtomicReference
 java.util.concurrent.atomic.AtomicReferenceFieldUpdater
@@ -4200,9 +4172,6 @@ java.util.concurrent.locks.ReentrantReadWriteLock$Sync
 java.util.concurrent.locks.ReentrantReadWriteLock$Sync$HoldCounter
 java.util.concurrent.locks.ReentrantReadWriteLock$Sync$ThreadLocalHoldCounter
 java.util.concurrent.locks.ReentrantReadWriteLock$WriteLock
-java.util.function.-$Lambda$1MZdIZ-DL_fjy9l0o8IMJk57T2g
-java.util.function.-$Lambda$VGDeaUHZQIZywZW2ttlyhwk3Cmk
-java.util.function.-$Lambda$VGDeaUHZQIZywZW2ttlyhwk3Cmk$1
 java.util.function.BiConsumer
 java.util.function.BiFunction
 java.util.function.BinaryOperator
