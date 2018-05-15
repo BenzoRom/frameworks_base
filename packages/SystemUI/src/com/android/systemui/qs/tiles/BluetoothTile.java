@@ -192,6 +192,7 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
 
     @Override
     public boolean isAvailable() {
+        if (mController == null) return false;
         return mController.isBluetoothSupported();
     }
 
