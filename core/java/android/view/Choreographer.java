@@ -97,6 +97,12 @@ public final class Choreographer {
     // The number of milliseconds between animation frames.
     private static volatile long sFrameDelay = DEFAULT_FRAME_DELAY;
 
+    // the time nanoseconds to record postFrameCallback
+    private long sTimeFrameStart = 0;
+
+    // the time nanoseconds to record SF call vsync time
+    private long sTimeOnVsync = 0;
+
     // Thread local storage for the choreographer.
     private static final ThreadLocal<Choreographer> sThreadInstance =
             new ThreadLocal<Choreographer>() {
@@ -426,6 +432,11 @@ public final class Choreographer {
         synchronized (mLock) {
             final long now = SystemClock.uptimeMillis();
             final long dueTime = now + delayMillis;
+
+            if (CALLBACK_ANIMATION == callbackType) {
+                sTimeFrameStart = System.nanoTime();
+            }
+
             mCallbackQueues[callbackType].addCallbackLocked(dueTime, action, token);
 
             if (dueTime <= now) {
@@ -925,6 +936,7 @@ public final class Choreographer {
             // earlier than the frame time, then the vsync event will be processed immediately.
             // Otherwise, messages that predate the vsync event will be handled first.
             long now = System.nanoTime();
+            sTimeOnVsync = timestampNanos;
             if (timestampNanos > now) {
                 Log.w(TAG, "Frame time is " + ((timestampNanos - now) * 0.000001f)
                         + " ms in the future!  Check that graphics HAL is generating vsync "
@@ -939,7 +951,14 @@ public final class Choreographer {
                 mHavePendingVsync = true;
             }
 
-            mTimestampNanos = timestampNanos;
+            if ((0 != sTimeFrameStart) && (0 != sTimeOnVsync) && (sTimeFrameStart > sTimeOnVsync)) {
+                mTimestampNanos = sTimeFrameStart;
+            } else {
+                mTimestampNanos = timestampNanos;
+            }
+
+            sTimeFrameStart = 0;
+            sTimeOnVsync = 0;
             mFrame = frame;
             Message msg = Message.obtain(mHandler, this);
             msg.setAsynchronous(true);
