@@ -136,5 +136,9 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
             mStatusBar.triggerAmbientForMedia();
         }
     }
+
+    public View getIndication() {
+        return mAmbientIndication;
+    }
 }
 

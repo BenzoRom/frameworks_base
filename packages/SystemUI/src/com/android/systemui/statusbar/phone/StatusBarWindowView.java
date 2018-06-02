@@ -116,7 +116,10 @@ public class StatusBarWindowView extends FrameLayout {
         mStatusBarHeaderHeight = context
                 .getResources().getDimensionPixelSize(R.dimen.status_bar_header_height);
         mSettingsObserver = new SettingsObserver(mHandler);
-        mDoubleTapHelper = new DoubleTapHelper(this, active -> {}, () -> {
+        mDoubleTapHelper = new DoubleTapHelper(this, active -> {}, event -> {
+            if (mService.isDoubleTapOnMusicTicker(event.getX(), event.getY())) {
+                return true;
+            }
             mService.wakeUpIfDozing(SystemClock.uptimeMillis(), this);
             return true;
         }, null, null);
