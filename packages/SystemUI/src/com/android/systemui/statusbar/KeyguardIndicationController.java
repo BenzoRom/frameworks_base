@@ -335,7 +335,7 @@ public class KeyguardIndicationController implements
                     // When dozing we ignore any text color and use white instead, because
                     // colors can be hard to read in low brightness.
                     mTextView.setTextColor(Color.WHITE);
-                    mTextView.switchIndication(mTransientIndication);
+                    mTextView.switchIndication(mTransientIndication, false /* animate */);
                 } else {
                     boolean showAmbientWeather = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.AMBIENT_DISPLAY_WEATHER, 0, UserHandle.USER_CURRENT) != 0;
@@ -343,10 +343,10 @@ public class KeyguardIndicationController implements
                         if (mWeatherEnabled && !mPowerPluggedIn) {
                             CharSequence weatherIndicator = String.format(mContext.getResources().getString(R.string.ambient_weather_info),
                                   mWeatherCurrentTemp, mWeatherConditionText);
-                            mTextView.switchIndication(weatherIndicator);
+                            mTextView.switchIndication(weatherIndicator, false /* animate */);
                         }
                     } else {
-                        mTextView.switchIndication(null);
+                        mTextView.switchIndication(null, false /* animate */);
                     }
                 }
                 return;
