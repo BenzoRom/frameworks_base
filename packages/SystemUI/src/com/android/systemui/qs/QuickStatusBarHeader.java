@@ -76,6 +76,7 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
     private View mHeaderContainer;
     private View mQuickQsPanelScrollerContainer;
     private boolean mMiniMode;
+    private boolean mQsCarrierText;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -311,6 +312,7 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
             if (mMiniMode) {
                 panelMarginTop = panelMarginTop - res.getDimensionPixelSize(R.dimen.qs_panel_mini_mode_diff);
             }
+            findViewById(R.id.qs_carrier_text).setVisibility(mQsCarrierText ? INVISIBLE : VISIBLE);
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mQsPanel.getLayoutParams();
             layoutParams.topMargin = panelMarginTop;
             mQsPanel.setLayoutParams(layoutParams);
@@ -352,6 +354,8 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_SHOW_MINI), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_CARRIER_TEXT), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -369,6 +373,8 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
             ContentResolver resolver = mContext.getContentResolver();
             mMiniMode = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_SHOW_MINI, 0, UserHandle.USER_CURRENT) == 1;
+            mQsCarrierText = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_CARRIER_TEXT, 0, UserHandle.USER_CURRENT) == 1;
             updateHeaderLayout();
             updateQsPanelLayout();
             updateQuickBarLayout();

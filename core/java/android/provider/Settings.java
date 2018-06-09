@@ -5361,6 +5361,12 @@ public final class Settings {
         public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
 
         /**
+         * Whether to show carrier text in quick settings header
+         * @hide
+         */
+        public static final String QS_CARRIER_TEXT = "qs_carrier_text";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
