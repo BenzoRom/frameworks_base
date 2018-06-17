@@ -81,6 +81,7 @@ cc_library_shared {
         "-Wunused",
         "-Wunreachable-code",
     ],
+    polly: false,
 }
 
 subdirs = [
