@@ -39,9 +39,6 @@ public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
     static final Intent TETHER_SETTINGS = new Intent().setComponent(new ComponentName(
              "com.android.settings", "com.android.settings.TetherSettings"));
 
-    private final Icon mEnabledStatic = ResourceIcon.get(R.drawable.ic_hotspot);
-    private final Icon mUnavailable = ResourceIcon.get(R.drawable.ic_hotspot_unavailable);
-
     private final HotspotController mController;
     private final Callback mCallback = new Callback();
     private final GlobalSetting mAirplaneMode;
@@ -109,9 +106,6 @@ public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
 
     @Override
     protected void handleUpdateState(AirplaneBooleanState state, Object arg) {
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         state.label = mContext.getString(R.string.quick_settings_hotspot_label);
 
         checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_CONFIG_TETHERING);
@@ -120,10 +114,10 @@ public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
         } else {
             state.value = mController.isHotspotEnabled();
         }
-        state.icon = mEnabledStatic;
+        state.icon = ResourceIcon.get(state.value ? R.drawable.ic_hotspot
+                : R.drawable.ic_hotspot_unavailable);
         state.isAirplaneMode = mAirplaneMode.getValue() != 0;
         state.isTransient = mController.isHotspotTransient();
-        state.slash.isSlashed = !state.value && !state.isTransient;
         if (state.isTransient) {
             state.icon = ResourceIcon.get(R.drawable.ic_hotspot_transient_animation);
         }

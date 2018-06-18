@@ -128,10 +128,6 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
                 || mController.getBluetoothState() == BluetoothAdapter.STATE_TURNING_ON;
         state.dualTarget = true;
         state.value = enabled;
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
-        state.slash.isSlashed = !enabled;
         if (enabled) {
             state.label = null;
             if (connected) {

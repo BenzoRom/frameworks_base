@@ -129,9 +129,6 @@ public class LocationTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         int currentState = arg instanceof Integer ? (Integer) arg :
                 mController.getLocationCurrentState();
         final boolean newValue = currentState != Settings.Secure.LOCATION_MODE_OFF;
@@ -144,7 +141,6 @@ public class LocationTile extends QSTileImpl<BooleanState> {
         state.dualTarget = true;
         checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
         state.label = mContext.getString(getStateLabelRes(currentState));
-        state.slash.isSlashed = currentState == Settings.Secure.LOCATION_MODE_OFF;
         switch (currentState) {
             case Settings.Secure.LOCATION_MODE_OFF:
                 state.contentDescription = mContext.getString(

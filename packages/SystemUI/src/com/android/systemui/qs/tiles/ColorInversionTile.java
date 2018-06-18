@@ -34,7 +34,6 @@ import com.android.systemui.qs.SecureSetting;
 /** Quick settings tile: Invert colors **/
 public class ColorInversionTile extends QSTileImpl<BooleanState> {
 
-    private final Icon mIcon = ResourceIcon.get(drawable.ic_invert_colors);
     private final SecureSetting mSetting;
 
     private boolean mListening;
@@ -92,14 +91,11 @@ public class ColorInversionTile extends QSTileImpl<BooleanState> {
     protected void handleUpdateState(BooleanState state, Object arg) {
         final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean enabled = value != 0;
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         state.value = enabled;
-        state.slash.isSlashed = !state.value;
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         state.label = mContext.getString(R.string.quick_settings_inversion_label);
-        state.icon = mIcon;
+        state.icon = ResourceIcon.get(state.value ? R.drawable.ic_invert_colors
+                : R.drawable.ic_invert_colors_off);
         state.expandedAccessibilityClassName = Switch.class.getName();
         state.contentDescription = state.label;
     }
