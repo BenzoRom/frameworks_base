@@ -39,6 +39,7 @@ import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.NavBarTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.OnTheGoTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UserTile;
@@ -107,6 +108,8 @@ public class QSFactoryImpl implements QSFactory {
                 return new NavBarTile(mHost);
             case "always_on_display":
                 return new AlwaysOnDisplayTile(mHost);
+            case "onthego":
+                return new OnTheGoTile(mHost);
         }
 
         // Intent tiles.

@@ -137,5 +137,7 @@
     <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
     <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">On-The-Go</string>
 
 </resources>
