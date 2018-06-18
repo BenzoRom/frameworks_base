@@ -42,6 +42,7 @@ import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.OnTheGoTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UiModeNightTile;
@@ -80,6 +81,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<UiModeNightTile> mUiModeNightTileProvider;
     private final Provider<SyncTile> mSyncTileProvider;
     private final Provider<AlwaysOnDisplayTile> mAlwaysOnDisplayTileProvider;
+    private final Provider<OnTheGoTile> mOnTheGoTileProvider;
     private final Provider<CPUInfoTile> mCPUInfoTileProvider;
 
     private QSTileHost mHost;
@@ -106,7 +108,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<UiModeNightTile> uiModeNightTileProvider,
             Provider<SyncTile> syncTileProvider,
             Provider<AlwaysOnDisplayTile> alwaysOnDisplayTileProvider,
-            Provider<CPUInfoTile> cpuInfoTileProvider) {
+            Provider<CPUInfoTile> cpuInfoTileProvider,
+            Provider<OnTheGoTile> onTheGoTileProvider) {
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
         mCellularTileProvider = cellularTileProvider;
@@ -129,6 +132,7 @@ public class QSFactoryImpl implements QSFactory {
         mSyncTileProvider = syncTileProvider;
         mAlwaysOnDisplayTileProvider = alwaysOnDisplayTileProvider;
         mCPUInfoTileProvider = cpuInfoTileProvider;
+        mOnTheGoTileProvider = onTheGoTileProvider;
     }
 
     public void setHost(QSTileHost host) {
@@ -188,6 +192,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mAlwaysOnDisplayTileProvider.get();
             case "cpuinfo":
                 return mCPUInfoTileProvider.get();
+            case "onthego":
+                return mOnTheGoTileProvider.get();
         }
 
         // Intent tiles.
