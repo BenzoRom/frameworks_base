@@ -651,12 +651,17 @@ public class WifiInfo implements Parcelable {
         dest.writeInt(mMeteredHint ? 1 : 0);
         dest.writeInt(mEphemeral ? 1 : 0);
         dest.writeInt(score);
+        dest.writeLong(txSuccess);
         dest.writeDouble(txSuccessRate);
+        dest.writeLong(txRetries);
         dest.writeDouble(txRetriesRate);
+        dest.writeLong(txBad);
         dest.writeDouble(txBadRate);
+        dest.writeLong(rxSuccess);
         dest.writeDouble(rxSuccessRate);
         dest.writeInt(badRssiCount);
         dest.writeInt(lowRssiCount);
+        dest.writeInt(linkStuckCount);
         mSupplicantState.writeToParcel(dest, flags);
     }
 
@@ -682,12 +687,17 @@ public class WifiInfo implements Parcelable {
                 info.mMeteredHint = in.readInt() != 0;
                 info.mEphemeral = in.readInt() != 0;
                 info.score = in.readInt();
+                info.txSuccess = in.readLong();
                 info.txSuccessRate = in.readDouble();
+                info.txRetries = in.readLong();
                 info.txRetriesRate = in.readDouble();
+                info.txBad = in.readLong();
                 info.txBadRate = in.readDouble();
+                info.rxSuccess = in.readLong();
                 info.rxSuccessRate = in.readDouble();
                 info.badRssiCount = in.readInt();
                 info.lowRssiCount = in.readInt();
+                info.linkStuckCount = in.readInt();
                 info.mSupplicantState = SupplicantState.CREATOR.createFromParcel(in);
                 return info;
             }
