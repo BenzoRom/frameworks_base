@@ -65,7 +65,6 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
     private boolean mBlockMobile;
     private boolean mBlockWifi;
     private boolean mBlockEthernet;
-    private boolean mActivityEnabled;
     private boolean mForceBlockWifi;
 
     // Track as little state as possible, and only for padding purposes
@@ -83,7 +82,6 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         mSlotWifi     = mContext.getString(com.android.internal.R.string.status_bar_wifi);
         mSlotEthernet = mContext.getString(com.android.internal.R.string.status_bar_ethernet);
         mSlotVpn      = mContext.getString(com.android.internal.R.string.status_bar_vpn);
-        mActivityEnabled = mContext.getResources().getBoolean(R.bool.config_showActivity);
 
         mIconController = iconController;
         mNetworkController = Dependency.get(NetworkController.class);
@@ -149,8 +147,8 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
             String statusLabel) {
 
         boolean visible = statusIcon.visible && !mBlockWifi;
-        boolean in = activityIn && mActivityEnabled && visible;
-        boolean out = activityOut && mActivityEnabled && visible;
+        boolean in = activityIn && visible;
+        boolean out = activityOut && visible;
 
         WifiIconState newState = mWifiIconState.copy();
 
@@ -201,8 +199,8 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         state.contentDescription = statusIcon.contentDescription;
         state.typeContentDescription = typeContentDescription;
         state.roaming = roaming;
-        state.activityIn = activityIn && mActivityEnabled;
-        state.activityOut = activityOut && mActivityEnabled;
+        state.activityIn = activityIn;
+        state.activityOut = activityOut;
 
         // Always send a copy to maintain value type semantics
         mIconController.setMobileIcons(mSlotMobile, MobileIconState.copyStates(mMobileStates));
