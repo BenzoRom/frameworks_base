@@ -933,7 +933,7 @@ public final class BatteryService extends SystemService {
             // mBatteryLights is initialized during PHASE_BOOT_COMPLETED
             // This means we don't have Lineage battery settings yet so skip.
             if (mBatteryLights == null) {
-                Slog.w(TAG, "updateLightsLocked: mBatteryLights is not yet ready; skipping");
+                //Slog.w(TAG, "updateLightsLocked: mBatteryLights is not yet ready; skipping");
                 return;
             }
             if (!mBatteryLights.isSupported()) {
