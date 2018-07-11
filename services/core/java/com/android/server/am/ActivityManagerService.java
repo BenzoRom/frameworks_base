@@ -24586,7 +24586,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             // Will bring task to front if it already has a root activity.
             final long origId = Binder.clearCallingIdentity();
             try {
-                synchronized (this) {
+                synchronized (ActivityManagerService.this) {
                     mStackSupervisor.startActivityFromRecentsInner(mTaskId, null);
                 }
             } finally {
