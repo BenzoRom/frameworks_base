@@ -103,5 +103,6 @@ public class SystemSettings {
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
         Settings.System.STATUS_BAR_CLOCK,
+        Settings.System.STATUS_BAR_AM_PM,
     };
 }
