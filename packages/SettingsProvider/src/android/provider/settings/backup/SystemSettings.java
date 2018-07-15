@@ -98,5 +98,6 @@ public class SystemSettings {
         Settings.System.ACCELEROMETER_ROTATION_ANGLES,
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
         Settings.System.STATUS_BAR_CLOCK,
+        Settings.System.STATUS_BAR_AM_PM,
     };
 }
