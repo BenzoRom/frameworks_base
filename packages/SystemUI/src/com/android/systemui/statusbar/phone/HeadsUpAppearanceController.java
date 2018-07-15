@@ -59,8 +59,9 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     private final NotificationIconAreaController mNotificationIconAreaController;
     private final HeadsUpManagerPhone mHeadsUpManager;
     private final NotificationStackScrollLayoutController mStackScrollerController;
+    private final View mCenteredView;
     private final View mCenteredIconView;
-    private final View mClockView;
+    private final ClockController mClockController;
     private final View mOperatorNameView;
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final NotificationPanelViewController mNotificationPanelViewController;
@@ -108,7 +109,9 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
                 //  (which also removes the undesirable @VisibleForTesting).
                 statusBarView.findViewById(R.id.heads_up_status_bar_view),
                 statusBarView.findViewById(R.id.clock),
+                new ClockController(statusBarView.getContext(), statusBarView),
                 statusBarView.findViewById(R.id.operator_name_frame),
+                statusBarView.findViewById(R.id.centered_area),
                 statusBarView.findViewById(R.id.centered_icon_area));
     }
 
@@ -125,11 +128,14 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
             NotificationPanelViewController notificationPanelViewController,
             HeadsUpStatusBarView headsUpStatusBarView,
             View clockView,
+            ClockController clockController,
             View operatorNameView,
+            View centeredView,
             View centeredIconView) {
         super(headsUpStatusBarView);
         mNotificationIconAreaController = notificationIconAreaController;
         mHeadsUpManager = headsUpManager;
+        mCenteredView = centeredView;
         mCenteredIconView = centeredIconView;
 
         // We may be mid-HUN-expansion when this controller is re-created (for example, if the user
@@ -143,7 +149,7 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
         mStackScrollerController = stackScrollerController;
         mNotificationPanelViewController = notificationPanelViewController;
         mStackScrollerController.setHeadsUpAppearanceController(this);
-        mClockView = clockView;
+        mClockController = clockController;
         mOperatorNameView = operatorNameView;
         mDarkIconDispatcher = Dependency.get(DarkIconDispatcher.class);
 
@@ -229,12 +235,19 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
 
     private void setShown(boolean isShown) {
         if (mShown != isShown) {
+            View clockView = mClockController.getClock();
+            boolean isRightClock = clockView.getId() == R.id.clock_right;
             mShown = isShown;
             if (isShown) {
                 updateParentClipping(false /* shouldClip */);
                 mView.setVisibility(View.VISIBLE);
                 show(mView);
-                hide(mClockView, View.INVISIBLE);
+                if (!isRightClock) {
+                    hide(clockView, View.INVISIBLE);
+                }
+                if (mCenteredView.getVisibility() != View.GONE) {
+                    hide(mCenteredView, View.INVISIBLE);
+                }
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     hide(mCenteredIconView, View.INVISIBLE);
                 }
@@ -242,7 +255,12 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
                     hide(mOperatorNameView, View.INVISIBLE);
                 }
             } else {
-                show(mClockView);
+                if (!isRightClock) {
+                    show(clockView);
+                }
+                if (mCenteredView.getVisibility() != View.GONE) {
+                    show(mCenteredView);
+                }
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     show(mCenteredIconView);
                 }

@@ -102,5 +102,6 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN,
         Settings.System.VOLUME_ROCKER_WAKE,
         Settings.System.VOLUME_BUTTON_MUSIC_CONTROL,
+        Settings.System.STATUS_BAR_CLOCK,
     };
 }
