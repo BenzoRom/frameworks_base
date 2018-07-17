@@ -2687,7 +2687,7 @@ class ActivityStack<T extends StackWindowController> extends ConfigurationContai
                     Slog.i(TAG, "Restarting because process died: " + next);
                     if (!next.hasBeenLaunched) {
                         next.hasBeenLaunched = true;
-                    } else  if (SHOW_APP_STARTING_PREVIEW && lastStack != null &&
+                    } else  if (SHOW_APP_STARTING_PREVIEW && lastStack != null && lastStack.getDisplay() != null &&
                             mStackSupervisor.isFrontStackOnDisplay(lastStack)) {
                         next.showStartingWindow(null /* prev */, false /* newTask */,
                                 false /* taskSwitch */);
