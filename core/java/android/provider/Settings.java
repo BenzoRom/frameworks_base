@@ -5466,6 +5466,11 @@ public final class Settings {
         };
 
         /**
+         * @hide
+         */
+        public static final String USE_BOTTOM_GESTURE_NAVIGATION = "use_bottom_gesture_navigation";
+
+        /**
          * These are all public system settings
          *
          * @hide
@@ -5615,6 +5620,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SHOW_LOCKSCREEN_DATE);
             PRIVATE_SETTINGS.add(SHOW_LOCKSCREEN_CLOCK);
             PRIVATE_SETTINGS.add(SHOW_LOCKSCREEN_ALARM);
+            PRIVATE_SETTINGS.add(USE_BOTTOM_GESTURE_NAVIGATION);
         }
 
         /**
