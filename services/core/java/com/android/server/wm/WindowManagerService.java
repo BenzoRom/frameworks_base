@@ -3055,6 +3055,7 @@ public class WindowManagerService extends IWindowManager.Stub
         return mPolicy.isKeyguardLocked();
     }
 
+    @Override
     public boolean isKeyguardShowingAndNotOccluded() {
         return mPolicy.isKeyguardShowingAndNotOccluded();
     }
@@ -7629,5 +7630,15 @@ public class WindowManagerService extends IWindowManager.Stub
                 mWindowPlacerLocked.performSurfacePlacement();
             }
         }
+    }
+
+    @Override
+    public boolean isGestureButtonEnabled() {
+        return this.mPolicy.isGestureButtonEnabled();
+    }
+
+    @Override
+    public boolean isGestureButtonRegion(int i, int i2) {
+        return this.mPolicy.isGestureButtonRegion(i, i2);
     }
 }
