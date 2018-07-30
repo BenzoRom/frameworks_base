@@ -156,6 +156,11 @@ public class AccountManagerService
         }
 
         @Override
+        public void onSwitchUser(int userHandle) {
+            mService.mContext.updateUserId(userHandle);
+        }
+
+        @Override
         public void onUnlockUser(int userHandle) {
             mService.onUnlockUser(userHandle);
         }

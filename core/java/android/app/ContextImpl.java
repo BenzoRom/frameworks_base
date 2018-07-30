@@ -164,7 +164,7 @@ class ContextImpl extends Context {
 
     private final @Nullable IBinder mActivityToken;
 
-    private final @Nullable UserHandle mUser;
+    private @Nullable UserHandle mUser;
 
     private final ApplicationContentResolver mContentResolver;
 
@@ -2235,6 +2235,12 @@ class ContextImpl extends Context {
     @Override
     public int getUserId() {
         return mUser.getIdentifier();
+    }
+
+    /** {@hide} */
+    @Override
+    public void updateUserId(int userId) {
+        mUser = UserHandle.of(userId);
     }
 
     /** @hide */
