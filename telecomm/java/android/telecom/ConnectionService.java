@@ -727,7 +727,22 @@ public abstract class ConnectionService extends Service {
                     SomeArgs args = (SomeArgs) msg.obj;
                     Log.continueSession((Session) args.arg2, SESSION_HANDLER + SESSION_ABORT);
                     try {
-                        abort((String) args.arg1);
+                        final String id = (String) args.arg1;
+                        if (!mAreAccountsInitialized) {
+                            Log.d(this, "Enqueueing pre-init request %s", id);
+                            mPreInitializationConnectionRequests.add(
+                                    new android.telecom.Logging.Runnable(
+                                            SESSION_HANDLER + SESSION_ABORT
+                                                    + ".pICR",
+                                            null /*lock*/) {
+                                        @Override
+                                        public void loggedRun() {
+                                            abort(id);
+                                        }
+                                    }.prepare());
+                        } else {
+                            abort(id);
+                        }
                     } finally {
                         args.recycle();
                         Log.endSession();
