@@ -26,6 +26,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.Log;
 import android.util.Slog;
+import com.android.server.pm.UserManagerService;
 import com.android.server.SystemService;
 
 import java.util.List;
@@ -62,9 +63,7 @@ public class MediaResourceMonitorService extends SystemService {
                 if (pkgNames == null) {
                     return;
                 }
-                UserManager manager = (UserManager) getContext().getSystemService(
-                        Context.USER_SERVICE);
-                int[] userIds = manager.getEnabledProfileIds(ActivityManager.getCurrentUser());
+                int[] userIds = UserManagerService.getInstance().getUserIds();
                 if (userIds == null || userIds.length == 0) {
                     return;
                 }
