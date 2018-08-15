@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.service.quicksettings.Tile;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
@@ -38,9 +39,11 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
     public AlwaysOnDisplayTile(QSHost host) {
         super(host);
 
-        mSetting = new SecureSetting(mContext, mHandler, Secure.DOZE_ALWAYS_ON) {
+        mSetting = new SecureSetting(mContext, mHandler,
+                   Secure.DOZE_ALWAYS_ON) {
             @Override
-            protected void handleValueChanged(int value, boolean observedChange) {
+            protected void handleValueChanged(int value,
+                   boolean observedChange) {
                 handleRefreshState(value);
             }
         };
@@ -59,7 +62,7 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     @Override
     public void handleClick() {
-        setEnabled(!mState.value);
+        mSetting.setValue(mState.value ? 0 : 1);
         refreshState();
     }
 
@@ -74,37 +77,31 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
         return mContext.getString(R.string.quick_settings_always_on_display_label);
     }
 
-    private void setEnabled(boolean enabled) {
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.DOZE_ALWAYS_ON,
-                enabled ? 1 : 0);
-    }
-
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        if (mSetting == null) return;
         final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
         final boolean enable = value != 0;
         state.value = enable;
         state.label = mContext.getString(R.string.quick_settings_always_on_display_label);
+        state.icon = ResourceIcon.get(R.drawable.ic_qs_alwaysondisplay);
         if (enable) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_alwaysondisplay_on);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_always_on_display_on);
+            state.state = Tile.STATE_ACTIVE;
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_alwaysondisplay_off);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_always_on_display_off);
+            state.state = Tile.STATE_INACTIVE;
         }
     }
 
     @Override
     protected String composeChangeAnnouncement() {
         if (mState.value) {
-            return mContext.getString(
-                    R.string.accessibility_quick_settings_always_on_display_changed_on);
+            return mContext.getString(R.string.accessibility_quick_settings_always_on_display_changed_on);
         } else {
-            return mContext.getString(
-                    R.string.accessibility_quick_settings_always_on_display_changed_off);
+            return mContext.getString(R.string.accessibility_quick_settings_always_on_display_changed_off);
         }
     }
 
