@@ -4767,12 +4767,6 @@ public final class Settings {
         public static final String SCREENSHOT_DEFAULT_MODE = "screenshot_default_mode";
 
         /**
-         * whether to enable torch on lockscreen
-         * @hide
-         */
-        public static final String KEYGUARD_TOGGLE_TORCH = "keyguard_toggle_torch";
-
-        /**
          * whether to enable or disable vibration on succesful fingerprint auth
          *
          * @hide
