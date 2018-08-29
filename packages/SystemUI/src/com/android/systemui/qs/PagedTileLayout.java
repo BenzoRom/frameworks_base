@@ -1,5 +1,6 @@
 package com.android.systemui.qs;
 
+import android.content.ContentResolver;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -396,13 +397,20 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
         }
 
         private int getRows() {
-            int defaultRows = Math.max(1, getResources().getInteger(R.integer.quick_settings_num_rows));
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                defaultRows = getResources().getInteger(R.integer.quick_settings_num_rows_portrait);
+            final ContentResolver resolver = mContext.getContentResolver();
+            final Resources res = getContext().getResources();
+            int defaultRows = Math.max(1, res.getInteger(R.integer.quick_settings_num_rows));
+            if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                defaultRows = res.getInteger(R.integer.quick_settings_num_rows_portrait);
             }
-            return Settings.System.getIntForUser(
-                mContext.getContentResolver(), Settings.System.QS_LAYOUT_ROWS, defaultRows,
-                UserHandle.USER_CURRENT);
+            if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                return Settings.System.getIntForUser(resolver,
+                        Settings.System.QS_LAYOUT_ROWS, defaultRows,
+                        UserHandle.USER_CURRENT);
+            }
+            return Settings.System.getIntForUser(resolver,
+                        Settings.System.QS_LAYOUT_ROWS_LANDSCAPE, defaultRows,
+                        UserHandle.USER_CURRENT);
         }
 
         public boolean isFull() {

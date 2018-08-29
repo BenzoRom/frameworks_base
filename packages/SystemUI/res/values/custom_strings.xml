@@ -29,6 +29,7 @@
     <string name="qs_menu_item_reset">Reset</string>
     <string name="qs_menu_item_titles">Show labels</string>
     <string name="qs_menu_item_rows">Rows</string>
+    <string name="qs_menu_item_rows_landscape">Rows landscape</string>
     <string name="qs_menu_item_rows_one">1</string>
     <string name="qs_menu_item_rows_two">2</string>
     <string name="qs_menu_item_rows_three">3</string>
@@ -101,6 +102,7 @@
     <string name="right">Right</string>
     <string name="navbar_editor_title">Editor</string>
     <string name="navbar_editor_summary">Configure navigaton bar</string>
+
 
     <!-- NavBar Tuner -->
     <string name="menu_ime_always_show">Menu / Keyboard Switcher (always show)</string>
