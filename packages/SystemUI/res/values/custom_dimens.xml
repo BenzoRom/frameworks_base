@@ -51,4 +51,7 @@
     <dimen name="net_traffic_multi_text_size">8dp</dimen>
     <dimen name="net_traffic_txt_img_padding">2dp</dimen>
 
+    <!-- Weather -->
+    <dimen name="current_weather_image_size">42dp</dimen>
+
 </resources>
