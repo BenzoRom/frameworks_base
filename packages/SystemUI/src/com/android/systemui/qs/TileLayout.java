@@ -183,6 +183,10 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         }
     }
 
+    @Override
+    public int getNumColumns() {
+        return mColumns;
+    }
 
     @Override
     public boolean isShowTitles() {
