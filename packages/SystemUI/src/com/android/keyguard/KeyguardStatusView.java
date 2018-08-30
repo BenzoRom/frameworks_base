@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.ActivityManager;
 import android.app.IActivityManager;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,6 +29,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -46,6 +48,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.ViewClippingUtil;
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
+import com.android.systemui.benzo.CurrentWeatherView;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.util.wakelock.KeepAwakeAnimationListener;
 
@@ -78,6 +81,8 @@ public class KeyguardStatusView extends GridLayout implements
     private int mTextColor;
     private float mWidgetPadding;
     private int mLastLayoutHeight;
+    private CurrentWeatherView mWeatherView;
+    private boolean mShowWeather;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -93,6 +98,7 @@ public class KeyguardStatusView extends GridLayout implements
                 refreshTime();
                 updateOwnerInfo();
                 updateLogoutView();
+                updateSettings();
             }
         }
 
@@ -111,6 +117,7 @@ public class KeyguardStatusView extends GridLayout implements
             refreshFormat();
             updateOwnerInfo();
             updateLogoutView();
+            updateSettings();
         }
 
         @Override
@@ -174,7 +181,19 @@ public class KeyguardStatusView extends GridLayout implements
         mOwnerInfo = findViewById(R.id.owner_info);
         mKeyguardSlice = findViewById(R.id.keyguard_status_area);
         mClockSeparator = findViewById(R.id.clock_separator);
-        mVisibleInDoze = Sets.newArraySet(mClockView, mKeyguardSlice);
+        mWeatherView = (CurrentWeatherView) findViewById(R.id.weather_container);
+
+        mVisibleInDoze = Sets.newArraySet();
+        if (mWeatherView != null) {
+            mVisibleInDoze.add(mWeatherView);
+        }
+        if (mClockView != null) {
+            mVisibleInDoze.add(mClockView);
+        }
+        if (mKeyguardSlice != null) {
+            mVisibleInDoze.add(mKeyguardSlice);
+        }
+
         mTextColor = mClockView.getCurrentTextColor();
 
         int clockStroke = getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke);
@@ -190,6 +209,11 @@ public class KeyguardStatusView extends GridLayout implements
         updateOwnerInfo();
         updateLogoutView();
         updateDark();
+        updateSettings();
+
+        // Disable elegant text height because our fancy colon makes the ymin value huge for no
+        // reason.
+        mClockView.setElegantTextHeight(false);
     }
 
     /**
@@ -295,6 +319,9 @@ public class KeyguardStatusView extends GridLayout implements
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
+        }
+        if (mWeatherView != null) {
+            mWeatherView.onDensityOrFontScaleChanged();
         }
     }
 
@@ -425,6 +452,9 @@ public class KeyguardStatusView extends GridLayout implements
         mKeyguardSlice.setDarkAmount(mDarkAmount);
         mClockView.setTextColor(blendedTextColor);
         mClockSeparator.setBackgroundColor(blendedTextColor);
+        if (mWeatherView != null) {
+            mWeatherView.blendARGB(mDarkAmount);
+        }
     }
 
     private void layoutOwnerInfo() {
@@ -455,6 +485,9 @@ public class KeyguardStatusView extends GridLayout implements
             animate = false;
         }
         mKeyguardSlice.setPulsing(pulsing, animate);
+        if (mWeatherView != null) {
+            mWeatherView.setVisibility((mShowWeather && !mPulsing) ? View.VISIBLE : View.GONE);
+        }
         updateDozeVisibleViews();
     }
 
@@ -476,6 +509,25 @@ public class KeyguardStatusView extends GridLayout implements
             mIActivityManager.stopUser(currentUserId, true /*force*/, null);
         } catch (RemoteException re) {
             Log.e(TAG, "Failed to logout user", re);
+        }
+    }
+
+    private void updateSettings() {
+        final ContentResolver resolver = getContext().getContentResolver();
+        final Resources res = getContext().getResources();
+        mShowWeather = Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKSCREEN_WEATHER_ENABLED, 0,
+                UserHandle.USER_CURRENT) == 1;
+
+        if (mWeatherView != null) {
+            if (mShowWeather) {
+                mWeatherView.setVisibility(View.VISIBLE);
+                mWeatherView.enableUpdates();
+            }
+            if (!mShowWeather) {
+                mWeatherView.setVisibility(View.GONE);
+                mWeatherView.disableUpdates();
+            }
         }
     }
 

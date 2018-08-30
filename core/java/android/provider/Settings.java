@@ -5109,6 +5109,14 @@ public final class Settings {
         private static final Validator OMNIJAWS_WEATHER_ICON_PACK_VALIDATOR = ANY_STRING_VALIDATOR;
 
         /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_WEATHER_ENABLED = "lockscreen_weather_enabled";
+
+        /** @hide */
+        private static final Validator LOCKSCREEN_WEATHER_ENABLED_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5198,6 +5206,7 @@ public final class Settings {
             USE_OLD_MOBILETYPE,
             STATUSBAR_HIDE_NOTCH,
             OMNIJAWS_WEATHER_ICON_PACK,
+            LOCKSCREEN_WEATHER_ENABLED,
         };
 
         /**
@@ -5363,6 +5372,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(USE_OLD_MOBILETYPE);
             PRIVATE_SETTINGS.add(STATUSBAR_HIDE_NOTCH);
             PRIVATE_SETTINGS.add(OMNIJAWS_WEATHER_ICON_PACK);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_WEATHER_ENABLED);
         }
 
         /**
@@ -5482,6 +5492,7 @@ public final class Settings {
             VALIDATORS.put(USE_OLD_MOBILETYPE, USE_OLD_MOBILETYPE_VALIDATOR);
             VALIDATORS.put(STATUSBAR_HIDE_NOTCH, STATUSBAR_HIDE_NOTCH_VALIDATOR);
             VALIDATORS.put(OMNIJAWS_WEATHER_ICON_PACK, OMNIJAWS_WEATHER_ICON_PACK_VALIDATOR);
+            VALIDATORS.put(LOCKSCREEN_WEATHER_ENABLED, LOCKSCREEN_WEATHER_ENABLED_VALIDATOR);
         }
 
         /**
