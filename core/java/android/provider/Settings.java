@@ -4339,11 +4339,17 @@ public final class Settings {
          */
         public static final String QS_LAYOUT_COLUMNS = "qs_layout_columns";
 
+        /** @hide */
+        private static final Validator QS_LAYOUT_COLUMNS_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
         /**
          * Number of qs columns on landscape orientation
          * @hide
          */
         public static final String QS_LAYOUT_COLUMNS_LANDSCAPE = "qs_layout_columns_landscape";
+
+        /** @hide */
+        private static final Validator QS_LAYOUT_COLUMNS_LANDSCAPE_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
          * Whether to display qs tile titles in the qs panel
@@ -4351,10 +4357,16 @@ public final class Settings {
          */
         public static final String QS_TILE_TITLE_VISIBILITY = "qs_tile_title_visibility";
 
+        /** @hide */
+        private static final Validator QS_TILE_TITLE_VISIBILITY_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**
          * @hide
          */
         public static final String QS_LAYOUT_ROWS = "qs_layout_rows";
+
+        /** @hide */
+        private static final Validator QS_LAYOUT_ROWS_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
          * Change quick settings tiles animation style
@@ -4988,7 +5000,11 @@ public final class Settings {
             INCREASING_RING,
             INCREASING_RING_START_VOLUME,
             INCREASING_RING_RAMP_UP_TIME,
-            SHOW_FOURG
+            SHOW_FOURG,
+            QS_LAYOUT_COLUMNS_LANDSCAPE,
+            QS_LAYOUT_COLUMNS,
+            QS_TILE_TITLE_VISIBILITY,
+            QS_LAYOUT_ROWS
         };
 
         /**
@@ -5248,6 +5264,10 @@ public final class Settings {
             VALIDATORS.put(INCREASING_RING_START_VOLUME	, INCREASING_RING_START_VOLUME_VALIDATOR);
             VALIDATORS.put(INCREASING_RING_RAMP_UP_TIME, INCREASING_RING_RAMP_UP_TIME_VALIDATOR);
             VALIDATORS.put(SHOW_FOURG, SHOW_FOURG_VALIDATOR);
+            VALIDATORS.put(QS_LAYOUT_COLUMNS_LANDSCAPE, QS_LAYOUT_COLUMNS_LANDSCAPE_VALIDATOR);
+            VALIDATORS.put(QS_LAYOUT_COLUMNS, QS_LAYOUT_COLUMNS_VALIDATOR);
+            VALIDATORS.put(QS_TILE_TITLE_VISIBILITY, QS_TILE_TITLE_VISIBILITY_VALIDATOR);
+            VALIDATORS.put(QS_LAYOUT_ROWS, QS_LAYOUT_ROWS_VALIDATOR);
         }
 
         /**

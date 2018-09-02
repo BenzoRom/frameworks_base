@@ -147,7 +147,6 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mRecyclerView.setItemAnimator(animator);
         mLightBarController = Dependency.get(LightBarController.class);
         updateNavBackDrop(getResources().getConfiguration());
-        updateSettings();
     }
 
     @Override
