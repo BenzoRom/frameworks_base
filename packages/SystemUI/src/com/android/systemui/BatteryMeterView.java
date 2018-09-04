@@ -18,6 +18,7 @@ package com.android.systemui;
 import static android.app.StatusBarManager.DISABLE2_SYSTEM_ICONS;
 import static android.app.StatusBarManager.DISABLE_NONE;
 import static android.provider.Settings.System.SHOW_BATTERY_PERCENT;
+import static android.provider.Settings.System.SHOW_BATTERY_PERCENT_ON_QSB;
 import static android.provider.Settings.Secure.STATUS_BAR_BATTERY_STYLE;
 
 import android.animation.ArgbEvaluator;
@@ -93,6 +94,7 @@ public class BatteryMeterView extends LinearLayout implements
     private final int mEndPadding;
 
     private boolean mQsHeaderOrKeyguard;
+    private int mShowPercentOnQSB;
 
     /**
      * Whether we should use colors that adapt based on wallpaper/the scrim behind quick settings.
@@ -209,7 +211,7 @@ public class BatteryMeterView extends LinearLayout implements
     }
 
     private boolean forcePercentageQsHeader() {
-        return mQsHeaderOrKeyguard
+        return mQsHeaderOrKeyguard && mShowPercentOnQSB == 1
                 && ((mStyle == BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT && mShowPercentText == 0)
                 || mStyle == BatteryMeterDrawableBase.BATTERY_STYLE_TEXT
                 || (isCircleBattery() && mShowPercentText == 0));
@@ -392,6 +394,9 @@ public class BatteryMeterView extends LinearLayout implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SHOW_BATTERY_PERCENT),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_BATTERY_PERCENT_ON_QSB),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -407,6 +412,8 @@ public class BatteryMeterView extends LinearLayout implements
                 SHOW_BATTERY_PERCENT, 0, mUser);
             mStyle = Settings.Secure.getIntForUser(resolver,
                 STATUS_BAR_BATTERY_STYLE, BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT, mUser);
+            mShowPercentOnQSB = Settings.System.getIntForUser(resolver,
+                SHOW_BATTERY_PERCENT_ON_QSB, 1, mUser);
             updateBatteryStyle();
             updateShowPercent();
             mDrawable.refresh();
