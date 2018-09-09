@@ -369,7 +369,11 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
                 Settings.System.putIntForUser(mContext.getContentResolver(),
                         Settings.System.QS_LAYOUT_ROWS_LANDSCAPE, 4, UserHandle.USER_CURRENT);
                 break;
-        }
+            case R.id.menu_item_qs_columns_auto:
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_QUICKBAR_COLUMNS, -1, UserHandle.USER_CURRENT);
+                break;
+            }
         updateSettings();
         return false;
     }
@@ -542,6 +546,8 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         menuItemSeven.setChecked(qsColumns == 7);
         menuItemEight = mToolbar.getMenu().findItem(R.id.menu_item_qs_columns_eight);
         menuItemEight.setChecked(qsColumns == 8);
+        MenuItem menuItemAuto = mToolbar.getMenu().findItem(R.id.menu_item_qs_columns_auto);
+        menuItemAuto.setChecked(qsColumns == -1);
 
         int rowsLandscape = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.QS_LAYOUT_ROWS_LANDSCAPE, defaultRows,
