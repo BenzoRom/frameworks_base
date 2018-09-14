@@ -116,7 +116,7 @@ public class NavBarEditor extends TunerPreferenceFragment implements TunerServic
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mNavBarAdapter.mCallbacks);
         mNavBarAdapter.setTouchHelper(itemTouchHelper);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-
+        setHasOptionsMenu(true);
         Dependency.get(TunerService.class).addTunable(this, NAV_BAR_VIEWS);
     }
 
@@ -146,7 +146,6 @@ public class NavBarEditor extends TunerPreferenceFragment implements TunerServic
             }
         }
         mNavBarAdapter.addButton(NavBarAdapter.ADD, getString(R.string.add_button));
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -597,7 +596,7 @@ public class NavBarEditor extends TunerPreferenceFragment implements TunerServic
         private final ItemTouchHelper.Callback mCallbacks = new ItemTouchHelper.Callback() {
             @Override
             public boolean isLongPressDragEnabled() {
-                return false;
+                return true;
             }
 
             @Override
@@ -626,7 +625,6 @@ public class NavBarEditor extends TunerPreferenceFragment implements TunerServic
                 }
                 move(from, to, mButtons);
                 move(from, to, mLabels);
-                notifyChanged();
                 notifyItemMoved(from, to);
                 return true;
             }
@@ -639,6 +637,12 @@ public class NavBarEditor extends TunerPreferenceFragment implements TunerServic
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 // Don't care.
+            }
+
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                super.clearView(recyclerView, viewHolder);
+                notifyChanged();
             }
         };
     }
