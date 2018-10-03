@@ -5099,6 +5099,14 @@ public final class Settings {
         public static final String QSFOOTER_SHOW_SERVICES = "qs_footer_show_services";
 
         /**
+         * @hide
+         */
+        public static final String STATUSBAR_HIDE_NOTCH = "statusbar_hide_notch";
+
+        /** @hide */
+        private static final Validator STATUSBAR_HIDE_NOTCH_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5186,6 +5194,7 @@ public final class Settings {
             BURN_IN_PROTECTION,
             BURN_IN_PROTECTION_INTERVAL,
             USE_OLD_MOBILETYPE,
+            STATUSBAR_HIDE_NOTCH,
         };
 
         /**
@@ -5350,6 +5359,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BURN_IN_PROTECTION);
             PRIVATE_SETTINGS.add(BURN_IN_PROTECTION_INTERVAL);
             PRIVATE_SETTINGS.add(USE_OLD_MOBILETYPE);
+            PRIVATE_SETTINGS.add(STATUSBAR_HIDE_NOTCH);
         }
 
         /**
@@ -5467,6 +5477,7 @@ public final class Settings {
             VALIDATORS.put(BURN_IN_PROTECTION, BURN_IN_PROTECTION_VALIDATOR);
             VALIDATORS.put(BURN_IN_PROTECTION_INTERVAL, BURN_IN_PROTECTION_INTERVAL_VALIDATOR);
             VALIDATORS.put(USE_OLD_MOBILETYPE, USE_OLD_MOBILETYPE_VALIDATOR);
+            VALIDATORS.put(STATUSBAR_HIDE_NOTCH, STATUSBAR_HIDE_NOTCH_VALIDATOR);
         }
 
         /**
