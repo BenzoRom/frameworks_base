@@ -5430,6 +5430,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USE_OLD_MOBILETYPE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_COMPONENT),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -5442,6 +5445,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setFpToDismissNotifications();
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.USE_OLD_MOBILETYPE))) {
+                mCommandQueue.restartUI();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.RECENTS_COMPONENT))) {
                 mCommandQueue.restartUI();
             }
         }
