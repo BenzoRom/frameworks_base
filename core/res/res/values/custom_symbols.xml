@@ -140,4 +140,8 @@
 
   <!-- In call notification vibration strength -->
   <java-symbol type="integer" name="config_in_call_notification_vibration_strength" />
+
+  <!-- Auto fill -->
+  <java-symbol type="color" name="autofill_save_title_color" />
+  <java-symbol type="color" name="autofill_autofill_save_custom_subtitle_color" />
 </resources>

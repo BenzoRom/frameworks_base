@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright (c) 2018 Benzo Rom
+    Copyright (c) 2018 Projekt Substratum
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 -->
 
 <resources>
-        <!-- Toast colors -->
-    <color name="toast_bg">#E621272b</color>
-    <color name="toast_text">@color/white</color>
 
-    <!-- Auto fill -->
-    <color name="autofill_save_title_color">@color/primary_text_default_material_light</color>
-    <color name="autofill_autofill_save_custom_subtitle_color">@color/primary_text_default_material_light</color>
+    <!-- Resolver theme. You can overlay this one while assuming the resolver_list_bg color
+        exposure is included on the device, while using the original
+        Theme.DeviceDefault.Resolver style on devices that don't have the resolver_list_bg
+        exposure. -->
+    <style name="Theme.DeviceDefault.Resolver.Exposed" />
+
 </resources>
