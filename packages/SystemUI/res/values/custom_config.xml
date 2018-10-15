@@ -19,4 +19,17 @@
     <!-- Allow Opa (Pixel navbar) layout -->
     <bool name="config_allowOpaLayout">true</bool>
 
+    <!-- Overall pie animation speed -->
+    <integer name="pie_animation_speed">250</integer>
+
+    <!-- Maximum amount of notification icons allowed to show in PIE -->
+    <integer name="pie_maximum_notifications">8</integer>
+
+    <!-- Pie letter spacing -->
+    <item name="pie_status_letter_spacing" format="float" type="integer">0.2</item>
+    <item name="pie_clock_letter_spacing" format="float" type="integer">0.1</item>
+
+    <bool name="config_relocatePieOnRotation">true</bool>
+    <bool name="config_forcePieCentered">false</bool>
+
 </resources>

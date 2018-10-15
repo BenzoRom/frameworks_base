@@ -154,4 +154,6 @@ oneway interface IStatusBar
     void hideFingerprintDialog();
 
     void toggleCameraFlash();
+
+    void toggleOrientationListener(boolean enable);
 }

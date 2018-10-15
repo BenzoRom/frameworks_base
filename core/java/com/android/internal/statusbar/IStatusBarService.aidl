@@ -103,4 +103,6 @@ interface IStatusBarService
     void setAutoRotate(boolean enabled);
     void toggleCameraFlash();
     void restartUI();
+    void toggleRecentApps();
+    void toggleOrientationListener(boolean enable);
 }
