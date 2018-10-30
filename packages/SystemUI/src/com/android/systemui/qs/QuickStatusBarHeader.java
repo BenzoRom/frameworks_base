@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.provider.AlarmClock;
+import android.provider.Settings;
 import android.service.notification.ZenModeConfig;
 import android.support.annotation.VisibleForTesting;
 import android.widget.FrameLayout;
@@ -63,6 +64,8 @@ import com.android.systemui.statusbar.policy.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.tuner.TunerService;
+import com.android.systemui.tuner.TunerService.Tunable;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -74,7 +77,7 @@ import java.util.Objects;
  */
 public class QuickStatusBarHeader extends RelativeLayout implements
         View.OnClickListener, NextAlarmController.NextAlarmChangeCallback,
-        ZenModeController.Callback {
+        ZenModeController.Callback, Tunable {
     private static final String TAG = "QuickStatusBarHeader";
     private static final boolean DEBUG = false;
 
@@ -123,6 +126,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private ZenModeController mZenController;
     /** Counts how many times the long press tooltip has been shown to the user. */
     private int mShownCount;
+    private boolean mHideDragHandle;
 
     private final BroadcastReceiver mRingerReceiver = new BroadcastReceiver() {
         @Override
@@ -298,14 +302,21 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 com.android.internal.R.dimen.quick_qs_offset_height);
         mSystemIconsView.setLayoutParams(mSystemIconsView.getLayoutParams());
 
+        mHideDragHandle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QS_SHOW_DRAG_HANDLE, 1) != 0;
+
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
         if (mQsDisabled) {
             lp.height = resources.getDimensionPixelSize(
                     com.android.internal.R.dimen.quick_qs_offset_height);
         } else {
-            lp.height = Math.max(getMinimumHeight(),
-                    resources.getDimensionPixelSize(
-                            com.android.internal.R.dimen.quick_qs_total_height));
+            int qsHeight = resources.getDimensionPixelSize(
+                    com.android.internal.R.dimen.quick_qs_total_height);
+            if (mHideDragHandle) {
+                qsHeight -= resources.getDimensionPixelSize(
+                        R.dimen.quick_qs_drag_handle_height);
+            }
+            lp.height = Math.max(getMinimumHeight(), qsHeight);
         }
 
         setLayoutParams(lp);
@@ -393,6 +404,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         super.onAttachedToWindow();
         Dependency.get(StatusBarIconController.class).addIconGroup(mIconManager);
         requestApplyInsets();
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, QSFooterImpl.QS_SHOW_DRAG_HANDLE);
     }
 
     @Override
@@ -413,6 +426,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     @VisibleForTesting
     public void onDetachedFromWindow() {
+        Dependency.get(TunerService.class).removeTunable(this);
         setListening(false);
         Dependency.get(StatusBarIconController.class).removeIconGroup(mIconManager);
         super.onDetachedFromWindow();
@@ -632,5 +646,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             lp.leftMargin = sideMargins;
             lp.rightMargin = sideMargins;
         }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        updateResources();
     }
 }

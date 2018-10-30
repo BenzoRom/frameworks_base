@@ -72,6 +72,8 @@ public class QSFooterImpl extends FrameLayout implements Tunable, QSFooter,
     private static final String QS_FOOTER_SHOW_SETTINGS = "qs_footer_show_settings";
     private static final String QS_FOOTER_SHOW_SERVICES = "qs_footer_show_services";
 
+    public static final String QS_SHOW_DRAG_HANDLE = "qs_show_drag_handle";
+
     private ActivityStarter mActivityStarter;
     private UserInfoController mUserInfoController;
     private View mSettingsButton;
@@ -162,8 +164,10 @@ public class QSFooterImpl extends FrameLayout implements Tunable, QSFooter,
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Dependency.get(TunerService.class).addTunable(this, QS_FOOTER_SHOW_SETTINGS);
-        Dependency.get(TunerService.class).addTunable(this, QS_FOOTER_SHOW_SERVICES);
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, QS_FOOTER_SHOW_SETTINGS);
+        tunerService.addTunable(this, QS_FOOTER_SHOW_SERVICES);
+        tunerService.addTunable(this, QS_SHOW_DRAG_HANDLE);
     }
 
     public void onTuningChanged(String key, String newValue) {
@@ -316,11 +320,14 @@ public class QSFooterImpl extends FrameLayout implements Tunable, QSFooter,
                 Settings.System.QSFOOTER_SHOW_SERVICES, 0) != 0;
         boolean settingsButtonVisible = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.QSFOOTER_SHOW_SETTINGS, 1) != 0;
+        boolean hideDragHandle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QS_SHOW_DRAG_HANDLE, 1) != 0;
         mMultiUserSwitch.setVisibility(showUserSwitcher(isDemo) ? View.VISIBLE : View.INVISIBLE);
         mEdit.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
         mSettingsButton.setVisibility(isDemo || settingsButtonVisible ? View.VISIBLE : View.GONE);
         mRunningServicesButton.setVisibility(!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE);
         mRunningServicesButton.setVisibility(servicesButtonVisible ? (!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE) : View.GONE);
+        mDragHandle.setVisibility(hideDragHandle ? View.GONE : View.VISIBLE);
     }
 
     private boolean showUserSwitcher(boolean isDemo) {

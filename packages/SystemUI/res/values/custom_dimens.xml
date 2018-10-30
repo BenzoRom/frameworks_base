@@ -31,8 +31,9 @@
     <dimen name="opa_return_translation">-1.0dip</dimen>
     <dimen name="opa_rest_to_collapse">7.0dip</dimen>
 
-    <!-- QS tile height -->
+    <!-- QS Options -->
     <dimen name="qs_tile_height_wo_label">48dp</dimen>
+    <dimen name="quick_qs_drag_handle_height">20dp</dimen>
 
     <!-- Height of the status bar header bar -->
     <dimen name="status_bar_header_height">130dp</dimen>

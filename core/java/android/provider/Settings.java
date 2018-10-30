@@ -5436,6 +5436,14 @@ public final class Settings {
         public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
 
         /**
+         * @hide
+         */
+        public static final String QS_SHOW_DRAG_HANDLE = "qs_show_drag_handle";
+
+        /** @hide */
+        public static final Validator QS_SHOW_DRAG_HANDLE_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5586,6 +5594,7 @@ public final class Settings {
             ANIM_TILE_STYLE,
             ANIM_TILE_DURATION,
             ANIM_TILE_INTERPOLATOR,
+            QS_SHOW_DRAG_HANDLE,
         };
 
         /**
@@ -5811,6 +5820,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ANIM_TILE_STYLE);
             PRIVATE_SETTINGS.add(ANIM_TILE_DURATION);
             PRIVATE_SETTINGS.add(ANIM_TILE_INTERPOLATOR);
+            PRIVATE_SETTINGS.add(QS_SHOW_DRAG_HANDLE);
         }
 
         /**
@@ -5994,6 +6004,7 @@ public final class Settings {
             VALIDATORS.put(ANIM_TILE_STYLE, ANIM_TILE_STYLE_VALIDATOR);
             VALIDATORS.put(ANIM_TILE_DURATION, ANIM_TILE_DURATION_VALIDATOR);
             VALIDATORS.put(ANIM_TILE_INTERPOLATOR, ANIM_TILE_INTERPOLATOR_VALIDATOR);
+            VALIDATORS.put(QS_SHOW_DRAG_HANDLE, QS_SHOW_DRAG_HANDLE_VALIDATOR);
         }
 
         /**
