@@ -157,4 +157,8 @@
 
   <!-- Whether or not ambient media display opt-in setting is available on this device -->
   <java-symbol type="bool" name="config_canForceDozeNotifications" />
+
+  <!-- System fonts -->
+  <java-symbol type="array" name="config_fontPackages" />
+
 </resources>
