@@ -227,6 +227,7 @@ public class NotificationMediaManager implements Dumpable {
 
     public void clearCurrentMediaNotification() {
         mMediaNotificationKey = null;
+        mPresenter.setAmbientMusicInfo(null, null);
         clearCurrentMediaNotificationSession();
     }
 
@@ -306,12 +307,19 @@ public class NotificationMediaManager implements Dumpable {
             int N = activeNotifications.size();
             final String pkg = mMediaController.getPackageName();
 
+            boolean mediaNotification= false;
             for (int i = 0; i < N; i++) {
                 final NotificationData.Entry entry = activeNotifications.get(i);
-                if (entry.notification.getPackageName().equals(pkg)) {
+                if (isMediaNotification(entry) && entry.notification.getPackageName().equals(pkg)) {
                     mEntryManager.setEntryToRefresh(entry);
+                    mediaNotification = true;
                     break;
                 }
+            }
+            if (!mediaNotification) {
+                // no notification for this mediacontroller thus no artwork or track info,
+                mEntryManager.setEntryToRefresh(null);
+                mPresenter.setAmbientMusicInfo(null, null);
             }
         } else {
             mEntryManager.setEntryToRefresh(null);
