@@ -20,8 +20,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.ActivityManager;
 import android.app.IActivityManager;
-import android.content.Context;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -48,7 +48,6 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.ViewClippingUtil;
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
-import com.android.systemui.benzo.CurrentWeatherView;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.util.wakelock.KeepAwakeAnimationListener;
@@ -82,7 +81,6 @@ public class KeyguardStatusView extends GridLayout implements
     private int mTextColor;
     private float mWidgetPadding;
     private int mLastLayoutHeight;
-    private CurrentWeatherView mWeatherView;
     private boolean mShowWeather;
 
     private boolean mForcedMediaDoze;
@@ -184,19 +182,14 @@ public class KeyguardStatusView extends GridLayout implements
         mOwnerInfo = findViewById(R.id.owner_info);
         mKeyguardSlice = findViewById(R.id.keyguard_status_area);
         mClockSeparator = findViewById(R.id.clock_separator);
-        mWeatherView = (CurrentWeatherView) findViewById(R.id.weather_container);
-
+        updateSettings();
         mVisibleInDoze = Sets.newArraySet();
-        if (mWeatherView != null) {
-            mVisibleInDoze.add(mWeatherView);
-        }
         if (mClockView != null) {
             mVisibleInDoze.add(mClockView);
         }
         if (mKeyguardSlice != null) {
-            mVisibleInDoze.add(mKeyguardSlice);
+            if (mShowWeather) mVisibleInDoze.add(mKeyguardSlice);
         }
-
         mTextColor = mClockView.getCurrentTextColor();
 
         int clockStroke = getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke);
@@ -213,10 +206,6 @@ public class KeyguardStatusView extends GridLayout implements
         updateLogoutView();
         updateDark();
         updateSettings();
-
-        // Disable elegant text height because our fancy colon makes the ymin value huge for no
-        // reason.
-        mClockView.setElegantTextHeight(false);
     }
 
     /**
@@ -322,9 +311,6 @@ public class KeyguardStatusView extends GridLayout implements
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
-        }
-        if (mWeatherView != null) {
-            mWeatherView.onDensityOrFontScaleChanged();
         }
     }
 
@@ -485,9 +471,6 @@ public class KeyguardStatusView extends GridLayout implements
             animate = false;
         }
         mKeyguardSlice.setPulsing(pulsing, animate);
-        if (mWeatherView != null) {
-            mWeatherView.setVisibility((mShowWeather && !mPulsing) ? View.VISIBLE : View.GONE);
-        }
         updateDozeVisibleViews();
     }
 
@@ -504,6 +487,9 @@ public class KeyguardStatusView extends GridLayout implements
             } else {
                 child.setAlpha(mDarkAmount == 1 ? 0 : 1);
             }
+        }
+        if (mKeyguardSlice != null) {
+            mKeyguardSlice.setVisibility(mForcedMediaDoze ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -528,17 +514,6 @@ public class KeyguardStatusView extends GridLayout implements
         mShowWeather = Settings.System.getIntForUser(resolver,
                 Settings.System.LOCKSCREEN_WEATHER_ENABLED, 0,
                 UserHandle.USER_CURRENT) == 1;
-
-        if (mWeatherView != null) {
-            if (mShowWeather) {
-                mWeatherView.setVisibility(View.VISIBLE);
-                mWeatherView.enableUpdates();
-            }
-            if (!mShowWeather) {
-                mWeatherView.setVisibility(View.GONE);
-                mWeatherView.disableUpdates();
-            }
-        }
     }
 
     private class ClipChildrenAnimationListener extends AnimatorListenerAdapter implements
