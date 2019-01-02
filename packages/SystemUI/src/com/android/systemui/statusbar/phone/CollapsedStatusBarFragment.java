@@ -277,6 +277,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mClockStyle == 2) {
             animateHide(mRightClock, animate, true);
         }
+        hideStaturbarWeather();
     }
 
     public void showSystemIconArea(boolean animate) {
@@ -285,6 +286,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mClockStyle == 2) {
             animateShow(mRightClock, animate);
         }
+        showStaturbarWeather(animate);
     }
 
     public void hideNotificationIconArea(boolean animate) {
@@ -324,7 +326,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             setCarrierLabel(animate);
         }
     }
-
 
     public void hideStaturbarWeather() {
         if (mWeatherTextView != null) {
