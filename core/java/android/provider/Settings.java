@@ -5435,6 +5435,20 @@ public final class Settings {
          */
         public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
 
+         /**
+         * Whether to enable DOZE only when charging
+         * @hide
+         */
+        public static final String DOZE_ON_CHARGE = "doze_on_charge";
+
+        private static final Validator DOZE_ON_CHARGE_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
+         * hidden stting of the current atate of DOZE only when charging
+         * @hide
+         */
+        public static final String DOZE_ON_CHARGE_NOW = "doze_on_charge_now";
+
         /**
          * @hide
          */
@@ -5595,6 +5609,7 @@ public final class Settings {
             ANIM_TILE_DURATION,
             ANIM_TILE_INTERPOLATOR,
             QS_SHOW_DRAG_HANDLE,
+            DOZE_ON_CHARGE,
         };
 
         /**
@@ -5821,6 +5836,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ANIM_TILE_DURATION);
             PRIVATE_SETTINGS.add(ANIM_TILE_INTERPOLATOR);
             PRIVATE_SETTINGS.add(QS_SHOW_DRAG_HANDLE);
+            PRIVATE_SETTINGS.add(DOZE_ON_CHARGE);
         }
 
         /**
@@ -6005,6 +6021,7 @@ public final class Settings {
             VALIDATORS.put(ANIM_TILE_DURATION, ANIM_TILE_DURATION_VALIDATOR);
             VALIDATORS.put(ANIM_TILE_INTERPOLATOR, ANIM_TILE_INTERPOLATOR_VALIDATOR);
             VALIDATORS.put(QS_SHOW_DRAG_HANDLE, QS_SHOW_DRAG_HANDLE_VALIDATOR);
+            VALIDATORS.put(DOZE_ON_CHARGE, DOZE_ON_CHARGE_VALIDATOR);
         }
 
         /**
