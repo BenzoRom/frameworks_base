@@ -28,10 +28,12 @@ import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
 import android.os.ShellCallback;
+import android.os.storage.IStorageManager;
 import android.os.storage.StorageManager;
 import android.util.Log;
 import android.util.Slog;
 
+import com.android.internal.content.PackageHelper;
 import com.android.internal.logging.MetricsLogger;
 import com.android.server.pm.Installer.InstallerException;
 import com.android.server.pm.dex.DexoptOptions;
@@ -59,6 +61,8 @@ public class OtaDexoptService extends IOtaDexopt.Stub {
     // The amount of "available" (free - low threshold) space necessary at the start of an OTA to
     // not bulk-delete unused apps' odex files.
     private final static long BULK_DELETE_THRESHOLD = 1024 * 1024 * 1024;  // 1GB.
+
+    private static final long MAINTENANCE_SLEEP_MILLIS = 30_000;  // 30s.
 
     private final Context mContext;
     private final PackageManagerService mPackageManagerService;
@@ -168,6 +172,8 @@ public class OtaDexoptService extends IOtaDexopt.Stub {
         availableSpaceAfterDexopt = getAvailableSpace();
 
         performMetricsLogging();
+
+        performStorageMaintenance();
     }
 
     @Override
@@ -441,6 +447,26 @@ public class OtaDexoptService extends IOtaDexopt.Stub {
         final int elapsedTimeSeconds =
                 (int) TimeUnit.NANOSECONDS.toSeconds(finalTime - otaDexoptTimeStart);
         MetricsLogger.histogram(mContext, "ota_dexopt_time_s", elapsedTimeSeconds);
+    }
+
+    /**
+     * Run standard storage maintenance. This helps reboot time, as it resets the timer for
+     * on-boot fstrim.
+     */
+    private void performStorageMaintenance() {
+        try {
+            IStorageManager sm = PackageHelper.getStorageManager();
+            if (sm == null) {
+                throw new RuntimeException("Could not find StorageManager");
+            }
+            sm.runMaintenance();
+
+            // The above call is non-blocking. Consider an API change (expose the existing function
+            // with callback). For now, wait a bit.
+            Thread.sleep(MAINTENANCE_SLEEP_MILLIS);
+        } catch (Exception e) {
+            Log.w(TAG, "Could not run fstrim: " + e.getMessage());
+        }
     }
 
     private static class OTADexoptPackageDexOptimizer extends
