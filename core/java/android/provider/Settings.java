@@ -9420,13 +9420,6 @@ public final class Settings {
         public static final String MANAGED_PROFILE_CONTACT_REMOTE_SEARCH =
                 "managed_profile_contact_remote_search";
 
-        /**
-         * Enable face auto unlock on secure lock screens
-         *
-         * @hide
-         */
-        public static final String FACE_AUTO_UNLOCK = "face_auto_unlock";
-
         /*
          * Whether to show PIE controls on the screen.
          * 0 = OFF
