@@ -3443,4 +3443,7 @@
   <java-symbol type="string" name="config_defaultAssistantComponentName" />
 
   <java-symbol type="bool" name="config_zramWriteback" />
+
+  <java-symbol type="integer" name="config_idleMaintSecs" />
+
 </resources>
