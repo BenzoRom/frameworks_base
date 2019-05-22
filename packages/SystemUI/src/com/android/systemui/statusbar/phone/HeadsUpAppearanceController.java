@@ -24,6 +24,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.DisplayCutout;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -262,6 +263,19 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
         }
     }
 
+    private void updateParentClipping(boolean shouldClip) {
+        ViewGroup vg = mHeadsUpStatusBarView;
+        while (vg != null) {
+            vg.setClipChildren(shouldClip);
+            vg.setClipToPadding(shouldClip);
+            if (vg.getId() == R.id.status_bar) {
+                break;
+            } else {
+                vg = (ViewGroup) vg.getParent();
+            }
+        }
+    }
+
     /**
      * Hides the view and sets the state to endState when finished.
      *
@@ -273,13 +287,26 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
     private void hide(View view, int endState) {
         if (mAnimationsEnabled) {
             CrossFadeHelper.fadeOut(view, CONTENT_FADE_DURATION /* duration */,
-                    0 /* delay */, () -> view.setVisibility(endState));
+                    0 /* delay */, () -> {
+                        if (view == mHeadsUpStatusBarView) {
+                            updateParentClipping(true);
+                        }
+                        view.setVisibility(endState);
+                    });
         } else {
+            if (view == mHeadsUpStatusBarView) {
+                updateParentClipping(true);
+            }
             view.setVisibility(endState);
         }
     }
 
     private void show(View view) {
+        if (view == mHeadsUpStatusBarView) {
+            // Do not clip the content of heads-up notifications
+            updateParentClipping(false);
+        }
+
         if (mAnimationsEnabled) {
             CrossFadeHelper.fadeIn(view, CONTENT_FADE_DURATION /* duration */,
                     CONTENT_FADE_DELAY /* delay */);
