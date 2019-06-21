@@ -328,6 +328,7 @@
                   android:label="@string/system_ui_tuner"
                   android:process=":tuner"
                   android:parentActivityName="com.benzo.settings.BenzoSettings"
+                  android:configChanges="orientation|screenSize"
                   android:exported="true">
         </activity>
 
@@ -337,6 +338,7 @@
                   android:label="@string/statusbar_icons_blacklist"
                   android:process=":tuner"
                   android:parentActivityName="com.benzo.settings.StatusbarSettings"
+                  android:configChanges="orientation|screenSize"
                   android:exported="true">
         </activity>
 
@@ -345,6 +347,7 @@
                   android:label="@string/navbar_tuner_activity"
                   android:process=":tuner"
                   android:parentActivityName="com.benzo.settings.NavbarSettings"
+                  android:configChanges="orientation|screenSize"
                   android:exported="true">
         </activity>
 
@@ -353,6 +356,7 @@
                   android:label="@string/lockscreen_tuner_activity"
                   android:process=":tuner"
                   android:parentActivityName="com.benzo.settings.LockScreenSettings"
+                  android:configChanges="orientation|screenSize"
                   android:exported="true">
         </activity>
 
@@ -361,6 +365,7 @@
                   android:label="@string/powernotif_tuner_activity"
                   android:process=":tuner"
                   android:parentActivityName="com.benzo.settings.PowerNotificationsSettings"
+                  android:configChanges="orientation|screenSize"
                   android:exported="true">
         </activity>
 
