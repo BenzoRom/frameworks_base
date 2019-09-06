@@ -150,6 +150,7 @@ public final class ClockManager {
         addBuiltinClock(() -> new DefaultClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new BubbleClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new AnalogClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new TypeClockController(res, layoutInflater, colorExtractor));
 
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -323,7 +324,7 @@ public final class ClockManager {
             mClocks.put(plugin.getClass().getName(), plugin);
             mClockInfo.add(ClockInfo.builder()
                     .setName(plugin.getName())
-                    .setTitle(plugin.getTitle())
+                    .setTitle(plugin::getTitle)
                     .setId(id)
                     .setThumbnail(plugin::getThumbnail)
                     .setPreview(() -> plugin.getPreview(mWidth, mHeight))
