@@ -20,6 +20,7 @@ import android.animation.ArgbEvaluator;
 import android.annotation.ColorInt;
 import android.annotation.Nullable;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -114,6 +115,15 @@ public class InvocationLightsView extends View
         for (int i = 0; i < 4; i++) {
             mAssistInvocationLights.add(new EdgeLight(Color.TRANSPARENT, 0, 0));
         }
+
+        // Set colors to Google's colors
+        Resources res = mContext.getResources();
+        @ColorInt int assistantBlue = res.getColor(R.color.assistant_blue);
+        @ColorInt int assistantRed = res.getColor(R.color.assistant_red);
+        @ColorInt int assistantYellow = res.getColor(R.color.assistant_yellow);
+        @ColorInt int assistantGreen = res.getColor(R.color.assistant_green);
+
+        setColors(assistantBlue, assistantRed, assistantYellow, assistantGreen);
     }
 
     /**
