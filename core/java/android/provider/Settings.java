@@ -4753,6 +4753,25 @@ public final class Settings {
         private static final Validator LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR_VALIDATOR = ANY_STRING_VALIDATOR;
 
         /**
+         * @hide
+         */
+        public static final String QS_LAYOUT_COLUMNS = "qs_layout_columns";
+
+        /** @hide */
+        private static final Validator QS_LAYOUT_COLUMNS_VALIDATOR =
+              new SettingsValidators.InclusiveIntegerRangeValidator(3, 8);
+
+        /**
+         * Number of qs columns on landscape orientation
+         * @hide
+         */
+        public static final String QS_LAYOUT_COLUMNS_LANDSCAPE = "qs_layout_columns_landscape";
+
+        /** @hide */
+        private static final Validator QS_LAYOUT_COLUMNS_LANDSCAPE_VALIDATOR =
+              new SettingsValidators.InclusiveIntegerRangeValidator(3, 8);
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4825,6 +4844,8 @@ public final class Settings {
             VOLUME_KEY_CURSOR_CONTROL,
             LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR,
             LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR,
+            QS_LAYOUT_COLUMNS,
+            QS_LAYOUT_COLUMNS_LANDSCAPE,
         };
 
         /**
@@ -4952,6 +4973,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(VOLUME_KEY_CURSOR_CONTROL);
             PRIVATE_SETTINGS.add(LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR);
             PRIVATE_SETTINGS.add(LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR);
+            PRIVATE_SETTINGS.add(QS_LAYOUT_COLUMNS);
+            PRIVATE_SETTINGS.add(QS_LAYOUT_COLUMNS_LANDSCAPE);
         }
 
         /**
@@ -5057,6 +5080,8 @@ public final class Settings {
                     LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR_VALIDATOR);
             VALIDATORS.put(LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR,
                     LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR_VALIDATOR);
+            VALIDATORS.put(QS_LAYOUT_COLUMNS, QS_LAYOUT_COLUMNS_VALIDATOR);
+            VALIDATORS.put(QS_LAYOUT_COLUMNS_LANDSCAPE, QS_LAYOUT_COLUMNS_LANDSCAPE_VALIDATOR);
         }
 
         /**
