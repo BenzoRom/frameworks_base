@@ -19,7 +19,7 @@
     <color name="foreground_material_dark">@color/white</color>
     <color name="foreground_material_light">@color/black</color>
 
-    <color name="background_material_dark">@color/material_grey_850</color>
+    <color name="background_material_dark">#ff1c1e20</color>
     <color name="background_material_light">@color/material_grey_50</color>
     <color name="background_floating_material_dark">@color/material_grey_800</color>
     <color name="background_floating_material_light">@color/white</color>

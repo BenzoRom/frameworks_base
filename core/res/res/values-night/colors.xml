@@ -24,10 +24,10 @@
     <!-- The secondary text color if the text is on top of a dark background. -->
     <color name="notification_secondary_text_color_dark">#b2ffffff</color>
 
-    <color name="notification_default_color_dark">#ddffffff</color>
+    <color name="notification_default_color_dark">#dd1c1e20</color>
 
     <!-- The background color of a notification card. -->
-    <color name="notification_material_background_color">@color/black</color>
+    <color name="notification_material_background_color">#ff1c1e20</color>
 
     <color name="chooser_row_divider">@color/list_divider_color_dark</color>
     <color name="chooser_gradient_background">@color/loading_gradient_background_color_dark</color>
