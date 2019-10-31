@@ -224,9 +224,6 @@ cc_defaults {
         "protos/graphicsstats.proto",
     ],
 
-    // Allow implicit fallthroughs in HardwareBitmapUploader.cpp until they are fixed.
-    cppflags: ["-Wno-implicit-fallthrough"],
-
     proto: {
         export_proto_headers: true,
     },
