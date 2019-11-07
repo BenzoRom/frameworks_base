@@ -20,12 +20,6 @@ import static android.app.StatusBarManager.DISABLE2_QUICK_SETTINGS;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -34,7 +28,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import com.android.settingslib.development.DevelopmentSettingsEnabler;
 import com.android.systemui.R;
 
 /**
@@ -58,15 +51,6 @@ public class QSFooterView extends FrameLayout {
     @Nullable
     private OnClickListener mExpandClickListener;
 
-    private final ContentObserver mDeveloperSettingsObserver = new ContentObserver(
-            new Handler(mContext.getMainLooper())) {
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            super.onChange(selfChange, uri);
-            setBuildText();
-        }
-    };
-
     public QSFooterView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -76,29 +60,12 @@ public class QSFooterView extends FrameLayout {
         super.onFinishInflate();
         mPageIndicator = findViewById(R.id.footer_page_indicator);
         mBuildText = findViewById(R.id.build);
+        mBuildText.setText(null);
+        mBuildText.setSelected(false);
         mEditButton = findViewById(android.R.id.edit);
 
         updateResources();
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
-        setBuildText();
-    }
-
-    private void setBuildText() {
-        if (mBuildText == null) return;
-        if (DevelopmentSettingsEnabler.isDevelopmentSettingsEnabled(mContext)) {
-            mBuildText.setText(mContext.getString(
-                    com.android.internal.R.string.bugreport_status,
-                    Build.VERSION.RELEASE_OR_CODENAME,
-                    Build.ID));
-            // Set as selected for marquee before its made visible, then it won't be announced when
-            // it's made visible.
-            mBuildText.setSelected(true);
-            mShouldShowBuildText = true;
-        } else {
-            mBuildText.setText(null);
-            mShouldShowBuildText = false;
-            mBuildText.setSelected(false);
-        }
     }
 
     @Override
@@ -154,15 +121,11 @@ public class QSFooterView extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mContext.getContentResolver().registerContentObserver(
-                Settings.Global.getUriFor(Settings.Global.DEVELOPMENT_SETTINGS_ENABLED), false,
-                mDeveloperSettingsObserver, UserHandle.USER_ALL);
     }
 
     @Override
     @VisibleForTesting
     public void onDetachedFromWindow() {
-        mContext.getContentResolver().unregisterContentObserver(mDeveloperSettingsObserver);
         super.onDetachedFromWindow();
     }
 
@@ -182,10 +145,10 @@ public class QSFooterView extends FrameLayout {
     }
 
     private void updateClickabilities() {
-        mBuildText.setLongClickable(mBuildText.getVisibility() == View.VISIBLE);
+        mBuildText.setLongClickable(false);
     }
 
     private void updateVisibilities() {
-        mBuildText.setVisibility(mExpanded && mShouldShowBuildText ? View.VISIBLE : View.INVISIBLE);
+        mBuildText.setVisibility(View.INVISIBLE);
     }
 }
