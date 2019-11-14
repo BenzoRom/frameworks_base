@@ -154,6 +154,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     private static final String GLOBAL_ACTION_KEY_SCREENSHOT = "screenshot";
     private static final String GLOBAL_ACTION_KEY_REBOOT_RECOVERY = "reboot_recovery";
     private static final String GLOBAL_ACTION_KEY_REBOOT_BOOTLOADER = "reboot_bootloader";
+    private static final String GLOBAL_ACTION_KEY_REBOOT_FASTBOOT = "reboot_fastboot";
     private static final String GLOBAL_ACTION_KEY_SCREENRECORD = "screenrecord";
     private static final String GLOBAL_ACTION_KEY_FLASHLIGHT = "flashlight";
     private static final String GLOBAL_ACTION_KEY_ONTHEGO = "onthego";
@@ -357,6 +358,8 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                 items.add(new RebootRecoveryAction());
             } else if (GLOBAL_ACTION_KEY_REBOOT_BOOTLOADER.equals(actionKey)) {
                 items.add(new RebootBootloaderAction());
+            } else if (GLOBAL_ACTION_KEY_REBOOT_FASTBOOT.equals(actionKey)) {
+                items.add(new RebootFastbootAction());
             }
         }
         return items;
@@ -493,6 +496,9 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             } else if (GLOBAL_ACTION_KEY_REBOOT_BOOTLOADER.equals(actionKey) &&
                     isAdvancedRebootPossible(mContext)) {
                 mItems.add(new RebootBootloaderAction());
+            } else if (GLOBAL_ACTION_KEY_REBOOT_FASTBOOT.equals(actionKey) &&
+                    isAdvancedRebootPossible(mContext)) {
+                mItems.add(new RebootFastbootAction());
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.GLOBAL_ACTIONS_SCREENSHOT, 0) == 1) {
@@ -798,6 +804,33 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         }
     }
 
+
+    private final class RebootFastbootAction extends SinglePressAction {
+        private RebootFastbootAction() {
+            super(com.android.systemui.R.drawable.ic_lock_restart_fastboot,
+                    com.android.systemui.R.string.global_action_reboot_fastboot);
+        }
+
+        @Override
+        public boolean showDuringKeyguard() {
+            return true;
+        }
+
+        @Override
+        public boolean showDuringRestrictedKeyguard() {
+            return false;
+        }
+
+        @Override
+        public boolean showBeforeProvisioning() {
+            return true;
+        }
+
+        @Override
+        public void onPress() {
+            mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_FASTBOOT);
+        }
+    }
 
     private Action getFlashlightToggleAction() {
         return new SinglePressAction(com.android.systemui.R.drawable.ic_lock_flashlight,

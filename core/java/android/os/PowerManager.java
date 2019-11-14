@@ -544,6 +544,13 @@ public final class PowerManager {
     public static final String REBOOT_RECOVERY_UPDATE = "recovery-update";
 
     /**
+     * The value to pass as the 'reason' argument to reboot() to
+     * reboot into fastboot mode
+     * @hide
+     */
+    public static final String REBOOT_FASTBOOT = "fastboot";
+
+    /**
      * The value to pass as the 'reason' argument to reboot() when device owner requests a reboot on
      * the device.
      * @hide

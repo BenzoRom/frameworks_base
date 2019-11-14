@@ -136,6 +136,9 @@ public class GlobalActionsImpl implements GlobalActions, CommandQueue.Callbacks 
                 } else if (PowerManager.REBOOT_BOOTLOADER.equals(reason)) {
                     message.setText(
                             com.android.systemui.R.string.global_action_reboot_bootloader_progress);
+                } else if (PowerManager.REBOOT_FASTBOOT.equals(reason)) {
+                    message.setText(
+                            com.android.systemui.R.string.global_action_reboot_fastboot_progress);
                 }
             } else {
                 message.setText(com.android.systemui.R.string.global_action_reboot_progress);
