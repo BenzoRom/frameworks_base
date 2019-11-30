@@ -104,5 +104,7 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
         Settings.System.STATUS_BAR_CLOCK,
         Settings.System.STATUS_BAR_AM_PM,
+        Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT,
+        Settings.System.STATUS_BAR_BATTERY_STYLE,
     };
 }
