@@ -113,4 +113,6 @@ interface IStatusBarService
     // Used to disable keyboard rotation
     void setAutoRotate(boolean enabled);
     void toggleCameraFlash();
+    // Used to block or unblock usage of gestural navigation
+    void setBlockedGesturalNavigation(boolean blocked);
 }
