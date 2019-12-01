@@ -1996,6 +1996,13 @@ public class StatusBar extends SystemUI implements DemoMode,
         mUserSetup = userSetup;
     }
 
+    @Override
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        if (getNavigationBarView() != null) {
+            getNavigationBarView().setBlockedGesturalNavigation(blocked);
+        }
+    }
+
     /**
      * All changes to the status bar and notifications funnel through here and are batched.
      */

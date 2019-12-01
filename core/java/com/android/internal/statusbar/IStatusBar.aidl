@@ -146,6 +146,8 @@ oneway interface IStatusBar
     void onBiometricError(int modality, int error, int vendorCode);
     // Used to hide the authentication dialog, e.g. when the application cancels authentication
     void hideAuthenticationDialog();
+    // Used to block or unblock usage of gestural navigation
+    void setBlockedGesturalNavigation(boolean blocked);
 
     /**
      * Notifies System UI that the display is ready to show system decorations.
