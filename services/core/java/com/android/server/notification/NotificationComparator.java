@@ -40,12 +40,15 @@ public class NotificationComparator
     private final Context mContext;
     private final NotificationMessagingUtil mMessagingUtil;
     private String mDefaultPhoneApp;
+    private int mNotificationInterruptionModel;
 
     public NotificationComparator(Context context) {
         mContext = context;
         mContext.registerReceiver(mPhoneAppBroadcastReceiver,
                 new IntentFilter(TelecomManager.ACTION_DEFAULT_DIALER_CHANGED));
         mMessagingUtil = new NotificationMessagingUtil(mContext);
+        mNotificationInterruptionModel = Settings.Secure.getInt(mContext.getContentResolver(),
+        Settings.Secure.NOTIFICATION_NEW_INTERRUPTION_MODEL, 1);
     }
 
     @Override
@@ -57,8 +60,7 @@ public class NotificationComparator
 
         // With new interruption model, prefer importance bucket above all other criteria
         // (to ensure buckets are contiguous)
-        if (Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.NOTIFICATION_NEW_INTERRUPTION_MODEL, 1) == 1) {
+        if (mNotificationInterruptionModel == 1) {
             if (isLeftHighImportance != isRightHighImportance) {
                 // by importance bucket, high importance higher than low importance
                 return -1 * Boolean.compare(isLeftHighImportance, isRightHighImportance);
@@ -137,6 +139,11 @@ public class NotificationComparator
 
         // then break ties by time, most recent first
         return -1 * Long.compare(left.getRankingTimeMs(), right.getRankingTimeMs());
+    }
+
+    public void updateInterruptionModel() {
+        mNotificationInterruptionModel = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.NOTIFICATION_NEW_INTERRUPTION_MODEL, 1);
     }
 
     private boolean isImportantColorized(NotificationRecord record) {

@@ -159,6 +159,10 @@ public class RankingHelper {
         return Collections.binarySearch(notificationList, target, mFinalComparator);
     }
 
+    public void updateInterruptionModel() {
+        mPreliminaryComparator.updateInterruptionModel();
+    }
+
     public void dump(PrintWriter pw, String prefix,
             @NonNull NotificationManagerService.DumpFilter filter) {
         final int N = mSignalExtractors.length;
