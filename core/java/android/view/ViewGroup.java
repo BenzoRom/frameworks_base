@@ -3699,7 +3699,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     private static View getAndVerifyPreorderedView(ArrayList<View> preorderedList, View[] children,
             int childIndex) {
         final View child;
-        if (preorderedList != null) {
+        if (preorderedList != null && !preorderedList.isEmpty()) {
             child = preorderedList.get(childIndex);
             if (child == null) {
                 throw new RuntimeException("Invalid preorderedList contained null child at index "
