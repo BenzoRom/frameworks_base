@@ -569,10 +569,11 @@ public class NotificationPanelView extends PanelView implements
     @Override
     public void onTuningChanged(String key, String newValue) {
         if (STATUS_BAR_QUICK_QS_PULLDOWN.equals(key)) {
-            mOneFingerQuickSettingsIntercept = 1;
             try {
                 mOneFingerQuickSettingsIntercept = Integer.parseInt(newValue);
-            } catch (NumberFormatException ex) {}
+            } catch (NumberFormatException ex) {
+                mOneFingerQuickSettingsIntercept = 1;
+            }
         }
     }
 
