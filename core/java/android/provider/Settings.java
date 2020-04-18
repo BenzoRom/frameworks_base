@@ -9431,6 +9431,17 @@ public final class Settings {
         public static final String ADB_PORT = "adb_port";
 
         /**
+         * Wheter to have transparent background on lockscreen notifications
+         *
+         * @hide
+         */
+        public static final String LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED =
+                "lock_screen_transparent_notifications_enabled";
+
+        private static final Validator LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -9572,7 +9583,8 @@ public final class Settings {
             TORCH_POWER_BUTTON_GESTURE,
             LOCKSCREEN_VISUALIZER_ENABLED,
             VOLUME_LINK_NOTIFICATION,
-            POWER_MENU_HIDE_ON_SECURE
+            POWER_MENU_HIDE_ON_SECURE,
+            LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED
         };
 
         /**
@@ -9776,6 +9788,8 @@ public final class Settings {
             VALIDATORS.put(LOCKSCREEN_VISUALIZER_ENABLED, LOCKSCREEN_VISUALIZER_ENABLED_VALIDATOR);
             VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
             VALIDATORS.put(POWER_MENU_HIDE_ON_SECURE, POWER_MENU_HIDE_ON_SECURE_VALIDATOR);
+            VALIDATORS.put(LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED,
+                    LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED_VALIDATOR);
         }
 
         /**
