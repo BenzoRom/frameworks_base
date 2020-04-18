@@ -170,6 +170,7 @@ public class SecureSettings {
         Settings.Secure.ADAPTIVE_CONNECTIVITY_ENABLED,
         Settings.Secure.ASSIST_HANDLES_LEARNING_TIME_ELAPSED_MILLIS,
         Settings.Secure.ASSIST_HANDLES_LEARNING_EVENT_COUNT,
-        Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE
+        Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE,
+        Settings.Secure.LOCK_SCREEN_TRANSPARENT_NOTIFICATIONS_ENABLED
     };
 }
