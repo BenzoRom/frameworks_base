@@ -274,7 +274,7 @@ public class Clock extends TextView implements
         updateClockVisibility();
     }
 
-    private boolean shouldBeVisible() {
+    public boolean shouldBeVisible() {
         return mClockVisibleByPolicy && mClockVisibleByUser;
     }
 
