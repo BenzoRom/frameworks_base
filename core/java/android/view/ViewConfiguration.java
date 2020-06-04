@@ -64,8 +64,9 @@ public class ViewConfiguration {
     /**
      * Defines the default duration in milliseconds before a press turns into
      * a long press
+     * @hide
      */
-    private static final int DEFAULT_LONG_PRESS_TIMEOUT = 250;
+    public static final int DEFAULT_LONG_PRESS_TIMEOUT = 400;
 
     /**
      * Defines the default duration in milliseconds between the first tap's up event and the second
@@ -115,7 +116,7 @@ public class ViewConfiguration {
      * is a jump tap. If the user does not complete the jump tap within this interval, it is
      * considered to be a tap.
      */
-    private static final int JUMP_TAP_TIMEOUT = 250;
+    private static final int JUMP_TAP_TIMEOUT = 500;
 
     /**
      * Defines the duration in milliseconds between the first tap's up event and
