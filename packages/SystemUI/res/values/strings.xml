@@ -770,13 +770,13 @@
     <!-- QuickSettings: Brightness [CHAR LIMIT=NONE] -->
     <string name="quick_settings_brightness_label">Brightness</string>
     <!-- QuickSettings: Rotation Unlocked [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_rotation_unlocked_label">Auto-rotate</string>
+    <string name="quick_settings_rotation_unlocked_label">Auto-Rotate</string>
     <!-- Accessibility label for Auto-ratate QuickSettings tile [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_rotation">Auto-rotate screen</string>
     <!-- Accessibility label for value of Auto-ratate QuickSettings tile [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_rotation_value"><xliff:g name="rotation" example="Portrait">%s</xliff:g> mode</string>
     <!-- QuickSettings: Rotation Locked [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_rotation_locked_label">Rotation locked</string>
+    <string name="quick_settings_rotation_locked_label">Rotation Locked</string>
     <!-- QuickSettings: Locked to Portrait [CHAR LIMIT=NONE] -->
     <string name="quick_settings_rotation_locked_portrait_label">Portrait</string>
     <!-- QuickSettings: Locked to Landscape [CHAR LIMIT=NONE] -->
@@ -834,7 +834,7 @@
     <!-- QuickSettings: Brightness dialog auto brightness button [CHAR LIMIT=NONE] -->
     <string name="quick_settings_brightness_dialog_auto_brightness_label">AUTO</string>
     <!-- QuickSettings: Label for the toggle that controls whether display inversion is enabled. [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_inversion_label">Invert colors</string>
+    <string name="quick_settings_inversion_label">Invert Colors</string>
     <!-- QuickSettings: Label for the toggle that controls whether display color correction is enabled. [CHAR LIMIT=NONE] -->
     <string name="quick_settings_color_space_label">Color correction mode</string>
     <!-- QuickSettings: Control panel: Label for button that navigates to settings. [CHAR LIMIT=NONE] -->
@@ -866,7 +866,7 @@
     <!-- QuickSettings: Flashlight [CHAR LIMIT=NONE] -->
     <string name="quick_settings_flashlight_label">Flashlight</string>
     <!-- QuickSettings: Cellular detail panel title [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_cellular_detail_title">Mobile data</string>
+    <string name="quick_settings_cellular_detail_title">Mobile Data</string>
     <!-- QuickSettings: Cellular detail panel, data usage title [CHAR LIMIT=NONE] -->
     <string name="quick_settings_cellular_detail_data_usage">Data usage</string>
     <!-- QuickSettings: Cellular detail panel, remaining data title [CHAR LIMIT=NONE] -->
@@ -883,7 +883,7 @@
     the top of their phone's screen. This is a label for a toggle to turn the work profile on and
     off. "Work profile" means a separate profile on a user's phone that's specifically for their
     work apps and managed by their company. "Work" is used as an adjective. [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_work_mode_label">Work profile</string>
+    <string name="quick_settings_work_mode_label">Work Profile</string>
     <!-- QuickSettings: Label for the toggle to activate Night display (renamed "Night Light" with title caps). [CHAR LIMIT=20] -->
     <string name="quick_settings_night_display_label">Night Light</string>
     <!-- QuickSettings: Secondary text for when the Night Light will be enabled at sunset. [CHAR LIMIT=20] -->
@@ -895,7 +895,7 @@
     <!-- QuickSettings: Secondary text for when the Night Light or some other tile will be on until some user-selected time. [CHAR LIMIT=20] -->
     <string name="quick_settings_secondary_label_until">Until <xliff:g id="time" example="7 am">%s</xliff:g></string>
     <!-- QuickSettings: Label for the toggle to activate dark theme (A.K.A Dark Mode). [CHAR LIMIT=20] -->
-    <string name="quick_settings_ui_mode_night_label">Dark theme</string>
+    <string name="quick_settings_ui_mode_night_label">Dark Theme</string>
     <!-- QuickSettings: Secondary text for the dark theme tile when enabled by battery saver. [CHAR LIMIT=20] -->
     <string name="quick_settings_dark_mode_secondary_label_battery_saver">Battery Saver</string>
     <!-- QuickSettings: Secondary text for when the Dark Mode will be enabled at sunset. [CHAR LIMIT=20] -->
