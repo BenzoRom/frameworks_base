@@ -278,7 +278,7 @@ public final class DirectStatementService extends Service {
                         failedSources.add(source.toJson());
                         allSourcesVerified = false;
                     }
-                } catch (AssociationServiceException e) {
+                } catch (Exception e) {
                     failedSources.add(source.toJson());
                     allSourcesVerified = false;
                 }
