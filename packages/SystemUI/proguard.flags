@@ -57,3 +57,5 @@
 -keep class com.android.systemui.dagger.GlobalRootComponent$SysUIComponentImpl { *; }
 -keep class com.android.systemui.dagger.Dagger** { *; }
 -keep class com.android.systemui.tv.Dagger** { *; }
+
+-keep class com.benzorom.systemui.BenzoSystemUIFactory
