@@ -27,10 +27,10 @@
         <item name="forceDarkAllowed">false</item>
 
         <!-- QS panel background -->
-        <item name="colorBackgroundFloating">#ff1c1e20</item>
+        <item name="colorBackgroundFloating">@color/black</item>
 
         <!-- volume background -->
-        <item name="panelColorBackground">#ff2a2c31</item>
+        <item name="panelColorBackground">@color/material_grey_800</item>
     </style>
 
     <style name="Theme.DeviceDefault.QuickSettings.Dialog" parent="Theme.DeviceDefault.Dialog" />
