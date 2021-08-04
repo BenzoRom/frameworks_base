@@ -148,13 +148,14 @@ public class SubscriptionInfo implements Parcelable {
 
     /**
      * The access rules for this subscription, if it is embedded and defines any.
+     * This does not include access rules for non-embedded subscriptions.
      */
     @Nullable
     private UiccAccessRule[] mNativeAccessRules;
 
     /**
      * The carrier certificates for this subscription that are saved in carrier configs.
-     * The other carrier certificates are embedded on Uicc and stored as part of mNativeAccessRules.
+     * This does not include access rules from the Uicc, whether embedded or non-embedded.
      */
     @Nullable
     private UiccAccessRule[] mCarrierConfigAccessRules;
@@ -568,6 +569,13 @@ public class SubscriptionInfo implements Parcelable {
     /**
      * @hide
      */
+    public void clearGroupUuid() {
+        this.mGroupUUID = null;
+    }
+
+    /**
+     * @hide
+     */
     public List<String> getEhplmns() {
         return mEhplmns == null ? Collections.emptyList() : Arrays.asList(mEhplmns);
     }
@@ -661,7 +669,6 @@ public class SubscriptionInfo implements Parcelable {
      * is authorized to manage this subscription.
      * TODO and fix it properly in R / master: either deprecate this and have 3 APIs
      *  native + carrier + all, or have this return all by default.
-     * @throws UnsupportedOperationException if this subscription is not embedded.
      * @hide
      */
     @SystemApi
