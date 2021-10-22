@@ -193,6 +193,7 @@ public class SecureSettings {
         Settings.Secure.LOCKSCREEN_SHOW_WALLET,
         Settings.Secure.ADVANCED_REBOOT,
         Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE,
+        Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE_DURATION,
         Settings.Secure.QUICK_SETTINGS_TILES_ANIM_STYLE,
         Settings.Secure.QUICK_SETTINGS_TILES_ANIM_DURATION,
         Settings.Secure.QUICK_SETTINGS_TILES_ANIM_DURATION,
