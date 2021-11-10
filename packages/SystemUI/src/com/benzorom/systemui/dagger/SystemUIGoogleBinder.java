@@ -16,6 +16,8 @@
 
 package com.benzorom.systemui.dagger;
 
+import android.app.Activity;
+import android.app.Service;
 import com.android.systemui.LatencyTester;
 import com.android.systemui.ScreenDecorations;
 import com.android.systemui.SliceBroadcastRelayHandler;
@@ -23,6 +25,7 @@ import com.android.systemui.SystemUI;
 import com.android.systemui.accessibility.SystemActions;
 import com.android.systemui.accessibility.WindowMagnification;
 import com.android.systemui.biometrics.AuthController;
+import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.globalactions.GlobalActionsComponent;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.keyguard.dagger.KeyguardModule;
@@ -42,6 +45,12 @@ import com.android.systemui.toast.ToastUI;
 import com.android.systemui.util.leak.GarbageMonitor;
 import com.android.systemui.volume.VolumeUI;
 import com.android.systemui.wmshell.WMShell;
+import com.google.android.systemui.gamedashboard.GameMenuActivity;
+import com.google.android.systemui.theme.ThemeOverlayControllerGoogle;
+import com.benzorom.systemui.GoogleServices;
+import com.benzorom.systemui.columbus.ColumbusTargetRequestServiceWrapper;
+import com.benzorom.systemui.gamedashboard.GameMenuActivityWrapper;
+import com.benzorom.systemui.statusbar.phone.StatusBarGoogle;
 
 import dagger.Binds;
 import dagger.Module;
@@ -160,7 +169,7 @@ public abstract class SystemUIGoogleBinder {
     @Binds
     @IntoMap
     @ClassKey(ThemeOverlayController.class)
-    public abstract SystemUI bindThemeOverlayController(ThemeOverlayController sysui);
+    public abstract SystemUI bindThemeOverlayController(ThemeOverlayControllerGoogle sysui);
 
     /**
      * Inject into ToastUI.
@@ -225,4 +234,36 @@ public abstract class SystemUIGoogleBinder {
     @IntoMap
     @ClassKey(HomeSoundEffectController.class)
     public abstract SystemUI bindHomeSoundEffectController(HomeSoundEffectController sysui);
+
+    /**
+     * Inject into GoogleServices.
+     */
+    @Binds
+    @IntoMap
+    @ClassKey(GoogleServices.class)
+    public abstract SystemUI bindGoogleServices(GoogleServices sysui);
+
+    /**
+     * Inject into StatusBarGoogle.
+     */
+    @Binds
+    @IntoMap
+    @ClassKey(StatusBarGoogle.class)
+    public abstract SystemUI bindStatusBarGoogle(StatusBarGoogle sysui);
+
+    /**
+     * Inject into GameMenuActivity.
+     */
+    @Binds
+    @IntoMap
+    @ClassKey(GameMenuActivityWrapper.class)
+    public abstract Activity bindGameMenuActivity(GameMenuActivityWrapper activity);
+
+    /**
+     * Inject into GameMenuActivity.
+     */
+    @Binds
+    @IntoMap
+    @ClassKey(ColumbusTargetRequestServiceWrapper.class)
+    public abstract Service bindColumbusTargetRequestService(ColumbusTargetRequestServiceWrapper activity);
 }

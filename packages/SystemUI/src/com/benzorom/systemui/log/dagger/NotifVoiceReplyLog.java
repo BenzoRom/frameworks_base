@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package com.benzorom.systemui.power.dagger;
+package com.benzorom.systemui.log.dagger;
 
-import com.android.systemui.power.PowerNotificationWarnings;
-import com.android.systemui.power.PowerUI;
-import com.google.android.systemui.power.PowerNotificationWarningsGoogleImpl;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import dagger.Binds;
-import dagger.Module;
+import com.android.systemui.log.LogBuffer;
 
-@Module
-public interface PowerModuleGoogle {
-    @Binds
-    PowerUI.WarningsUI provideWarningsUi(PowerNotificationWarningsGoogleImpl controllerImpl);
-}
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+
+import javax.inject.Qualifier;
+
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+public @interface NotifVoiceReplyLog { }

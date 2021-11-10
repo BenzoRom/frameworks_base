@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package com.benzorom.systemui.qs.dagger;
+package com.benzorom.systemui.statusbar.phone;
 
 import static com.android.systemui.qs.dagger.QSFlagsModule.RBC_AVAILABLE;
 
 import android.content.Context;
 import android.hardware.display.NightDisplayListener;
+import android.os.Build;
 import android.os.Handler;
 
 import com.android.systemui.dagger.qualifiers.Background;
-import com.android.systemui.media.dagger.MediaModule;
 import com.android.systemui.qs.AutoAddTracker;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.qs.ReduceBrightColorsController;
-import com.android.systemui.qs.dagger.QSFlagsModule;
-import com.android.systemui.qs.dagger.QSFragmentComponent;
 import com.android.systemui.statusbar.phone.AutoTileManager;
 import com.android.systemui.statusbar.phone.ManagedProfileController;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -39,20 +36,26 @@ import com.android.systemui.statusbar.policy.DeviceControlsController;
 import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.WalletController;
 import com.android.systemui.util.settings.SecureSettings;
-import com.benzorom.systemui.statusbar.phone.AutoTileManagerGoogle;
-
-import dagger.Binds;
-import dagger.Module;
-import dagger.Provides;
 
 import javax.inject.Named;
 
-@Module(subcomponents = {QSFragmentComponent.class},
-        includes = {MediaModule.class, QSFlagsModule.class})
-public interface QSModuleGoogle {
+public class AutoTileManagerGoogle extends AutoTileManager {
 
-    @Provides
-    static AutoTileManager provideAutoTileManager(
+    private final BatteryController mBatteryController;
+
+    private final BatteryController.BatteryStateChangeCallback mBatteryControllerCallback =
+        new BatteryController.BatteryStateChangeCallback() {
+            @Override
+            public void onReverseChanged(boolean isReverse, int level, String name) {
+                if (!mAutoTracker.isAdded("reverse") && isReverse) {
+                    mHost.addTile("reverse");
+                    mAutoTracker.setTileAdded("reverse");
+                    mHandler.post(() -> mBatteryController.removeCallback(mBatteryControllerCallback));
+                }
+            }
+        };
+
+    public AutoTileManagerGoogle(
             Context context,
             AutoAddTracker.Builder autoAddTrackerBuilder,
             QSTileHost host,
@@ -68,27 +71,33 @@ public interface QSModuleGoogle {
             DeviceControlsController deviceControlsController,
             WalletController walletController,
             @Named(RBC_AVAILABLE) boolean isReduceBrightColorsAvailable) {
-        AutoTileManagerGoogle manager = new AutoTileManagerGoogle(
-                context,
-                autoAddTrackerBuilder,
-                host,
-                handler,
-                secureSettings,
-                hotspotController,
-                dataSaverController,
-                managedProfileController,
-                nightDisplayListener,
-                castController,
-                batteryController,
-                reduceBrightColorsController,
-                deviceControlsController,
-                walletController,
-                isReduceBrightColorsAvailable
-        );
-        manager.init();
-        return manager;
+        super(context, autoAddTrackerBuilder, host, handler, secureSettings,
+                hotspotController, dataSaverController, managedProfileController,
+                nightDisplayListener, castController, reduceBrightColorsController,
+                deviceControlsController, walletController, isReduceBrightColorsAvailable);
+        mBatteryController = batteryController;
     }
 
-    @Binds
-    QSHost provideQsHost(QSTileHost controllerImpl);
+    @Override
+    public void init() {
+        super.init();
+        if (!mAutoTracker.isAdded("ott") && Build.IS_DEBUGGABLE) {
+            mAutoTracker.setTileAdded("ott");
+            mHost.addTile("ott");
+        }
+    }
+
+    @Override
+    public void startControllersAndSettingsListeners() {
+        super.startControllersAndSettingsListeners();
+        if (!mAutoTracker.isAdded("reverse")) {
+            mBatteryController.addCallback(mBatteryControllerCallback);
+        }
+    }
+
+    @Override
+    public void stopListening() {
+        super.stopListening();
+        mBatteryController.removeCallback(mBatteryControllerCallback);
+    }
 }

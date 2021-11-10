@@ -21,6 +21,8 @@ import com.android.systemui.dagger.DependencyProvider;
 import com.android.systemui.dagger.SysUIComponent;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.SystemUIModule;
+import com.google.android.systemui.smartspace.KeyguardSmartspaceController;
+import com.benzorom.systemui.keyguard.KeyguardSliceProviderGoogle;
 
 import dagger.Subcomponent;
 
@@ -28,6 +30,7 @@ import dagger.Subcomponent;
 @Subcomponent(modules = {
         DefaultComponentBinder.class,
         DependencyProvider.class,
+        SystemUIGoogleDependencyProvider.class,
         SystemUIGoogleBinder.class,
         SystemUIModule.class,
         SystemUIGoogleModule.class})
@@ -36,4 +39,9 @@ public interface SysUIGoogleSysUIComponent extends SysUIComponent {
     interface Builder extends SysUIComponent.Builder {
         SysUIGoogleSysUIComponent build();
     }
+
+    @SysUISingleton
+    KeyguardSmartspaceController createKeyguardSmartspaceController();
+
+    void inject(KeyguardSliceProviderGoogle keyguardSliceProvider);
 }

@@ -18,4 +18,9 @@
     <!-- SystemUI flags -->
     <bool name="flag_monet">true</bool>
     <bool name="flag_smartspace">true</bool>
+
+    <!-- SystemUI Components -->
+    <string name="config_statusBarComponent" translatable="false">com.benzorom.systemui.statusbar.phone.StatusBarGoogle</string>
+    <string name="config_systemUIFactoryComponent" translatable="false">com.benzorom.systemui.SystemUIGoogleFactory</string>
+    <string name="config_systemUIVendorServiceComponent" translatable="false">com.benzorom.systemui.GoogleServices</string>
 </resources>

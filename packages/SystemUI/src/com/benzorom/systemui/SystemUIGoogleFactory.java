@@ -18,10 +18,20 @@
 package com.benzorom.systemui;
 
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.os.Handler;
 
 import com.android.systemui.SystemUIFactory;
 import com.android.systemui.dagger.GlobalRootComponent;
+import com.android.systemui.navigationbar.gestural.BackGestureTfClassifierProvider;
+import com.android.systemui.screenshot.ScreenshotNotificationSmartActionsProvider;
+import com.benzorom.systemui.dagger.SysUIGoogleSysUIComponent;
 import com.benzorom.systemui.dagger.DaggerSysUIGoogleGlobalRootComponent;
+import com.google.android.systemui.gesture.BackGestureTfClassifierProviderGoogle;
+import com.google.android.systemui.screenshot.ScreenshotNotificationSmartActionsProviderGoogle;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 public class SystemUIGoogleFactory extends SystemUIFactory {
     @Override
@@ -29,5 +39,27 @@ public class SystemUIGoogleFactory extends SystemUIFactory {
         return DaggerSysUIGoogleGlobalRootComponent.builder()
                 .context(context)
                 .build();
+    }
+
+    @Override
+    public ScreenshotNotificationSmartActionsProvider
+                createScreenshotNotificationSmartActionsProvider(
+                        Context context, Executor executor, Handler uiHandler) {
+        return new ScreenshotNotificationSmartActionsProviderGoogle(context, executor, uiHandler);
+    }
+
+    @Override
+    public BackGestureTfClassifierProvider createBackGestureTfClassifierProvider(
+            AssetManager am, String modelName) {
+        return new BackGestureTfClassifierProviderGoogle(am, modelName);
+    }
+
+    @Override
+    public void init(Context context, boolean fromTest)
+            throws ExecutionException, InterruptedException {
+        super.init(context, fromTest);
+        if (shouldInitializeComponents()) {
+            ((SysUIGoogleSysUIComponent) getSysUIComponent()).createKeyguardSmartspaceController();
+        }
     }
 }

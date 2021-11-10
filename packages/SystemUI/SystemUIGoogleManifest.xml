@@ -69,7 +69,7 @@
             android:exported="true"/>
 
         <service
-            android:name="com.google.android.systemui.columbus.ColumbusTargetRequestService"
+            android:name="com.benzorom.systemui.columbus.ColumbusTargetRequestServiceWrapper"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.systemui.QUICK_TAP_TARGET_REQUEST"/>
@@ -77,13 +77,13 @@
         </service>
 
         <provider
-            android:name="com.google.android.systemui.keyguard.KeyguardSliceProviderGoogle"
+            android:name="com.benzorom.systemui.keyguard.KeyguardSliceProviderGoogle"
             android:authorities="com.android.systemui.keyguard"
             android:enabled="true"
             android:exported="true"/>
 
         <activity
-            android:name="com.google.android.systemui.gamedashboard.GameMenuActivity"
+            android:name="com.benzorom.systemui.gamedashboard.GameMenuActivityWrapper"
             android:theme="@style/GameMenuTheme"
             android:exported="false"
             android:excludeFromRecents="true"
