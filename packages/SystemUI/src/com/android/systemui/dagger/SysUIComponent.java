@@ -38,6 +38,7 @@ import com.android.wm.shell.splitscreen.SplitScreen;
 import com.android.wm.shell.startingsurface.StartingSurface;
 import com.android.wm.shell.tasksurfacehelper.TaskSurfaceHelper;
 import com.android.wm.shell.transition.ShellTransitions;
+import com.benzorom.systemui.dagger.SystemUIBenzoModule;
 
 import java.util.Optional;
 
@@ -53,7 +54,8 @@ import dagger.Subcomponent;
         DependencyProvider.class,
         SystemUIBinder.class,
         SystemUIModule.class,
-        SystemUIDefaultModule.class})
+        SystemUIDefaultModule.class,
+        SystemUIBenzoModule.class})
 public interface SysUIComponent {
 
     /**

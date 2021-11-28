@@ -96,6 +96,7 @@ android_library {
         "jsr330",
         "lottie",
         "tensorflowlite_java",
+        "com.google.hardware.pixel.display-V3-java",
     ],
     manifest: "AndroidManifest.xml",
 
