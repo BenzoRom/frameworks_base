@@ -17,16 +17,21 @@ package com.benzorom.systemui.dagger
 
 import android.content.Context
 import android.hardware.SensorPrivacyManager
+import android.hardware.display.DisplayManager
 import android.hardware.usb.UsbManager
 import android.os.Handler
 import android.os.IThermalService
 import android.os.PowerManager
+import android.os.Process.THREAD_PRIORITY_DISPLAY
+import android.os.Process.setThreadPriority
 import android.os.ServiceManager
 import com.android.keyguard.KeyguardViewController
 import com.android.systemui.R
 import com.android.systemui.Dependency.ALLOW_NOTIFICATION_LONG_PRESS_NAME
 import com.android.systemui.Dependency.LEAK_REPORT_EMAIL_NAME
 import com.android.systemui.assist.AssistManager
+import com.android.systemui.biometrics.AuthController
+import com.android.systemui.biometrics.UdfpsHbmProvider
 import com.android.systemui.broadcast.BroadcastDispatcher
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Background
@@ -52,8 +57,12 @@ import com.android.systemui.statusbar.notification.NotificationEntryManager.Keyg
 import com.android.systemui.statusbar.notification.collection.render.GroupMembershipManager
 import com.android.systemui.statusbar.phone.*
 import com.android.systemui.statusbar.policy.*
+import com.android.systemui.util.concurrency.Execution
 import com.android.systemui.volume.dagger.VolumeModule
 import com.benzorom.systemui.assist.AssistManagerGoogle
+import com.benzorom.systemui.fingerprint.UdfpsGhbmProvider
+import com.benzorom.systemui.fingerprint.UdfpsHbmController
+import com.benzorom.systemui.fingerprint.UdfpsLhbmProvider
 import com.benzorom.systemui.log.dagger.NotifVoiceReplyLog
 import com.benzorom.systemui.power.PowerModuleGoogle
 import com.benzorom.systemui.qs.dagger.QSModuleGoogle
@@ -70,6 +79,7 @@ import com.google.android.systemui.reversecharging.ReverseWirelessCharger
 import com.google.android.systemui.smartspace.BcSmartspaceDataProvider
 import com.google.android.systemui.statusbar.KeyguardIndicationControllerGoogle
 import java.util.*
+import java.util.concurrent.Executors
 import javax.inject.Named
 import dagger.Binds
 import dagger.Module
@@ -206,6 +216,42 @@ abstract class SystemUIGoogleModule {
         ): Recents {
             return Recents(context, recentsImplementation, commandQueue)
         }
+
+        @Provides
+        @SysUISingleton
+        fun provideUdfpsHbmProvider(
+            context: Context,
+            execution: Execution,
+            @Main mainHandler: Handler,
+            ghbmProvider: UdfpsGhbmProvider,
+            lhbmProvider: UdfpsLhbmProvider,
+            authController: AuthController,
+            displayManager: DisplayManager
+        ): UdfpsHbmProvider {
+            return UdfpsHbmController(
+                context,
+                execution,
+                mainHandler,
+                Executors.newSingleThreadExecutor { r ->
+                    Thread {
+                        setThreadPriority(THREAD_PRIORITY_DISPLAY)
+                        r.run()
+                    }
+                },
+                ghbmProvider,
+                lhbmProvider,
+                authController,
+                displayManager
+            )
+        }
+
+        @Provides
+        @SysUISingleton
+        fun provideUdfpsGhbm(): UdfpsGhbmProvider = UdfpsGhbmProvider()
+
+        @Provides
+        @SysUISingleton
+        fun provideUdfpsLhbm(): UdfpsLhbmProvider = UdfpsLhbmProvider()
 
         @Provides
         @SysUISingleton
