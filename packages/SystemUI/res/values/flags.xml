@@ -22,8 +22,6 @@
     <bool name="flag_notification_pipeline2_rendering">false</bool>
     <bool name="flag_notif_updates">true</bool>
 
-    <bool name="flag_monet">false</bool>
-
     <!-- b/171917882 -->
     <bool name="flag_notification_twocolumn">false</bool>
 
@@ -48,8 +46,6 @@
     <bool name="flag_charging_ripple">false</bool>
 
     <bool name="flag_ongoing_call_status_bar_chip">true</bool>
-
-    <bool name="flag_smartspace">false</bool>
 
     <bool name="flag_smartspace_deduping">true</bool>
 
