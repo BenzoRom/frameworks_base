@@ -283,9 +283,7 @@ import com.google.android.systemui.gamedashboard.ShortcutBarController;
 import com.google.android.systemui.gamedashboard.ToastController;
 import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
 import com.google.android.systemui.power.PowerNotificationWarningsGoogleImpl;
-import com.google.android.systemui.qs.tiles.BatterySaverTileGoogle;
 import com.google.android.systemui.qs.tiles.OverlayToggleTile;
-import com.google.android.systemui.qs.tiles.ReverseChargingTile;
 import com.google.android.systemui.reversecharging.ReverseChargingController;
 import com.google.android.systemui.reversecharging.ReverseChargingViewController;
 import com.google.android.systemui.reversecharging.ReverseWirelessCharger;
@@ -412,42 +410,6 @@ public class SystemUIGoogleDependencyProvider {
     @SysUISingleton
     static EnhancedEstimatesGoogleImpl provideEnhancedEstimatesGoogleImpl(Context context) {
         return new EnhancedEstimatesGoogleImpl(context);
-    }
-
-    @Provides
-    @SysUISingleton
-    static ReverseChargingTile provideReverseChargingTile(
-            QSHost host,
-            @Background Looper backgroundLooper,
-            @Main Handler mainHandler,
-            FalsingManager falsingManager,
-            MetricsLogger metricsLogger,
-            StatusBarStateController statusBarStateController,
-            ActivityStarter activityStarter,
-            QSLogger qsLogger,
-            BatteryController batteryController,
-            IThermalService thermalService) {
-        return new ReverseChargingTile(host, backgroundLooper, mainHandler, falsingManager,
-                metricsLogger, statusBarStateController, activityStarter, qsLogger,
-                batteryController, thermalService);
-    }
-
-    @Provides
-    @SysUISingleton
-    static BatterySaverTileGoogle provideBatterySaverTileGoogle(
-            QSHost host,
-            @Background Looper backgroundLooper,
-            @Main Handler handler,
-            FalsingManager falsingManager,
-            MetricsLogger metricsLogger,
-            StatusBarStateController statusBarStateController,
-            ActivityStarter activityStarter,
-            QSLogger qsLogger,
-            BatteryController batteryController,
-            SecureSettings secureSettings) {
-        return new BatterySaverTileGoogle(host, backgroundLooper, mainHandler, falsingManager,
-                metricsLogger, statusBarStateController, activityStarter, qsLogger,
-                batteryController, secureSettings);
     }
 
     @Provides

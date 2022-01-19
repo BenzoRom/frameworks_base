@@ -49,9 +49,9 @@ import com.android.systemui.qs.tiles.UserTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.WorkModeTile;
 import com.android.systemui.util.leak.GarbageMonitor;
-import com.google.android.systemui.qs.tiles.BatterySaverTileGoogle;
+import com.benzorom.systemui.qs.tiles.BatterySaverTileGoogle;
+import com.benzorom.systemui.qs.tiles.ReverseChargingTile;
 import com.google.android.systemui.qs.tiles.OverlayToggleTile;
-import com.google.android.systemui.qs.tiles.ReverseChargingTile;
 
 import dagger.Lazy;
 
@@ -143,10 +143,10 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
     }
 
     private QSTileImpl createTileInternal(String tileSpec) {
-        if (tileSpec.equals("ott")) {
-            return mOverlayToggleTileProvider.get();
-        } else if (tileSpec.equals("reverse")) {
+        if (tileSpec.equals("reverse")) {
             return mReverseChargingTileProvider.get();
+        } else if (tileSpec.equals("battery")) {
+            return mBatterySaverTileGoogleProvider.get();
         }
         return null;
     }
