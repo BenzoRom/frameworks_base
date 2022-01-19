@@ -98,6 +98,8 @@ android_library {
         "lottie",
         "tensorflowlite_java",
         "libSystemUIGoogle",
+        "android.frameworks.stats-V1-java", // For pixelatoms-google-java
+        "pixelatoms-google-java",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["SystemUIGoogleManifest.xml"],

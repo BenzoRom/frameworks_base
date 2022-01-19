@@ -3,3 +3,15 @@ java_import {
     sdk_version: "current",
     jars: ["libSystemUIGoogle.jar"],
 }
+
+java_library {
+    name: "pixelatoms-google-java",
+    sdk_version: "current",
+    srcs: [
+        "pixelatoms-google.proto",
+    ],
+    proto: {
+        type: "lite",
+    },
+    vendor: true,
+}

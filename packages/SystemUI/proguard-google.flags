@@ -5,3 +5,6 @@
 
 -keep class com.benzorom.systemui.SystemUIGoogleFactory
 -keep class com.benzorom.systemui.dagger.Dagger** { *; }
+
+-keep class android.frameworks.stats.** { *; }
+-keep class android.hardware.google.pixel.** { *; }
