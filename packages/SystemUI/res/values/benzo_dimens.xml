@@ -22,4 +22,7 @@
     <!-- CPUInfoService text size. -->
     <dimen name="cpu_info_text_height">12dp</dimen>
 
+    <!-- Power Menu Lite: drawable padding -->
+    <dimen name="global_actions_light_icon_padding">32dp</dimen>
+
 </resources>
