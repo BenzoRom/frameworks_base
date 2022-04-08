@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2021 The Pixel Experience Project
+ * Copyright (C) 2022 Benzo Rom
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.benzorom.systemui.columbus;
 
 import android.content.Context;
@@ -31,24 +31,33 @@ import com.google.android.systemui.columbus.ColumbusStructuredDataManager;
 import javax.inject.Inject;
 
 public class ColumbusTargetRequestServiceWrapper extends ColumbusTargetRequestService {
-
-    private final Context mContext;
-    private final UserTracker mUserTracker;
-    private final ColumbusSettings mColumbusSettings;
-    private final ColumbusStructuredDataManager mColumbusStructuredDataManager;
-    private final UiEventLogger mUiEventLogger;
-    private final Handler mHandler;
-    private final Looper mLooper;
+    private final Context sysUIContext;
+    private final UserTracker userTracker;
+    private final ColumbusSettings columbusSettings;
+    private final ColumbusStructuredDataManager columbusStructuredDataManager;
+    private final UiEventLogger uiEventLogger;
+    @Main
+    private final Handler mainHandler;
+    @Background
+    private final Looper looper;
 
     @Inject
-    public ColumbusTargetRequestServiceWrapper(Context context, UserTracker userTracker, ColumbusSettings columbusSettings, ColumbusStructuredDataManager columbusStructuredDataManager, UiEventLogger uiEventLogger, @Main Handler handler, @Background Looper looper) {
-        super(context, userTracker, columbusSettings, columbusStructuredDataManager, uiEventLogger, handler, looper);
-        mContext = context;
-        mUserTracker = userTracker;
-        mColumbusSettings = columbusSettings;
-        mColumbusStructuredDataManager = columbusStructuredDataManager;
-        mUiEventLogger = uiEventLogger;
-        mHandler = handler;
-        mLooper = looper;
+    public ColumbusTargetRequestServiceWrapper(
+            Context sysUIContext,
+            UserTracker userTracker,
+            ColumbusSettings columbusSettings,
+            ColumbusStructuredDataManager columbusStructuredDataManager,
+            UiEventLogger uiEventLogger,
+            @Main Handler mainHandler,
+            @Background Looper looper) {
+        super(sysUIContext, userTracker, columbusSettings, columbusStructuredDataManager,
+                uiEventLogger, mainHandler, looper);
+        this.sysUIContext = sysUIContext;
+        this.userTracker = userTracker;
+        this.columbusSettings = columbusSettings;
+        this.columbusStructuredDataManager = columbusStructuredDataManager;
+        this.uiEventLogger = uiEventLogger;
+        this.mainHandler = mainHandler;
+        this.looper = looper;
     }
 }

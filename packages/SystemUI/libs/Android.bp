@@ -3,3 +3,16 @@ java_import {
     sdk_version: "32",
     jars: ["libSystemUIGoogle.jar"],
 }
+
+java_library {
+    name: "pixelatoms-google-java",
+    vendor: true,
+    proto: {
+        type: "lite",
+    },
+    srcs: [
+        "pixelatoms-google.proto",
+    ],
+    static_libs: ["libprotobuf-java-nano"],
+    sdk_version: "current",
+}

@@ -123,6 +123,8 @@ android_library {
         "tensorflowlite_java",
         "libSystemUIGoogle",
         "android.frameworks.stats-V1-java",
+        "android.hidl.base-V1.0-java-shallow",
+        "pixelatoms-google-java",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["SystemUIGoogleManifest.xml"],

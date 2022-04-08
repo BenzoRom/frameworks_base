@@ -16,6 +16,6 @@
 -->
 <resources>
     <!-- SystemUI Components -->
-    <string name="config_systemUIFactoryComponent" translatable="false">com.google.android.systemui.SystemUIGoogleFactory</string>
-    <string name="config_systemUIVendorServiceComponent" translatable="false">com.google.android.systemui.GoogleServices</string>
+    <string name="config_systemUIFactoryComponent" translatable="false">com.benzorom.systemui.SystemUIGoogleFactory</string>
+    <string name="config_systemUIVendorServiceComponent" translatable="false">com.benzorom.systemui.GoogleServices</string>
 </resources>
