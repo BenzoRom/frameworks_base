@@ -60,7 +60,6 @@ import com.android.systemui.statusbar.policy.*
 import com.android.systemui.util.concurrency.Execution
 import com.android.systemui.volume.dagger.VolumeModule
 import com.benzorom.systemui.assist.AssistManagerGoogle
-import com.benzorom.systemui.fingerprint.UdfpsGhbmProvider
 import com.benzorom.systemui.fingerprint.UdfpsHbmController
 import com.benzorom.systemui.fingerprint.UdfpsLhbmProvider
 import com.benzorom.systemui.log.dagger.NotifVoiceReplyLog
@@ -223,7 +222,6 @@ abstract class SystemUIGoogleModule {
             context: Context,
             execution: Execution,
             @Main mainHandler: Handler,
-            ghbmProvider: UdfpsGhbmProvider,
             lhbmProvider: UdfpsLhbmProvider,
             authController: AuthController,
             displayManager: DisplayManager
@@ -232,22 +230,17 @@ abstract class SystemUIGoogleModule {
                 context,
                 execution,
                 mainHandler,
-                Executors.newSingleThreadExecutor { r ->
+                Executors.newSingleThreadExecutor {
                     Thread {
                         setThreadPriority(THREAD_PRIORITY_DISPLAY)
-                        r.run()
+                        it.run()
                     }
                 },
-                ghbmProvider,
                 lhbmProvider,
                 authController,
                 displayManager
             )
         }
-
-        @Provides
-        @SysUISingleton
-        fun provideUdfpsGhbm(): UdfpsGhbmProvider = UdfpsGhbmProvider()
 
         @Provides
         @SysUISingleton

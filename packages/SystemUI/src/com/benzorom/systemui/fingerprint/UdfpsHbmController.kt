@@ -17,24 +17,20 @@ package com.benzorom.systemui.fingerprint
 
 import android.content.Context
 import android.hardware.display.DisplayManager
-import android.hardware.fingerprint.IUdfpsHbmListener
-import android.os.Handler
-import android.os.RemoteException
-import android.os.Trace
-import android.os.UserHandle
+import android.os.*
 import android.provider.Settings
-import android.os.SystemProperties
-import android.util.Log
+import android.util.Log.*
 import android.view.Surface
 import com.android.systemui.biometrics.AuthController
 import com.android.systemui.biometrics.UdfpsHbmProvider
-import com.android.systemui.biometrics.UdfpsHbmTypes
 import com.android.systemui.biometrics.UdfpsHbmTypes.HbmType
 import com.android.systemui.dagger.SysUISingleton
+import com.android.systemui.dagger.qualifiers.DisplayId
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.util.concurrency.Execution
 import java.util.concurrent.Executor
 import javax.inject.Inject
+import kotlin.math.max
 
 @SysUISingleton
 class UdfpsHbmController @Inject constructor(
@@ -42,161 +38,24 @@ class UdfpsHbmController @Inject constructor(
     private val execution: Execution,
     @Main private val mainHandler: Handler,
     @Main private val biometricExecutor: Executor,
-    private val ghbmProvider: UdfpsGhbmProvider,
     private val lhbmProvider: UdfpsLhbmProvider,
     private val authController: AuthController,
     private val displayManager: DisplayManager
 ) : UdfpsHbmProvider, DisplayManager.DisplayListener {
-
-    companion object {
-        private const val logTag = "UdfpsHbmController"
-        private const val REFRESH_RATE_GHBM_HZ = 60.0f
-        private const val SECURE_SETTINGS_HBM_TYPE =
-            "com.android.systemui.biometrics.UdfpsSurfaceView.hbmType"
-        @HbmType private val GLOBAL_HBM = UdfpsHbmTypes.GLOBAL_HBM
-        @HbmType private val LOCAL_HBM = UdfpsHbmTypes.LOCAL_HBM
-    }
-
     private var currentRequest: HbmRequest? = null
     private val peakRefreshRate: Float
     override fun onDisplayAdded(displayId: Int) {}
     override fun onDisplayRemoved(displayId: Int) {}
 
-    override fun enableHbm(
-        @HbmType hbmType: Int,
-        surface: Surface?,
-        onHbmEnabled: Runnable?
-    ) {
-        execution.isMainThread()
-        Log.v(logTag, "enableHbm")
-        Trace.beginSection("UdfpsHbmController.enableHbm")
-        if (canEnableHbm(hbmType, surface)) {
-            Trace.beginAsyncSection("UdfpsHbmController.e2e.enableHbm", 0)
-            val hbmRequest = HbmRequest(
-                mainHandler,
-                biometricExecutor,
-                authController,
-                ghbmProvider,
-                lhbmProvider,
-                context.getDisplayId(),
-                hbmType,
-                surface,
-                onHbmEnabled
-            )
-            currentRequest = hbmRequest
-            displayManager.registerDisplayListener(this, mainHandler)
-            try {
-                val udfpsHbmListener: IUdfpsHbmListener?
-                udfpsHbmListener = authController.udfpsHbmListener
-                if (udfpsHbmListener != null) {
-                    udfpsHbmListener.onHbmEnabled(
-                        hbmRequest.hbmType,
-                        hbmRequest.displayId
-                    )
-                }
-                Log.v(
-                    logTag,
-                    "enableHbm | request freeze refresh rate for type: ${hbmRequest.hbmType}"
-                )
-            } catch (ex: RemoteException) {
-                Log.e(logTag, "enableHbm", ex)
-            }
-            if (getRefreshRate(hbmRequest.displayId).equals(
-                    getRequiredRefreshRate(hbmRequest.hbmType)
-                )
-            ) onDisplayChanged(hbmRequest.displayId)
-        }
-        Trace.endSection()
-    }
-
-    private fun canEnableHbm(
-        @HbmType hbmType: Int,
-        surface: Surface?
-    ): Boolean {
-        return if (hbmType != GLOBAL_HBM && hbmType != LOCAL_HBM) {
-            Log.e(logTag, "enableHbm | unsupported hbmType: $hbmType")
-            false
-        } else if (hbmType == GLOBAL_HBM && surface == null) {
-            Log.e(logTag, "enableHbm | surface must be non-null for GHBM")
-            false
-        } else if (authController.udfpsHbmListener == null) {
-            Log.e(logTag, "enableHbm | mDisplayManagerCallback is null")
-            false
-        } else if (currentRequest == null) {
-            true
-        } else {
-            Log.e(logTag, "enableHbm | HBM is already requested")
-            false
-        }
-    }
-
-    override fun disableHbm(onHbmDisabled: Runnable?) {
-        execution.isMainThread()
-        Log.v(logTag, "disableHbm")
-        Trace.beginSection("UdfpsHbmController.disableHbm")
-        val hbmRequest = currentRequest
-        if (hbmRequest == null) {
-            Log.w(logTag, "disableHbm | HBM is already disabled")
-            return
-        }
-        if (authController.udfpsHbmListener == null) {
-            Log.e(logTag, "disableHbm | mDisplayManagerCallback is null")
-        }
-        Trace.beginAsyncSection("UdfpsHbmController.e2e.disableHbm", 0)
-        displayManager.unregisterDisplayListener(this)
-        currentRequest = null
-        hbmRequest.disable(onHbmDisabled)
-        Trace.endSection()
-    }
-
-    override fun onDisplayChanged(displayId: Int) {
-        execution.isMainThread()
-        val hbmRequest = currentRequest
-        when {
-            hbmRequest == null                -> {
-                Log.w(logTag, "onDisplayChanged | mHbmRequest is null")
-            }
-            displayId != hbmRequest.displayId -> {
-                Log.w(logTag, "onDisplayChanged | displayId: $displayId != ${hbmRequest.displayId}")
-            }
-            else                              -> {
-                val refreshRate = getRefreshRate(displayId)
-                val requiredRefreshRate = getRequiredRefreshRate(hbmRequest.hbmType)
-                if (refreshRate != requiredRefreshRate) {
-                    Log.w(logTag, "onDisplayChanged | hz: $refreshRate != $requiredRefreshRate")
-                    if (hbmRequest.finishedStarting) {
-                        Log.e(logTag, "onDisplayChanged | refresh rate changed while HBM is enabled.")
-                        return
-                    }
-                    return
-                }
-                Log.v(logTag, "onDisplayChanged | froze the refresh rate at hz: $refreshRate")
-                hbmRequest.enable()
-            }
-        }
-    }
-
-    private fun getPeakRefreshRate(displayId: Int): Float {
-        var f = 0.0f
-        for (mode in displayManager.getDisplay(displayId).supportedModes)
-            f = kotlin.math.max(f, mode.refreshRate)
-        return f
-    }
-
-    private fun getRefreshRate(displayId: Int): Float {
-        return displayManager.getDisplay(displayId).refreshRate
-    }
-
-    private fun getRequiredRefreshRate(@HbmType hbmType: Int): Float {
-        if (hbmType == GLOBAL_HBM) return REFRESH_RATE_GHBM_HZ
-        return if (hbmType == LOCAL_HBM) peakRefreshRate else 0.0f
-    }
-
     init {
-        peakRefreshRate = getPeakRefreshRate(context.getDisplayId())
+        var refreshRate = 0.0f
+        displayManager.getDisplay(context.displayId).supportedModes.forEach {
+            refreshRate = max(refreshRate, it.refreshRate)
+        }
+        peakRefreshRate = refreshRate
         Settings.Secure.putIntForUser(
             context.contentResolver,
-            SECURE_SETTINGS_HBM_TYPE,
+            "com.android.systemui.biometrics.UdfpsSurfaceView.hbmType",
             if (!SystemProperties.getBoolean(
                     "persist.fingerprint.ghbm",
                     false
@@ -205,4 +64,147 @@ class UdfpsHbmController @Inject constructor(
             UserHandle.USER_CURRENT
         )
     }
+
+    override fun enableHbm(
+        @HbmType hbmType: Int,
+        surface: Surface?,
+        onHbmEnabled: Runnable?
+    ) {
+        execution.run(Execution::isMainThread)
+        logv("enableHbm")
+        if (authController.udfpsHbmListener == null) {
+            loge("enableHbm | mDisplayManagerCallback is null")
+        } else if (currentRequest != null) {
+            loge("enableHbm | HBM is already requested")
+        } else {
+            @DisplayId val displayId = context.displayId
+            val hbmRequest = HbmRequest(
+                mainHandler,
+                biometricExecutor,
+                authController,
+                lhbmProvider,
+                displayId,
+                hbmType,
+                onHbmEnabled
+            )
+            currentRequest = hbmRequest
+            displayManager.registerDisplayListener(this, mainHandler)
+            try {
+                with(authController) {
+                    udfpsHbmListener?.onHbmEnabled(hbmType, displayId)
+                }
+                logv("enableHbm | request freeze refresh rate")
+            } catch (ex: RemoteException) {
+                loge("enableHbm: $ex")
+            }
+            if (displayManager.getDisplay(hbmRequest.displayId).refreshRate
+                    .equals(peakRefreshRate)
+            ) onDisplayChanged(hbmRequest.displayId)
+        }
+    }
+
+    override fun disableHbm(onHbmDisabled: Runnable?) {
+        execution.run(Execution::isMainThread)
+        logv("disableHbm")
+        val hbmRequest = currentRequest
+        if (hbmRequest == null) {
+            logw("disableHbm | HBM is already disabled")
+            return
+        }
+        if (authController.udfpsHbmListener == null) {
+            loge("disableHbm | mDisplayManagerCallback is null")
+        }
+        displayManager.unregisterDisplayListener(this)
+        currentRequest = null
+        if (hbmRequest.startedRequest) {
+            with(hbmRequest) {
+                biometricExecutor.execute {
+                    val udfpsLhbmProvider = lhbmProvider
+                    udfpsLhbmProvider.javaClass
+                    logv("UdfpsLhbmProvider: disableLhbm")
+                    val displayHal = udfpsLhbmProvider.displayHal
+                    if (displayHal != null) {
+                        with(displayHal) {
+                            setLhbmState(false)
+                        }
+                    } else {
+                        loge("UdfpsLhbmProvider: disableLhbm | displayHal is null")
+                    }
+                    mainHandler.post {
+                        try {
+                            authController.udfpsHbmListener!!.onHbmDisabled(hbmType, displayId)
+                            logv("disableHbm | requested to unfreeze the refresh rate")
+                        } catch (ex: RemoteException) {
+                            loge("disableHbm: $ex")
+                        }
+                    }
+                    if (onHbmDisabled != null) {
+                        mainHandler.run { post(onHbmDisabled) }
+                    } else {
+                        logw("doDisableHbm | onHbmDisabled is null")
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDisplayChanged(@DisplayId displayId: Int) {
+        execution.run(Execution::isMainThread)
+        val hbmRequest = currentRequest
+        if (hbmRequest == null) {
+            logw("onDisplayChanged | mHbmRequest is null")
+        } else if (displayId != hbmRequest.displayId) {
+            logw("onDisplayChanged | displayId: $displayId != ${hbmRequest.displayId}")
+        } else {
+            val refreshRate = displayManager.getDisplay(displayId).refreshRate
+            if (!refreshRate.equals(peakRefreshRate)) {
+                logw("onDisplayChanged | hz: $refreshRate != $peakRefreshRate")
+                if (hbmRequest.finishedStarting) {
+                    loge("onDisplayChanged | refresh rate changed while HBM is enabled.")
+                }
+                return
+            }
+            logv("onDisplayChanged | froze the refresh rate at hz: $refreshRate")
+            if (!hbmRequest.startedRequest) {
+                with(hbmRequest) {
+                    startedRequest = true
+                    biometricExecutor.execute {
+                        val udfpsLhbmProvider = lhbmProvider
+                        udfpsLhbmProvider.javaClass
+                        logv("UdfpsLhbmProvider: enableLhbm")
+                        val displayHal = udfpsLhbmProvider.displayHal
+                        if (displayHal != null) {
+                            with(displayHal) {
+                                setLhbmState(true)
+                            }
+                        } else {
+                            loge("UdfpsLhbmProvider: enableLhbm | displayHal is null")
+                        }
+                        try {
+                            if (onHbmEnabled != null) {
+                                mainHandler.run { post(onHbmEnabled) }
+                            } else {
+                                logw("doEnableHbm | onHbmEnabled is null")
+                            }
+                        } finally {
+                            finishedStarting = true
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+
+internal fun log(level: Int, message: String) {
+    val logTag = "UdfpsHbmController"
+    if (isLoggable(logTag, DEBUG))
+        when (level) {
+            ERROR   -> e(logTag, message)
+            VERBOSE -> v(logTag, message)
+            WARN    -> w(logTag, message)
+        }
+}
+internal fun loge(message: String) = log(ERROR, message)
+internal fun logv(message: String) = log(VERBOSE, message)
+internal fun logw(message: String) = log(WARN, message)

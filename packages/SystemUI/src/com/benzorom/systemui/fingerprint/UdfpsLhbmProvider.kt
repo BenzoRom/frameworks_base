@@ -27,59 +27,39 @@ class UdfpsLhbmProvider : IBinder.DeathRecipient {
         private const val logTag = "UdfpsLhbmProvider"
     }
 
-    @Volatile private var iDisplayHal: IDisplay? = null
-    fun enableLhbm() {
-        Log.v(logTag, "enableLhbm")
-        val displayHal: IDisplay? = displayHal
-        if (displayHal == null) {
-            Log.e(logTag, "enableLhbm | displayHal is null")
-            return
-        }
-        try {
-            displayHal.setLhbmState(true)
-        } catch (ex: RemoteException) {
-            Log.e(logTag, "enableLhbm | RemoteException", ex)
-        }
+    @Volatile var iDisplayHal: IDisplay? = null
+    override fun binderDied() {
+        Log.e(logTag, "binderDied | Display HAL died")
+        iDisplayHal = null
     }
 
-    fun disableLhbm() {
-        Log.v(logTag, "disableLhbm")
-        val displayHal: IDisplay? = displayHal
-        if (displayHal == null) {
-            Log.e(logTag, "disableLhbm | displayHal is null")
-            return
-        }
-        try {
-            displayHal.setLhbmState(false)
-        } catch (ex: RemoteException) {
-            Log.e(logTag, "disableLhbm | RemoteException", ex)
-        }
-    }
-
-    private val displayHal: IDisplay?
+    val displayHal: IDisplay?
         get() {
-            val display: IDisplay? = iDisplayHal
-            if (display != null) {
-                return display
+            var iDisplay: IDisplay? = iDisplayHal
+            if (iDisplay != null) {
+                return iDisplay
             }
-            val waitForDeclaredService: IBinder
-            waitForDeclaredService = ServiceManager.waitForDeclaredService(
+            val displayService: IBinder = ServiceManager.waitForDeclaredService(
                 "com.google.hardware.pixel.display.IDisplay/default"
             )
             return try {
-                waitForDeclaredService.linkToDeath(this, 0)
-                iDisplayHal = IDisplay.Stub.asInterface(waitForDeclaredService)
+                displayService.linkToDeath(this, 0)
+                val displayInterface = displayService.queryLocalInterface(IDisplay.DESCRIPTOR)
+                when {
+                    displayInterface != null && displayInterface is IDisplay -> {
+                        displayInterface
+                    }
+                    else -> {
+                        IDisplay.Stub.asInterface(displayService)
+                    }
+                }.also { iDisplay = it }
+                iDisplayHal = iDisplay
                 iDisplayHal
             } catch (ex: RemoteException) {
                 Log.e(logTag, "getDisplayHal | Failed to link to death", ex)
                 null
             }
         }
-
-    override fun binderDied() {
-        Log.e(logTag, "binderDied | Display HAL died")
-        iDisplayHal = null
-    }
 
     init {
         displayHal
