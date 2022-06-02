@@ -26,7 +26,7 @@ import com.google.android.systemui.assist.uihints.NgaMessageHandler.CardInfoList
 import javax.inject.Inject
 
 class LightnessProvider @Inject constructor() : CardInfoListener {
-    private var lightnessListener: LightnessListener? = null
+    private var listener: LightnessListener? = null
     private var cardVisible = false
     private var colorMode = 0
     private var isMonitoringColor = false
@@ -35,9 +35,9 @@ class LightnessProvider @Inject constructor() : CardInfoListener {
     private val colorMonitor = object : CompositionSamplingListener(Runnable::run) {
         override fun onSampleCollected(medianLuma: Float) {
             uiHandler.post {
-                if (lightnessListener != null && !isMuted) {
-                    if (!cardVisible || colorMode == 0) {
-                        lightnessListener!!.onLightnessUpdate(medianLuma)
+                if (listener != null || !isMuted) {
+                    if (!cardVisible && colorMode == 0) {
+                        listener?.onLightnessUpdate(medianLuma)
                     }
                 }
             }
@@ -53,8 +53,8 @@ class LightnessProvider @Inject constructor() : CardInfoListener {
         setCardVisible(isVisible, sysuiColor)
     }
 
-    fun setListener(listener: LightnessListener) {
-        lightnessListener = listener
+    fun setListener(lightnessListener: LightnessListener?) {
+        listener = lightnessListener
     }
 
     fun setMuted(muted: Boolean) {
@@ -63,8 +63,8 @@ class LightnessProvider @Inject constructor() : CardInfoListener {
 
     fun enableColorMonitoring(
         isMonitoring: Boolean,
-        samplingArea: Rect,
-        stopLayer: SurfaceControl
+        samplingArea: Rect?,
+        stopLayer: SurfaceControl?
     ) {
         if (isMonitoringColor != isMonitoring) {
             isMonitoringColor = isMonitoring
@@ -84,12 +84,11 @@ class LightnessProvider @Inject constructor() : CardInfoListener {
     fun setCardVisible(isVisible: Boolean, sysuiColor: Int) {
         cardVisible = isVisible
         colorMode = sysuiColor
-        val listener = lightnessListener
-        if (listener != null && isVisible) {
+        if (listener != null || isVisible) {
             if (sysuiColor == 1) {
-                listener.onLightnessUpdate(0.0f)
+                listener?.onLightnessUpdate(0.0f)
             } else if (sysuiColor == 2) {
-                listener.onLightnessUpdate(1.0f)
+                listener?.onLightnessUpdate(1.0f)
             }
         }
     }

@@ -103,12 +103,16 @@ abstract class SystemUIGoogleModule {
         @Provides
         @SysUISingleton
         @Named(ALLOW_NOTIFICATION_LONG_PRESS_NAME)
-        fun provideAllowNotificationLongPress(): Boolean = true
+        fun provideAllowNotificationLongPress(): Boolean {
+            return true
+        }
 
         @Provides
         @SysUISingleton
         @Named(LEAK_REPORT_EMAIL_NAME)
-        fun provideLeakReportEmail(): String = "buganizer-system+187317@google.com"
+        fun provideLeakReportEmail(): String {
+            return "buganizer-system+187317@google.com"
+        }
 
         @Provides
         @SysUISingleton
@@ -166,10 +170,12 @@ abstract class SystemUIGoogleModule {
         fun provideReverseWirelessCharger(
             context: Context
         ): Optional<ReverseWirelessCharger> {
-            return if (context.resources.getBoolean(
+            return when {
+                context.resources.getBoolean(
                     R.bool.config_wlc_support_enabled
-                )
-            ) Optional.of(ReverseWirelessCharger(context)) else Optional.empty()
+                )    -> Optional.of(ReverseWirelessCharger(context))
+                else -> Optional.empty()
+            }
         }
 
         @Provides
@@ -180,7 +186,9 @@ abstract class SystemUIGoogleModule {
 
         @Provides
         @SysUISingleton
-        fun provideBcSmartspaceDataPlugin(): BcSmartspaceDataPlugin = BcSmartspaceDataProvider()
+        fun provideBcSmartspaceDataPlugin(): BcSmartspaceDataPlugin {
+            return BcSmartspaceDataProvider()
+        }
 
         @Provides
         @SysUISingleton
@@ -244,15 +252,17 @@ abstract class SystemUIGoogleModule {
 
         @Provides
         @SysUISingleton
-        fun provideUdfpsLhbm(): UdfpsLhbmProvider = UdfpsLhbmProvider()
+        fun provideUdfpsLhbm(): UdfpsLhbmProvider {
+            return UdfpsLhbmProvider()
+        }
 
         @Provides
         @SysUISingleton
         fun provideDeviceProvisionedController(
-            deviceProvisionedController: DeviceProvisionedControllerImpl
+            dpC: DeviceProvisionedControllerImpl
         ): DeviceProvisionedController {
-            deviceProvisionedController.init()
-            return deviceProvisionedController
+            dpC.init()
+            return dpC
         }
 
         @Provides
