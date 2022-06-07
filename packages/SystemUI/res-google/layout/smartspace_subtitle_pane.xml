@@ -5,6 +5,7 @@
 
     <com.google.android.systemui.smartspace.DoubleShadowTextView
         android:id="@+id/subtitle_text"
+        android:focusable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?android:textColorPrimary"
@@ -17,6 +18,7 @@
 
     <com.google.android.systemui.smartspace.DoubleShadowTextView
         android:id="@+id/base_action_icon_subtitle"
+        android:focusable="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="none"

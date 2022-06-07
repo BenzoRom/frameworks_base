@@ -21,6 +21,10 @@
     <string name="accessibility_next_alarm">Next alarm at %s</string>
     <string name="accessibility_settings_gear">Pixel Stand settings</string>
     <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="adaptive_charging_notify_des">Battery full by %1$s. Charging steadily to preserve battery health.</string>
+    <string name="adaptive_charging_notify_help_url">https://support.google.com/pixelphone?p=adaptive_charging</string>
+    <string name="adaptive_charging_notify_title">Adaptive Charging is on</string>
+    <string name="adaptive_charging_notify_turn_off_once">Turn off once</string>
     <string name="adaptive_charging_time_estimate">%1$s • Adaptive charging (full by %2$s)</string>
     <string name="assistant_keyboard_icon_label">Keyboard</string>
     <string name="assistant_scrim_label">Listening, tap to cancel</string>

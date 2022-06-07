@@ -76,6 +76,8 @@
     <item type="id" name="list_item_1"/>
     <item type="id" name="list_item_2"/>
     <item type="id" name="list_item_3"/>
+    <item type="id" name="loading_screen" />
+    <item type="id" name="loading_screen_icon" />
     <item type="id" name="loading_view"/>
     <item type="id" name="lockscreen_opa"/>
     <item type="id" name="loyalty_program_logo"/>

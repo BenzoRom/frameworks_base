@@ -19,6 +19,7 @@
 
     <com.google.android.systemui.smartspace.DoubleShadowTextView
         android:id="@+id/title_text"
+        android:focusable="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/EnhancedSmartspaceTextTitle"

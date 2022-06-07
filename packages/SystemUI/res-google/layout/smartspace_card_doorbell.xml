@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.systemui.smartspace.BcSmartspaceCardDoorbell
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:clipChildren="false"
     android:clipToPadding="false">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/loading_screen"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        app:cardBackgroundColor="?androidprv:attr/colorSurface"
+        app:cardCornerRadius="@dimen/enhanced_smartspace_secondary_card_corner_radius"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/indeterminateBar"
+            android:layout_gravity="center"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:indeterminateTint="?android:textColorSecondary" />
+
+        <ImageView
+            android:id="@+id/loading_screen_icon"
+            android:layout_gravity="center"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/videocam" />
+
+    </androidx.cardview.widget.CardView>
 
     <ImageView
         android:id="@+id/image_view"
