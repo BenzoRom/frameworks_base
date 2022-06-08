@@ -31,10 +31,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Switch
 import com.android.internal.util.benzo.OnTheGoUtils
 import com.android.systemui.R
-import com.android.systemui.dagger.qualifiers.Main
 
+@Suppress("DEPRECATION")
 class OnTheGoDialog(private val mContext: Context) : Dialog(mContext) {
-    @Main private val mainHandler = Handler(getMainLooper())
+    private val handler = Handler()
     private val onTheGoDialogLongTimeout: Int
     private val onTheGoDialogShortTimeout: Int
     private val dismissDialogRunnable = Runnable { if (isShowing) dismiss() }
@@ -136,11 +136,11 @@ class OnTheGoDialog(private val mContext: Context) : Dialog(mContext) {
 
     private fun dismissOnTheGoDialog(timeout: Int) {
         removeAllOnTheGoDialogCallbacks()
-        with(mainHandler) { postDelayed(dismissDialogRunnable, timeout.toLong()) }
+        with(handler) { postDelayed(dismissDialogRunnable, timeout.toLong()) }
     }
 
     private fun removeAllOnTheGoDialogCallbacks() {
-        with(mainHandler) { removeCallbacks(dismissDialogRunnable) }
+        with(handler) { removeCallbacks(dismissDialogRunnable) }
     }
 
     private fun sendAlphaBroadcast(progress: String) {

@@ -38,9 +38,9 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import com.android.internal.util.benzo.OnTheGoUtils
 import com.android.systemui.R
-import com.android.systemui.dagger.qualifiers.Main
 import java.io.IOException
 
+@Suppress("DEPRECATION")
 class OnTheGoService : Service() {
 
     companion object {
@@ -61,7 +61,7 @@ class OnTheGoService : Service() {
         private const val notificationError = 2
     }
 
-    @Main private val mainHandler = Handler(mainLooper)
+    private val handler = Handler()
     @BlockUntrustedTouchesMode private var blockedTouchDefault = 0
     private val restartObject = Any()
     private var overlay: FrameLayout? = null
@@ -207,7 +207,7 @@ class OnTheGoService : Service() {
 
     private fun restartOnTheGo() {
         resetViews()
-        with(mainHandler) {
+        with(handler) {
             removeCallbacks(restartRunnable)
             postDelayed(restartRunnable, 750)
         }
