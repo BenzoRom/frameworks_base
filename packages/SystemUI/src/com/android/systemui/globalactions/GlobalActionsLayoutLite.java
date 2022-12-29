@@ -16,7 +16,11 @@
 
 package com.android.systemui.globalactions;
 
+import static com.android.systemui.util.leak.RotationUtils.ROTATION_NONE;
+
+import android.content.ContentResolver;
 import android.content.Context;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,7 @@ import android.view.ViewGroup;
 import androidx.constraintlayout.helper.widget.Flow;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.systemui.globalactions.GlobalActionsDialogLite;
 import com.android.systemui.HardwareBgDrawable;
 import com.android.systemui.R;
 
@@ -31,9 +36,20 @@ import com.android.systemui.R;
  * ConstraintLayout implementation of the button layout created by the global actions dialog.
  */
 public class GlobalActionsLayoutLite extends GlobalActionsLayout {
+    private final int mMaxColumns;
+    private final int mMaxRows;
 
     public GlobalActionsLayoutLite(Context context, AttributeSet attrs) {
         super(context, attrs);
+        if (GlobalActionsDialogLite.isRebootMenu()) {
+            mMaxColumns = 2;
+            mMaxRows = 2;
+        } else {
+            mMaxColumns = Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.GLOBAL_ACTIONS_MAX_COLUMNS, 2);
+            mMaxRows = Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.GLOBAL_ACTIONS_MAX_ROWS, 4);
+        }
         setOnClickListener(v -> { }); // Prevent parent onClickListener from triggering
     }
 
@@ -52,13 +68,10 @@ public class GlobalActionsLayoutLite extends GlobalActionsLayout {
     @Override
     public void onUpdateList() {
         super.onUpdateList();
-        int nElementsWrap = getResources().getInteger(
-                com.android.systemui.R.integer.power_menu_lite_max_columns);
+        int nElementsWrap = (getCurrentRotation() == ROTATION_NONE) ? mMaxColumns : mMaxRows;
         int nChildren = getListView().getChildCount() - 1; // don't count flow element
-
-        // Avoid having just one action on the last row if there are more than 2 columns because
-        // it looks unbalanced. Instead, bring the column size down to balance better.
-        if (nChildren == nElementsWrap + 1 && nElementsWrap > 2) {
+        if (getCurrentRotation() != ROTATION_NONE && nChildren > mMaxRows) {
+            // up to 4 elements can fit in a row in landscape, otherwise limit for balance
             nElementsWrap -= 1;
         }
         Flow flow = findViewById(R.id.list_flow);
